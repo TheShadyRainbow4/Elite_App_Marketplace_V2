@@ -1,0 +1,9 @@
+* text=auto eol=crlf
+*.exe binary
+*.ico binary
+*.png binary
+*.jpg binary
+*.pfx binary
+*.cer binary
+*.p7b binary
+*.res binary

@@ -1,0 +1,325 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.elitesoftware.geminiwidget"
+4    android:versionCode="10025"
+5    android:versionName="1.0.25" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:6:5-67
+11-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:6:22-64
+12    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+12-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:7:5-78
+12-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:7:22-75
+13    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+13-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:8:5-114
+13-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:8:22-75
+14    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
+14-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:10:5-78
+14-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:10:22-75
+15    <uses-permission android:name="com.rosan.dhizuku.permission.API" />
+15-->[io.github.iamr0s:Dhizuku-API:2.4] C:\Users\Administrator\.gradle\caches\transforms-3\693fb6f660ba0927678da9a4d653762b\transformed\jetified-Dhizuku-API-2.4\AndroidManifest.xml:7:5-72
+15-->[io.github.iamr0s:Dhizuku-API:2.4] C:\Users\Administrator\.gradle\caches\transforms-3\693fb6f660ba0927678da9a4d653762b\transformed\jetified-Dhizuku-API-2.4\AndroidManifest.xml:7:22-69
+16
+17    <queries>
+17-->[io.github.iamr0s:Dhizuku-API:2.4] C:\Users\Administrator\.gradle\caches\transforms-3\693fb6f660ba0927678da9a4d653762b\transformed\jetified-Dhizuku-API-2.4\AndroidManifest.xml:9:5-11:15
+18        <provider android:authorities="com.rosan.dhizuku.server.provider" />
+18-->[io.github.iamr0s:Dhizuku-API:2.4] C:\Users\Administrator\.gradle\caches\transforms-3\693fb6f660ba0927678da9a4d653762b\transformed\jetified-Dhizuku-API-2.4\AndroidManifest.xml:10:9-77
+18-->[io.github.iamr0s:Dhizuku-API:2.4] C:\Users\Administrator\.gradle\caches\transforms-3\693fb6f660ba0927678da9a4d653762b\transformed\jetified-Dhizuku-API-2.4\AndroidManifest.xml:10:19-74
+19    </queries>
+20
+21    <permission
+21-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+22        android:name="com.elitesoftware.geminiwidget.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+22-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+23        android:protectionLevel="signature" />
+23-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+24
+25    <uses-permission android:name="com.elitesoftware.geminiwidget.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+25-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+25-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+26
+27    <application
+27-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:10:5-135:19
+28        android:allowBackup="true"
+28-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:11:9-35
+29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+29-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+30        android:debuggable="true"
+31        android:extractNativeLibs="false"
+32        android:hardwareAccelerated="true"
+32-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:16:9-43
+33        android:icon="@mipmap/ic_launcher"
+33-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:12:9-43
+34        android:label="@string/app_name"
+34-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:13:9-41
+35        android:supportsRtl="true"
+35-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:14:9-35
+36        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+36-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:15:9-65
+37        android:usesCleartextTraffic="true" >
+37-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:17:9-44
+38
+39        <!-- Custom Frame Builder -->
+40        <activity
+40-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:20:9-29:20
+41            android:name="com.elitesoftware.appmarketplace.CustomFrameActivity"
+41-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:21:13-48
+42            android:exported="true"
+42-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:24:13-36
+43            android:icon="@mipmap/ic_custom_frame"
+43-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:23:13-51
+44            android:label="Custom Frame" >
+44-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:22:13-41
+45            <intent-filter>
+45-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:25:13-28:29
+46                <action android:name="android.intent.action.MAIN" />
+46-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:17-69
+46-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:25-66
+47
+48                <category android:name="android.intent.category.LAUNCHER" />
+48-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:17-77
+48-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:27-74
+49            </intent-filter>
+50        </activity>
+51
+52        <!-- Gemini Window -->
+53        <activity
+53-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:32:9-44:20
+54            android:name="com.elitesoftware.appmarketplace.GeminiLauncherActivity"
+54-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:33:13-51
+55            android:excludeFromRecents="true"
+55-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:37:13-46
+56            android:exported="true"
+56-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:39:13-36
+57            android:icon="@mipmap/ic_gemini_star"
+57-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:35:13-50
+58            android:label="Elite Gemini"
+58-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:34:13-41
+59            android:noHistory="true"
+59-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:38:13-37
+60            android:taskAffinity="" >
+60-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:36:13-36
+61            <intent-filter>
+61-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:25:13-28:29
+62                <action android:name="android.intent.action.MAIN" />
+62-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:17-69
+62-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:25-66
+63
+64                <category android:name="android.intent.category.LAUNCHER" />
+64-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:17-77
+64-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:27-74
+65            </intent-filter>
+66        </activity>
+67
+68        <!-- Settings Window -->
+69        <activity
+69-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:47:9-59:20
+70            android:name="com.elitesoftware.appmarketplace.SettingsLauncherActivity"
+70-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:48:13-53
+71            android:excludeFromRecents="true"
+71-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:52:13-46
+72            android:exported="true"
+72-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:54:13-36
+73            android:icon="@mipmap/ic_settings"
+73-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:50:13-47
+74            android:label="Elite Settings"
+74-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:49:13-43
+75            android:noHistory="true"
+75-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:53:13-37
+76            android:taskAffinity="" >
+76-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:51:13-36
+77            <intent-filter>
+77-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:25:13-28:29
+78                <action android:name="android.intent.action.MAIN" />
+78-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:17-69
+78-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:25-66
+79
+80                <category android:name="android.intent.category.LAUNCHER" />
+80-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:17-77
+80-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:27-74
+81            </intent-filter>
+82        </activity>
+83
+84        <!-- Share Target -->
+85        <activity
+85-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:62:9-71:20
+86            android:name="com.elitesoftware.appmarketplace.ShareReceiverActivity"
+86-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:63:13-50
+87            android:exported="true"
+87-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:65:13-36
+88            android:label="Open in Elite Frame" >
+88-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:64:13-48
+89            <intent-filter>
+89-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:66:13-70:29
+90                <action android:name="android.intent.action.SEND" />
+90-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:67:17-69
+90-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:67:25-66
+91
+92                <category android:name="android.intent.category.DEFAULT" />
+92-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:68:17-76
+92-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:68:27-73
+93
+94                <data android:mimeType="text/plain" />
+94-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:69:17-55
+94-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:69:23-52
+95            </intent-filter>
+96        </activity>
+97
+98        <!-- Test App Launcher -->
+99        <activity
+99-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:74:9-86:20
+100            android:name="com.elitesoftware.appmarketplace.TestAppLauncherActivity"
+100-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:75:13-52
+101            android:excludeFromRecents="true"
+101-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:79:13-46
+102            android:exported="true"
+102-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:81:13-36
+103            android:icon="@mipmap/ic_launcher"
+103-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:77:13-47
+104            android:label="Elite Test App"
+104-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:76:13-43
+105            android:noHistory="true"
+105-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:80:13-37
+106            android:taskAffinity="" >
+106-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:78:13-36
+107            <intent-filter>
+107-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:25:13-28:29
+108                <action android:name="android.intent.action.MAIN" />
+108-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:17-69
+108-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:25-66
+109
+110                <category android:name="android.intent.category.LAUNCHER" />
+110-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:17-77
+110-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:27-74
+111            </intent-filter>
+112        </activity>
+113
+114        <!-- Test App Activity -->
+115        <activity
+115-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:89:9-92:39
+116            android:name="com.elitesoftware.appmarketplace.TestAppActivity"
+116-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:90:13-44
+117            android:exported="true"
+117-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:92:13-36
+118            android:label="Test App" />
+118-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:91:13-37
+119
+120        <!-- Custom Package Launcher -->
+121        <activity
+121-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:95:9-108:20
+122            android:name="com.elitesoftware.appmarketplace.PackageLauncherActivity"
+122-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:96:13-52
+123            android:excludeFromRecents="true"
+123-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:101:13-46
+124            android:exported="true"
+124-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:103:13-36
+125            android:icon="@mipmap/ic_launcher"
+125-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:98:13-47
+126            android:label="Launch Any App"
+126-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:97:13-43
+127            android:noHistory="true"
+127-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:102:13-37
+128            android:taskAffinity=""
+128-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:100:13-36
+129            android:theme="@style/Theme.AppCompat.Light.Dialog" >
+129-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:99:13-64
+130            <intent-filter>
+130-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:25:13-28:29
+131                <action android:name="android.intent.action.MAIN" />
+131-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:17-69
+131-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:25-66
+132
+133                <category android:name="android.intent.category.LAUNCHER" />
+133-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:17-77
+133-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:27-74
+134            </intent-filter>
+135        </activity>
+136
+137        <!-- Calculator Launcher -->
+138        <activity
+138-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:111:9-123:20
+139            android:name="com.elitesoftware.appmarketplace.CalculatorLauncherActivity"
+139-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:112:13-55
+140            android:excludeFromRecents="true"
+140-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:116:13-46
+141            android:exported="true"
+141-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:118:13-36
+142            android:icon="@mipmap/ic_launcher"
+142-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:114:13-47
+143            android:label="Elite Calculator"
+143-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:113:13-45
+144            android:noHistory="true"
+144-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:117:13-37
+145            android:taskAffinity="" >
+145-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:115:13-36
+146            <intent-filter>
+146-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:25:13-28:29
+147                <action android:name="android.intent.action.MAIN" />
+147-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:17-69
+147-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:26:25-66
+148
+149                <category android:name="android.intent.category.LAUNCHER" />
+149-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:17-77
+149-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:27:27-74
+150            </intent-filter>
+151        </activity>
+152
+153        <!-- Elite Window Framework API Receiver -->
+154        <receiver
+154-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:126:9-132:20
+155            android:name="com.elitesoftware.appmarketplace.WindowApiReceiver"
+155-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:127:13-46
+156            android:exported="true" >
+156-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:128:13-36
+157            <intent-filter>
+157-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:129:13-131:29
+158                <action android:name="com.elitesoftware.appmarketplace.LAUNCH_WINDOW" />
+158-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:130:17-89
+158-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:130:25-86
+159            </intent-filter>
+160        </receiver>
+161
+162        <service
+162-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:134:9-106
+163            android:name="com.elitesoftware.appmarketplace.FloatingWidgetService"
+163-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:134:18-55
+164            android:enabled="true"
+164-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:134:56-78
+165            android:exported="false" />
+165-->C:\Users\Administrator\Desktop\Local_APK_Store\EliteGeminiWidget\app\src\main\AndroidManifest.xml:134:79-103
+166
+167        <meta-data
+167-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:13:9-15:36
+168            android:name="moe.shizuku.client.V3_SUPPORT"
+168-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:14:13-57
+169            android:value="true" />
+169-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:15:13-33
+170
+171        <provider
+171-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+172            android:name="androidx.startup.InitializationProvider"
+172-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+173            android:authorities="com.elitesoftware.geminiwidget.androidx-startup"
+173-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+174            android:exported="false" >
+174-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+175            <meta-data
+175-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+176                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+176-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+177                android:value="androidx.startup" />
+177-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+178            <meta-data
+178-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Administrator\.gradle\caches\transforms-3\78d3c2aa8dfccd704ee93532120c5e33\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+179                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+179-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Administrator\.gradle\caches\transforms-3\78d3c2aa8dfccd704ee93532120c5e33\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+180                android:value="androidx.startup" />
+180-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Administrator\.gradle\caches\transforms-3\78d3c2aa8dfccd704ee93532120c5e33\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+181        </provider>
+182    </application>
+183
+184</manifest>

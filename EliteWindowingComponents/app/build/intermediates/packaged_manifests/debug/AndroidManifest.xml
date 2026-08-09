@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.elitesoftware.geminiwidget"
+    android:versionCode="10025"
+    android:versionName="1.0.25" >
+
+    <uses-sdk
+        android:minSdkVersion="24"
+        android:targetSdkVersion="34" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
+    <uses-permission android:name="com.rosan.dhizuku.permission.API" />
+
+    <queries>
+        <provider android:authorities="com.rosan.dhizuku.server.provider" />
+    </queries>
+
+    <permission
+        android:name="com.elitesoftware.geminiwidget.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.elitesoftware.geminiwidget.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+
+    <application
+        android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:debuggable="true"
+        android:extractNativeLibs="false"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:usesCleartextTraffic="true" >
+
+        <!-- Custom Frame Builder -->
+        <activity
+            android:name="com.elitesoftware.elitewindowingcomponents.CustomFrameActivity"
+            android:exported="true"
+            android:icon="@mipmap/ic_custom_frame"
+            android:label="Custom Frame" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Gemini Window -->
+        <activity
+            android:name="com.elitesoftware.elitewindowingcomponents.GeminiLauncherActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_gemini_star"
+            android:label="Elite Gemini"
+            android:noHistory="true"
+            android:taskAffinity="" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Settings Window -->
+        <activity
+            android:name="com.elitesoftware.elitewindowingcomponents.SettingsLauncherActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_settings"
+            android:label="Elite Settings"
+            android:noHistory="true"
+            android:taskAffinity="" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Share Target -->
+        <activity
+            android:name="com.elitesoftware.elitewindowingcomponents.ShareReceiverActivity"
+            android:exported="true"
+            android:label="Open in Elite Frame" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <!-- Test App Launcher -->
+        <activity
+            android:name="com.elitesoftware.elitewindowingcomponents.TestAppLauncherActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Elite Test App"
+            android:noHistory="true"
+            android:taskAffinity="" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Test App Activity -->
+        <activity
+            android:name="com.elitesoftware.elitewindowingcomponents.TestAppActivity"
+            android:exported="true"
+            android:label="Test App" />
+
+        <!-- Custom Package Launcher -->
+        <activity
+            android:name="com.elitesoftware.elitewindowingcomponents.PackageLauncherActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Launch Any App"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.Dialog" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Calculator Launcher -->
+        <activity
+            android:name="com.elitesoftware.elitewindowingcomponents.CalculatorLauncherActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Elite Calculator"
+            android:noHistory="true"
+            android:taskAffinity="" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Elite Window Framework API Receiver -->
+        <receiver
+            android:name="com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.elitesoftware.elitewindowingcomponents.FloatingWidgetService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <meta-data
+            android:name="moe.shizuku.client.V3_SUPPORT"
+            android:value="true" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.elitesoftware.geminiwidget.androidx-startup"
+            android:exported="false" >
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+                android:value="androidx.startup" />
+        </provider>
+    </application>
+
+</manifest>
