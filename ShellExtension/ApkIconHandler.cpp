@@ -296,6 +296,9 @@ private:
                 fnameLower.find(".jpg") == std::string::npos && 
                 fnameLower.find(".jpeg") == std::string::npos) continue;
 
+            // Never use 9-patch images (they are stretchable UI borders, not icons)
+            if (fnameLower.find(".9.png") != std::string::npos) continue;
+
             int score = 0;
             
             // Base location
@@ -308,11 +311,14 @@ private:
                 score -= 1000;
             }
             if (fnameLower.find("foreground") != std::string::npos || fnameLower.find("_fg") != std::string::npos) {
-                score -= 1000;
+                score -= 50; // Slight penalty so a full legacy icon wins if both exist, but still very viable if it's the only PNG
             }
             // Small UI icons (penalize heavily so we don't pick a back button or notification glyph)
             if (fnameLower.find("notification") != std::string::npos || fnameLower.find("stat_sys") != std::string::npos || fnameLower.find("status_bar") != std::string::npos) {
                 score -= 1000;
+            }
+            if (fnameLower.find("abc_") != std::string::npos || fnameLower.find("divider") != std::string::npos) {
+                score -= 1000; // Android library UI elements
             }
 
             // Filename matches (check the actual file name, not the path)
@@ -324,6 +330,8 @@ private:
             else if (name_only == "icon.png" || name_only == "icon.jpg") score += 250;
             else if (name_only.find("logo") != std::string::npos) score += 200;
             else if (name_only.find("icon") != std::string::npos) score += 50;
+            else if (name_only.find("main") != std::string::npos) score += 50;
+            else if (name_only.find("app") != std::string::npos) score += 50;
 
             if (name_only.find("round") != std::string::npos) score += 50;
 
@@ -334,7 +342,10 @@ private:
             else if (fnameLower.find("hdpi") != std::string::npos) score += 40;
             else if (fnameLower.find("mdpi") != std::string::npos) score += 20;
 
-            candidates.push_back({i, score});
+            // Minimum score requirement: Must have matched at least one of our keyword rules
+            if (score > 40) {
+                candidates.push_back({i, score});
+            }
         }
 
         std::sort(candidates.begin(), candidates.end(), CompareCandidates);

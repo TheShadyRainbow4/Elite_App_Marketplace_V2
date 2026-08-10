@@ -1,13 +1,13 @@
 {
     "data_dir": "Z:\\Local_APK_Store\\Manager_App",
     "list_cols": [
-        335,
-        419,
+        266,
+        136,
         55,
         60,
         70
     ],
-    "listview_width": 736,
+    "listview_width": 818,
     "server_port": 8553,
     "window_height": 877,
     "window_maximized": false,
