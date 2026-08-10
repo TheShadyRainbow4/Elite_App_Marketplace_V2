@@ -143,102 +143,102 @@ public class FloatingWidgetService extends Service {
             settingsLayout.addView(settingsTitle);
             settingsLayout.addView(infoText);
             contentView = settingsLayout;
-        } else if (pkg != null && !pkg.isEmpty()) {
-            final android.view.TextureView textureView = new android.view.TextureView(this);
-            textureView.setSurfaceTextureListener(new android.view.TextureView.SurfaceTextureListener() {
-                android.hardware.display.VirtualDisplay virtualDisplay;
-                android.view.Surface mSurface;
-                @Override
-                public void onSurfaceTextureAvailable(android.graphics.SurfaceTexture surface, int width, int height) {
-                    mSurface = new android.view.Surface(surface);
-                    
-                    android.hardware.display.DisplayManager displayManager = (android.hardware.display.DisplayManager) getSystemService(android.content.Context.DISPLAY_SERVICE);
-                    
-                    android.util.DisplayMetrics metrics = new android.util.DisplayMetrics();
-                    ((android.view.WindowManager) getSystemService(android.content.Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
-                    int density = metrics.densityDpi;
+          } else if (pkg != null && !pkg.isEmpty()) {
+              final android.view.SurfaceView surfaceView = new android.view.SurfaceView(this);
+              surfaceView.getHolder().addCallback(new android.view.SurfaceHolder.Callback() {
+                  android.hardware.display.VirtualDisplay virtualDisplay;
+                  android.hardware.display.DisplayManager displayManager = (android.hardware.display.DisplayManager) getSystemService(android.content.Context.DISPLAY_SERVICE);
+                  @Override
+                  public void surfaceCreated(android.view.SurfaceHolder holder) {
+                      android.util.DisplayMetrics metrics = new android.util.DisplayMetrics();
+                      ((android.view.WindowManager) getSystemService(android.content.Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
+                      int density = metrics.densityDpi;
+                      
+                      int width = surfaceView.getWidth();
+                      int height = surfaceView.getHeight();
 
-                    virtualDisplay = displayManager.createVirtualDisplay(
-                            "EliteVirtualDisplay",
-                            width > 0 ? width : 700, height > 0 ? height : 900, density,
-                            mSurface,
-                            android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC | 
-                            android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY
-                    );
+                      // Android 10+ requires FLAG_SHOULD_SHOW_SYSTEM_DECORATIONS (512) and FLAG_TRUSTED (1024) to launch activities on virtual displays without developer options
+                      int flags = android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC | 
+                                  android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY |
+                                  android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION | 512 | 1024;
+                      
+                      try {
+                          virtualDisplay = displayManager.createVirtualDisplay(
+                                  "EliteVirtualDisplay",
+                                  width > 0 ? width : 700, height > 0 ? height : 900, density,
+                                  holder.getSurface(), flags);
+                      } catch (SecurityException e) {
+                          // Fallback without trusted flag if permission denied
+                          virtualDisplay = displayManager.createVirtualDisplay(
+                                  "EliteVirtualDisplay",
+                                  width > 0 ? width : 700, height > 0 ? height : 900, density,
+                                  holder.getSurface(), flags & ~1024);
+                      }
 
-                    Intent launchIntent = null;
-                    if (pkg.equals("com.elitesoftware.elitewindowingcomponents.testapp")) {
-                        launchIntent = new Intent(FloatingWidgetService.this, TestAppActivity.class);
-                    } else {
-                        launchIntent = getPackageManager().getLaunchIntentForPackage(pkg);
-                        if (launchIntent == null) {
-                            if (pkg.equals("com.android.settings")) {
-                                launchIntent = new Intent(android.provider.Settings.ACTION_SETTINGS);
-                            } else if (pkg.equals("com.google.android.calculator")) {
-                                launchIntent = getPackageManager().getLaunchIntentForPackage("com.android.calculator2");
-                                if (launchIntent == null) {
-                                    launchIntent = getPackageManager().getLaunchIntentForPackage("com.sec.android.app.calculator");
-                                }
-                            }
-                        }
-                    }
-                    if (launchIntent != null) {
-                        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        final Intent finalIntent = launchIntent;
-                        
-                        // Delay launch to allow SurfaceFlinger to fully register the VirtualDisplay
-                          new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                              android.app.ActivityOptions options = android.app.ActivityOptions.makeBasic();
-                              try {
-                                  int displayId = virtualDisplay.getDisplay().getDisplayId();
-                                  boolean shizukuAvailable = false;
-                                  try { shizukuAvailable = rikka.shizuku.Shizuku.pingBinder(); } catch(Exception e){}
-                                  
-                                  if (shizukuAvailable) {
-                                      String cmd;
-                                      if (finalIntent.getComponent() != null) {
-                                          cmd = "am start -f 0x18008000 -n " + finalIntent.getComponent().flattenToShortString() + " --display " + displayId;
-                                      } else {
-                                          cmd = "am start -f 0x18008000 -a " + finalIntent.getAction() + " --display " + displayId;
-                                      }
-                                      rikka.shizuku.Shizuku.newProcess(new String[]{"sh", "-c", cmd}, null, null).waitFor();
-                                  } else {
-                                      options.setLaunchDisplayId(displayId);
-                                      
-                                      android.app.PendingIntent pendingIntent = android.app.PendingIntent.getActivity(
-                                          FloatingWidgetService.this, 0, finalIntent, 
-                                          android.app.PendingIntent.FLAG_UPDATE_CURRENT | android.app.PendingIntent.FLAG_IMMUTABLE
-                                      );
-                                      pendingIntent.send(FloatingWidgetService.this, 0, null, null, null, null, options.toBundle());
+                      Intent launchIntent = null;
+                      if (pkg.equals(getPackageName())) {
+                          launchIntent = new Intent(FloatingWidgetService.this, MainActivity.class);
+                      } else {
+                          launchIntent = getPackageManager().getLaunchIntentForPackage(pkg);
+                          if (launchIntent == null) {
+                              if (pkg.equals("com.android.settings")) {
+                                  launchIntent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+                              } else if (pkg.equals("com.google.android.calculator")) {
+                                  launchIntent = getPackageManager().getLaunchIntentForPackage("com.android.calculator2");
+                                  if (launchIntent == null) {
+                                      launchIntent = getPackageManager().getLaunchIntentForPackage("com.sec.android.app.calculator");
                                   }
-                              } catch (Exception e) {
-                                  android.widget.Toast.makeText(FloatingWidgetService.this, "Launch Failed: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
                               }
-                          }, 500);
-                    }
-                }
-                @Override
-                public void onSurfaceTextureSizeChanged(android.graphics.SurfaceTexture surface, int width, int height) {
-                    if (virtualDisplay != null && width > 0 && height > 0) {
-                        virtualDisplay.resize(width, height, 160);
-                    }
-                }
-                @Override
-                public boolean onSurfaceTextureDestroyed(android.graphics.SurfaceTexture surface) {
-                    if (virtualDisplay != null) {
-                        virtualDisplay.release();
-                    }
-                    if (mSurface != null) {
-                        mSurface.release();
-                    }
-                    return true;
-                }
-                @Override
-                public void onSurfaceTextureUpdated(android.graphics.SurfaceTexture surface) {
-                }
-            });
-            textureView.setOpaque(false);
-            contentView = textureView;
+                          }
+                      }
+                      if (launchIntent != null) {
+                          launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                          final Intent finalIntent = launchIntent;
+                          
+                          // Delay launch to allow SurfaceFlinger to fully register the VirtualDisplay
+                            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                                android.app.ActivityOptions options = android.app.ActivityOptions.makeBasic();
+                                try {
+                                    int displayId = virtualDisplay.getDisplay().getDisplayId();
+                                    boolean shizukuAvailable = false;
+                                    try { shizukuAvailable = rikka.shizuku.Shizuku.pingBinder(); } catch(Exception e){}
+                                    
+                                    if (shizukuAvailable) {
+                                        String cmd;
+                                        if (finalIntent.getComponent() != null) {
+                                            cmd = "am start -f 0x18008000 -n " + finalIntent.getComponent().flattenToShortString() + " --display " + displayId;
+                                        } else {
+                                            cmd = "am start -f 0x18008000 -a " + finalIntent.getAction() + " --display " + displayId;
+                                        }
+                                        rikka.shizuku.Shizuku.newProcess(new String[]{"sh", "-c", cmd}, null, null).waitFor();
+                                    } else {
+                                        options.setLaunchDisplayId(displayId);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            startActivity(finalIntent, options.toBundle());
+                                        } else {
+                                            startActivity(finalIntent);
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }, 500);
+                      }
+                  }
+                  @Override
+                  public void surfaceChanged(android.view.SurfaceHolder holder, int format, int width, int height) {
+                      if (virtualDisplay != null && width > 0 && height > 0) {
+                          virtualDisplay.resize(width, height, 160);
+                      }
+                  }
+                  @Override
+                  public void surfaceDestroyed(android.view.SurfaceHolder holder) {
+                      if (virtualDisplay != null) {
+                          virtualDisplay.release();
+                      }
+                  }
+              });
+              contentView = surfaceView;
         } else {
             final WebView webView = new WebView(this);
             WebSettings webSettings = webView.getSettings();
