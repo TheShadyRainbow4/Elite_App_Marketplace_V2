@@ -15,7 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:hardwareAccelerated="true"
+        android:resizeableActivity="true"
         android:usesCleartextTraffic="true">
+        
+        <meta-data android:name="com.samsung.android.keepalive.density" android:value="true"/>
+        <meta-data android:name="com.samsung.android.dex.launchwidth" android:value="0" />
+        <meta-data android:name="com.samsung.android.dex.launchheight" android:value="0" />
         
         <!-- Main Component Launcher -->
         <activity

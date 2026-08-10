@@ -527,14 +527,25 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Connectivity",
+      "description": "This application represents the core Bluetooth functionality for Android devices, an essential component that enables seamless wireless communication. It facilitates the discovery, pairing, and connection of your device with a wide array of Bluetooth-enabled peripherals and other mobile devices.\n\nLeveraging this system application, users can connect to wireless headphones, smartwatches, speakers, and other accessories, as well as transfer files and data between compatible devices. It underpins many common features, ensuring a robust and reliable foundation for all Bluetooth-related interactions within the Android ecosystem.",
       "icon": "com.android.bluetooth_icon.png",
-      "name": "Bluetooth_16.apk",
+      "name": "Bluetooth",
       "package_name": "com.android.bluetooth",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "bluetooth",
+        "wireless",
+        "connectivity",
+        "pairing",
+        "device",
+        "system",
+        "Android",
+        "communication",
+        "transfer"
+      ],
       "versions": [
         {
           "file": "Bluetooth_16.apk",
@@ -543,13 +554,23 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
-      "name": "Bluetooth MIDI Service_16.apk",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "The Bluetooth MIDI Service is a fundamental system component designed to enable seamless communication between Android devices and MIDI-compatible equipment via a Bluetooth connection. This service facilitates the wireless transmission of Musical Instrument Digital Interface (MIDI) data, allowing for efficient interaction with various music hardware and software without the need for physical cables.\n\nThis functionality is crucial for musicians, producers, and hobbyists who utilize MIDI controllers, keyboards, and other instruments with their Android devices. It provides the underlying framework for stable and low-latency wireless MIDI connections, enhancing the user experience for composing, performing, and controlling digital audio workstations or music applications.",
+      "name": "Bluetooth MIDI Service",
       "package_name": "com.android.bluetoothmidiservice",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "Bluetooth",
+        "MIDI",
+        "service",
+        "audio",
+        "music",
+        "connectivity",
+        "tools",
+        "utility"
+      ],
       "versions": [
         {
           "file": "Bluetooth MIDI Service_16.apk",
@@ -558,14 +579,23 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "The Bookmark Provider app serves as a foundational Android system component responsible for managing and making bookmarks accessible across various applications. It centralizes the storage and retrieval of user-saved bookmarks, ensuring consistency and seamless integration within the Android environment.\n\nThis application is crucial for the functionality of other apps that rely on persistent bookmarking, such as web browsers or content readers. While not directly interacted with by the user, it works silently in the background to provide essential data management services.",
       "icon": "com.android.bookmarkprovider_icon.png",
-      "name": "Bookmark Provider_16.apk",
+      "name": "Bookmark Provider",
       "package_name": "com.android.bookmarkprovider",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "bookmark",
+        "provider",
+        "system",
+        "utility",
+        "android",
+        "data management",
+        "core component"
+      ],
       "versions": [
         {
           "file": "Bookmark Provider_16.apk",
@@ -574,13 +604,24 @@
       ]
     },
     {
-      "category": "",
-      "description": "Auto-discovered APK.",
-      "name": "Call Log Backup_Restore_16.apk",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "This application provides essential functionality for managing your phone's call history. It allows users to conveniently back up their call logs, ensuring that important communication records are preserved and not lost. \n\nBeyond backup, the app also facilitates the restoration of call logs, making it simple to retrieve your history if you switch devices or need to recover lost data. It's a useful tool for maintaining an organized and accessible record of your phone conversations.",
+      "name": "Call Log Backup Restore",
       "package_name": "com.android.calllogbackup",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "call log",
+        "backup",
+        "restore",
+        "phone",
+        "utility",
+        "data",
+        "management",
+        "communication",
+        "history"
+      ],
       "versions": [
         {
           "file": "Call Log Backup_Restore_16.apk",
@@ -589,13 +630,23 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
-      "name": "CameraExtensionsProxy_16.apk",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "This application, Camera Extensions Proxy, is a critical system component for Android devices, specifically designed to manage and facilitate advanced camera functionalities. It acts as a proxy to enable various extensions and features for the device's native camera application, improving its capabilities and performance.\n\nOperating primarily in the background, this APK ensures seamless integration of new camera features, computational photography enhancements, and compatibility with different camera hardware configurations. It is not a standalone camera app but a foundational service that supports and extends the default camera experience on your Android device.",
+      "name": "Camera Extensions Proxy 16",
       "package_name": "com.android.cameraextensions",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "camera",
+        "extensions",
+        "proxy",
+        "system app",
+        "utility",
+        "android",
+        "photography",
+        "image processing"
+      ],
       "versions": [
         {
           "file": "CameraExtensionsProxy_16.apk",
@@ -604,14 +655,24 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "The Certificate Installer is an essential Android system utility designed to manage digital certificates on your device. It facilitates the installation, storage, and handling of various types of certificates, which are crucial for establishing secure connections, verifying app authenticity, and enabling secure communication protocols.\n\nThis tool plays a vital role in ensuring the security and integrity of your device's interactions with networks and applications, allowing for trusted communication and data exchange. It helps maintain the cryptographic foundation necessary for secure browsing, email, and other network-dependent services.",
       "icon": "com.android.certinstaller_icon.png",
-      "name": "Certificate installer_16.apk",
+      "name": "Certificate installer",
       "package_name": "com.android.certinstaller",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "certificate",
+        "installer",
+        "system tool",
+        "security",
+        "android",
+        "utility",
+        "management",
+        "secure connection"
+      ],
       "versions": [
         {
           "file": "Certificate installer_16.apk",
@@ -620,14 +681,28 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Web Browser",
+      "description": "Google Chrome is a fast, easy-to-use, and secure web browser built by Google. Designed for Android, it brings you personalized news articles, quick links to your favorite sites, downloads, and Google Search and Google Translate built-in. Sync your bookmarks, passwords, and settings across all your devices to access your information seamlessly.\n\nExperience private browsing with Incognito mode, save data with Chrome's data saver feature, and enjoy a smooth browsing experience with faster page loads. Chrome also features built-in malware and phishing protection, ensuring a safe online experience for all your daily internet needs.",
       "icon": "com.android.chrome_icon.png",
-      "name": "Chrome_150.0.7871.186.apk",
+      "name": "Chrome",
       "package_name": "com.android.chrome",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "browser",
+        "internet",
+        "web",
+        "search",
+        "Google",
+        "fast",
+        "secure",
+        "sync",
+        "mobile",
+        "tabs",
+        "incognito",
+        "bookmarks"
+      ],
       "versions": [
         {
           "file": "Chrome_150.0.7871.186.apk",
@@ -636,14 +711,26 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "This application serves as a crucial tool for performing comprehensive diagnostic checks on an Android device. It is designed to help users or system administrators monitor the health, performance, and overall status of the device's hardware and software components.\n\nKey functionalities likely include identifying potential issues, analyzing system resources, and providing valuable insights into the device's operational state. As a core system component (indicated by its package name `com.android.devicediagnostics`), it plays a vital role in maintaining device stability and assisting in the troubleshooting of various device-related problems.",
       "icon": "com.android.devicediagnostics_icon.png",
-      "name": "DeviceDiagnostics_16.apk",
+      "name": "Device Diagnostics",
       "package_name": "com.android.devicediagnostics",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "device",
+        "diagnostics",
+        "system",
+        "monitor",
+        "health",
+        "performance",
+        "troubleshoot",
+        "android",
+        "utility",
+        "analysis"
+      ],
       "versions": [
         {
           "file": "DeviceDiagnostics_16.apk",
@@ -652,14 +739,24 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Personalization",
+      "description": "Basic Daydreams offers a collection of simple and elegant interactive screensavers for your Android device. These dynamic displays automatically activate when your device is charging or docked, providing a visually engaging experience rather than a static black screen.\n\nPerfect for users looking to add a touch of personalization to their device's idle state, this app provides fundamental daydream options to enhance the aesthetic appeal of your smartphone or tablet when not in active use.",
       "icon": "com.android.dreams.basic_icon.png",
-      "name": "Basic Daydreams_16.apk",
+      "name": "Basic Daydreams",
       "package_name": "com.android.dreams.basic",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "daydream",
+        "screensaver",
+        "personalization",
+        "display",
+        "android",
+        "basic",
+        "animation",
+        "interactive"
+      ],
       "versions": [
         {
           "file": "Basic Daydreams_16.apk",
@@ -668,14 +765,26 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Personalization",
+      "description": "Photo Screensavers allows you to transform your Android device's idle state into a captivating visual experience. This application enables you to display your favorite photos as a dynamic screensaver, turning your device into a digital photo frame when it's charging or docked. \n\nEnjoy a continuous slideshow of your cherished memories, adding a personal touch to your device's display even when not actively in use. It leverages the Android Daydream feature to bring your photo collection to life.",
       "icon": "com.android.dreams.phototable_icon.png",
-      "name": "Photo Screensavers_16.apk",
+      "name": "Photo Screensavers",
       "package_name": "com.android.dreams.phototable",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "photo",
+        "screensaver",
+        "slideshow",
+        "personalization",
+        "customization",
+        "wallpaper",
+        "images",
+        "album",
+        "display",
+        "android dreams"
+      ],
       "versions": [
         {
           "file": "Photo Screensavers_16.apk",
@@ -1387,6 +1496,10 @@
       "screenshots": [],
       "tags": [],
       "versions": [
+        {
+          "version": "1.0.110",
+          "file": "Elite_App_Marketplace-Client_v1.0.110.apk"
+        },
         {
           "file": "Elite_App_Marketplace-Client_v1.0.109.apk",
           "version": "1.0.109"

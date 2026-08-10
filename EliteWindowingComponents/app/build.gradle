@@ -7,11 +7,11 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.elitesoftware.geminiwidget"
+        applicationId "com.elitesoftware.popupwindowmanager"
         minSdk 24
         targetSdk 34
-        versionCode 10109
-        versionName "1.0.109"
+        versionCode 10110
+        versionName "1.0.110"
     }
     buildTypes {
         release {

@@ -77,6 +77,9 @@ Write-Host "Injecting newest APK into Server's DB..."
 $apkFileName = "Elite_App_Marketplace-Client_$Version.apk"
 Copy-Item "Client_App\app\build\outputs\apk\debug\app-release-signed.apk" "Manager_App\apks\$apkFileName" -Force
 
+$windowingApkName = "EliteWindowingComponents_$Version.apk"
+Copy-Item "EliteWindowingComponents\app\build\outputs\apk\debug\app-release-signed.apk" "Manager_App\apks\$windowingApkName" -Force
+
 Write-Host "Building Windows Server EXE..."
 cd Manager_App
 Stop-Process -Name "Elite_App_Marketplace-Server.v2" -ErrorAction SilentlyContinue

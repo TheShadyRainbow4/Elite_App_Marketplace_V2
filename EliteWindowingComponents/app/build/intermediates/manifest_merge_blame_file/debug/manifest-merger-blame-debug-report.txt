@@ -1,8 +1,8 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-3    package="com.elitesoftware.geminiwidget"
-4    android:versionCode="10109"
-5    android:versionName="1.0.109" >
+3    package="com.elitesoftware.popupwindowmanager"
+4    android:versionCode="10110"
+5    android:versionName="1.0.110" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="24"
@@ -33,17 +33,17 @@
 20
 21    <permission
 21-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
-22        android:name="com.elitesoftware.geminiwidget.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+22        android:name="com.elitesoftware.popupwindowmanager.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
 22-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
 23        android:protectionLevel="signature" />
 23-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
 24
-25    <uses-permission android:name="com.elitesoftware.geminiwidget.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+25    <uses-permission android:name="com.elitesoftware.popupwindowmanager.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 25-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
 25-->[androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
 26
 27    <application
-27-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:11:5-148:19
+27-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:11:5-153:19
 28        android:allowBackup="true"
 28-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:12:9-35
 29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -56,293 +56,313 @@
 33-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:13:9-43
 34        android:label="@string/app_name"
 34-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:14:9-41
-35        android:supportsRtl="true"
-35-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:15:9-35
-36        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-36-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:16:9-65
-37        android:usesCleartextTraffic="true" >
-37-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:18:9-44
-38
-39        <!-- Main Component Launcher -->
-40        <activity
-40-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:21:9-30:20
-41            android:name="com.elitesoftware.elitewindowingcomponents.MainActivity"
-41-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:22:13-41
-42            android:exported="true"
-42-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:25:13-36
-43            android:icon="@mipmap/ic_launcher"
-43-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:24:13-47
-44            android:label="Elite Windows" >
-44-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:23:13-42
-45            <intent-filter>
-45-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:13-29:29
-46                <action android:name="android.intent.action.MAIN" />
-46-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:17-69
-46-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:25-66
-47
-48                <category android:name="android.intent.category.LAUNCHER" />
-48-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:17-77
-48-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:27-74
-49            </intent-filter>
-50        </activity>
-51
-52        <!-- Custom Frame Builder -->
-53        <activity
-53-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:9-42:20
-54            android:name="com.elitesoftware.elitewindowingcomponents.CustomFrameActivity"
-54-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:34:13-48
-55            android:exported="true"
-55-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:37:13-36
-56            android:icon="@mipmap/ic_custom_frame"
-56-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:36:13-51
-57            android:label="Custom Frame" >
-57-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:35:13-41
-58            <intent-filter>
-58-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:13-29:29
-59                <action android:name="android.intent.action.MAIN" />
-59-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:17-69
-59-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:25-66
-60
-61                <category android:name="android.intent.category.LAUNCHER" />
-61-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:17-77
-61-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:27-74
-62            </intent-filter>
-63        </activity>
-64
-65        <!-- Gemini Window -->
-66        <activity
-66-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:45:9-57:20
-67            android:name="com.elitesoftware.elitewindowingcomponents.GeminiLauncherActivity"
-67-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:46:13-51
-68            android:excludeFromRecents="true"
-68-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:50:13-46
-69            android:exported="true"
-69-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:52:13-36
-70            android:icon="@mipmap/ic_gemini_star"
-70-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:48:13-50
-71            android:label="Elite Gemini"
-71-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:47:13-41
-72            android:noHistory="true"
-72-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:51:13-37
-73            android:taskAffinity="" >
-73-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:49:13-36
-74            <intent-filter>
-74-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:13-29:29
-75                <action android:name="android.intent.action.MAIN" />
-75-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:17-69
-75-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:25-66
-76
-77                <category android:name="android.intent.category.LAUNCHER" />
-77-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:17-77
-77-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:27-74
-78            </intent-filter>
-79        </activity>
-80
-81        <!-- Settings Window -->
-82        <activity
-82-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:60:9-72:20
-83            android:name="com.elitesoftware.elitewindowingcomponents.SettingsLauncherActivity"
-83-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:61:13-53
-84            android:excludeFromRecents="true"
-84-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:65:13-46
-85            android:exported="true"
-85-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:67:13-36
-86            android:icon="@mipmap/ic_settings"
-86-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:63:13-47
-87            android:label="Elite Settings"
-87-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:62:13-43
-88            android:noHistory="true"
-88-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:66:13-37
-89            android:taskAffinity="" >
-89-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:64:13-36
-90            <intent-filter>
-90-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:13-29:29
-91                <action android:name="android.intent.action.MAIN" />
-91-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:17-69
-91-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:25-66
-92
-93                <category android:name="android.intent.category.LAUNCHER" />
-93-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:17-77
-93-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:27-74
-94            </intent-filter>
-95        </activity>
-96
-97        <!-- Share Target -->
-98        <activity
-98-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:75:9-84:20
-99            android:name="com.elitesoftware.elitewindowingcomponents.ShareReceiverActivity"
-99-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:76:13-50
-100            android:exported="true"
-100-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:78:13-36
-101            android:label="Open in Elite Frame" >
-101-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:77:13-48
-102            <intent-filter>
-102-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:79:13-83:29
-103                <action android:name="android.intent.action.SEND" />
-103-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:80:17-69
-103-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:80:25-66
-104
-105                <category android:name="android.intent.category.DEFAULT" />
-105-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:81:17-76
-105-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:81:27-73
+35        android:resizeableActivity="true"
+35-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:18:9-42
+36        android:supportsRtl="true"
+36-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:15:9-35
+37        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+37-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:16:9-65
+38        android:usesCleartextTraffic="true" >
+38-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:19:9-44
+39        <meta-data
+39-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:21:9-95
+40            android:name="com.samsung.android.keepalive.density"
+40-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:21:20-72
+41            android:value="true" />
+41-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:21:73-93
+42        <meta-data
+42-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:22:9-91
+43            android:name="com.samsung.android.dex.launchwidth"
+43-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:22:20-70
+44            android:value="0" />
+44-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:22:71-88
+45        <meta-data
+45-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:23:9-92
+46            android:name="com.samsung.android.dex.launchheight"
+46-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:23:20-71
+47            android:value="0" />
+47-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:23:72-89
+48
+49        <!-- Main Component Launcher -->
+50        <activity
+50-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:9-35:20
+51            android:name="com.elitesoftware.elitewindowingcomponents.MainActivity"
+51-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:13-41
+52            android:exported="true"
+52-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:30:13-36
+53            android:icon="@mipmap/ic_launcher"
+53-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:29:13-47
+54            android:label="Elite Windows" >
+54-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:13-42
+55            <intent-filter>
+55-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:31:13-34:29
+56                <action android:name="android.intent.action.MAIN" />
+56-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:17-69
+56-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:25-66
+57
+58                <category android:name="android.intent.category.LAUNCHER" />
+58-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:17-77
+58-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:27-74
+59            </intent-filter>
+60        </activity>
+61
+62        <!-- Custom Frame Builder -->
+63        <activity
+63-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:38:9-47:20
+64            android:name="com.elitesoftware.elitewindowingcomponents.CustomFrameActivity"
+64-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:39:13-48
+65            android:exported="true"
+65-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:42:13-36
+66            android:icon="@mipmap/ic_custom_frame"
+66-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:41:13-51
+67            android:label="Custom Frame" >
+67-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:40:13-41
+68            <intent-filter>
+68-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:31:13-34:29
+69                <action android:name="android.intent.action.MAIN" />
+69-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:17-69
+69-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:25-66
+70
+71                <category android:name="android.intent.category.LAUNCHER" />
+71-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:17-77
+71-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:27-74
+72            </intent-filter>
+73        </activity>
+74
+75        <!-- Gemini Window -->
+76        <activity
+76-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:50:9-62:20
+77            android:name="com.elitesoftware.elitewindowingcomponents.GeminiLauncherActivity"
+77-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:51:13-51
+78            android:excludeFromRecents="true"
+78-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:55:13-46
+79            android:exported="true"
+79-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:57:13-36
+80            android:icon="@mipmap/ic_gemini_star"
+80-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:53:13-50
+81            android:label="Elite Gemini"
+81-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:52:13-41
+82            android:noHistory="true"
+82-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:56:13-37
+83            android:taskAffinity="" >
+83-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:54:13-36
+84            <intent-filter>
+84-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:31:13-34:29
+85                <action android:name="android.intent.action.MAIN" />
+85-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:17-69
+85-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:25-66
+86
+87                <category android:name="android.intent.category.LAUNCHER" />
+87-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:17-77
+87-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:27-74
+88            </intent-filter>
+89        </activity>
+90
+91        <!-- Settings Window -->
+92        <activity
+92-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:65:9-77:20
+93            android:name="com.elitesoftware.elitewindowingcomponents.SettingsLauncherActivity"
+93-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:66:13-53
+94            android:excludeFromRecents="true"
+94-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:70:13-46
+95            android:exported="true"
+95-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:72:13-36
+96            android:icon="@mipmap/ic_settings"
+96-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:68:13-47
+97            android:label="Elite Settings"
+97-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:67:13-43
+98            android:noHistory="true"
+98-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:71:13-37
+99            android:taskAffinity="" >
+99-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:69:13-36
+100            <intent-filter>
+100-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:31:13-34:29
+101                <action android:name="android.intent.action.MAIN" />
+101-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:17-69
+101-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:25-66
+102
+103                <category android:name="android.intent.category.LAUNCHER" />
+103-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:17-77
+103-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:27-74
+104            </intent-filter>
+105        </activity>
 106
-107                <data android:mimeType="text/plain" />
-107-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:82:17-55
-107-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:82:23-52
-108            </intent-filter>
-109        </activity>
-110
-111        <!-- Test App Launcher -->
-112        <activity
-112-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:87:9-99:20
-113            android:name="com.elitesoftware.elitewindowingcomponents.TestAppLauncherActivity"
-113-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:88:13-52
-114            android:excludeFromRecents="true"
-114-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:92:13-46
-115            android:exported="true"
-115-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:94:13-36
-116            android:icon="@mipmap/ic_launcher"
-116-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:90:13-47
-117            android:label="Elite Test App"
-117-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:89:13-43
-118            android:noHistory="true"
-118-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:93:13-37
-119            android:taskAffinity="" >
-119-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:91:13-36
-120            <intent-filter>
-120-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:13-29:29
-121                <action android:name="android.intent.action.MAIN" />
-121-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:17-69
-121-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:25-66
-122
-123                <category android:name="android.intent.category.LAUNCHER" />
-123-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:17-77
-123-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:27-74
-124            </intent-filter>
-125        </activity>
-126
-127        <!-- Test App Activity -->
-128        <activity
-128-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:102:9-105:39
-129            android:name="com.elitesoftware.elitewindowingcomponents.TestAppActivity"
-129-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:103:13-44
-130            android:exported="true"
-130-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:105:13-36
-131            android:label="Test App" />
-131-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:104:13-37
+107        <!-- Share Target -->
+108        <activity
+108-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:80:9-89:20
+109            android:name="com.elitesoftware.elitewindowingcomponents.ShareReceiverActivity"
+109-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:81:13-50
+110            android:exported="true"
+110-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:83:13-36
+111            android:label="Open in Elite Frame" >
+111-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:82:13-48
+112            <intent-filter>
+112-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:84:13-88:29
+113                <action android:name="android.intent.action.SEND" />
+113-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:85:17-69
+113-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:85:25-66
+114
+115                <category android:name="android.intent.category.DEFAULT" />
+115-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:86:17-76
+115-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:86:27-73
+116
+117                <data android:mimeType="text/plain" />
+117-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:87:17-55
+117-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:87:23-52
+118            </intent-filter>
+119        </activity>
+120
+121        <!-- Test App Launcher -->
+122        <activity
+122-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:92:9-104:20
+123            android:name="com.elitesoftware.elitewindowingcomponents.TestAppLauncherActivity"
+123-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:93:13-52
+124            android:excludeFromRecents="true"
+124-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:97:13-46
+125            android:exported="true"
+125-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:99:13-36
+126            android:icon="@mipmap/ic_launcher"
+126-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:95:13-47
+127            android:label="Elite Test App"
+127-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:94:13-43
+128            android:noHistory="true"
+128-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:98:13-37
+129            android:taskAffinity="" >
+129-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:96:13-36
+130            <intent-filter>
+130-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:31:13-34:29
+131                <action android:name="android.intent.action.MAIN" />
+131-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:17-69
+131-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:25-66
 132
-133        <!-- Custom Package Launcher -->
-134        <activity
-134-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:108:9-121:20
-135            android:name="com.elitesoftware.elitewindowingcomponents.PackageLauncherActivity"
-135-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:109:13-52
-136            android:excludeFromRecents="true"
-136-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:114:13-46
-137            android:exported="true"
-137-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:116:13-36
-138            android:icon="@mipmap/ic_launcher"
-138-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:111:13-47
-139            android:label="Launch Any App"
-139-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:110:13-43
-140            android:noHistory="true"
-140-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:115:13-37
-141            android:taskAffinity=""
-141-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:113:13-36
-142            android:theme="@style/Theme.AppCompat.Light.Dialog" >
-142-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:112:13-64
-143            <intent-filter>
-143-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:13-29:29
-144                <action android:name="android.intent.action.MAIN" />
-144-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:17-69
-144-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:25-66
-145
-146                <category android:name="android.intent.category.LAUNCHER" />
-146-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:17-77
-146-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:27-74
-147            </intent-filter>
-148        </activity>
-149
-150        <!-- Calculator Launcher -->
-151        <activity
-151-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:124:9-136:20
-152            android:name="com.elitesoftware.elitewindowingcomponents.CalculatorLauncherActivity"
-152-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:125:13-55
-153            android:excludeFromRecents="true"
-153-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:129:13-46
-154            android:exported="true"
-154-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:131:13-36
-155            android:icon="@mipmap/ic_launcher"
-155-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:127:13-47
-156            android:label="Elite Calculator"
-156-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:126:13-45
-157            android:noHistory="true"
-157-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:130:13-37
-158            android:taskAffinity="" >
-158-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:128:13-36
-159            <intent-filter>
-159-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:13-29:29
-160                <action android:name="android.intent.action.MAIN" />
-160-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:17-69
-160-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:25-66
-161
-162                <category android:name="android.intent.category.LAUNCHER" />
-162-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:17-77
-162-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:27-74
-163            </intent-filter>
-164        </activity>
-165
-166        <!-- Elite Window Framework API Receiver -->
-167        <receiver
-167-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:139:9-145:20
-168            android:name="com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"
-168-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:140:13-46
-169            android:exported="true" >
-169-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:141:13-36
-170            <intent-filter>
-170-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:142:13-144:29
-171                <action android:name="com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW" />
-171-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:143:17-99
-171-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:143:25-96
-172            </intent-filter>
-173        </receiver>
-174
-175        <service
-175-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:147:9-106
-176            android:name="com.elitesoftware.elitewindowingcomponents.FloatingWidgetService"
-176-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:147:18-55
-177            android:enabled="true"
-177-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:147:56-78
-178            android:exported="false" />
-178-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:147:79-103
-179
-180        <meta-data
-180-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:13:9-15:36
-181            android:name="moe.shizuku.client.V3_SUPPORT"
-181-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:14:13-57
-182            android:value="true" />
-182-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:15:13-33
-183
-184        <provider
-184-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-185            android:name="androidx.startup.InitializationProvider"
-185-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
-186            android:authorities="com.elitesoftware.geminiwidget.androidx-startup"
-186-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
-187            android:exported="false" >
-187-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
-188            <meta-data
-188-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
-189                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-189-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
-190                android:value="androidx.startup" />
-190-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
-191            <meta-data
-191-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Administrator\.gradle\caches\transforms-3\78d3c2aa8dfccd704ee93532120c5e33\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
-192                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-192-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Administrator\.gradle\caches\transforms-3\78d3c2aa8dfccd704ee93532120c5e33\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
-193                android:value="androidx.startup" />
-193-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Administrator\.gradle\caches\transforms-3\78d3c2aa8dfccd704ee93532120c5e33\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
-194        </provider>
-195    </application>
-196
-197</manifest>
+133                <category android:name="android.intent.category.LAUNCHER" />
+133-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:17-77
+133-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:27-74
+134            </intent-filter>
+135        </activity>
+136
+137        <!-- Test App Activity -->
+138        <activity
+138-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:107:9-110:39
+139            android:name="com.elitesoftware.elitewindowingcomponents.TestAppActivity"
+139-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:108:13-44
+140            android:exported="true"
+140-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:110:13-36
+141            android:label="Test App" />
+141-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:109:13-37
+142
+143        <!-- Custom Package Launcher -->
+144        <activity
+144-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:113:9-126:20
+145            android:name="com.elitesoftware.elitewindowingcomponents.PackageLauncherActivity"
+145-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:114:13-52
+146            android:excludeFromRecents="true"
+146-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:119:13-46
+147            android:exported="true"
+147-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:121:13-36
+148            android:icon="@mipmap/ic_launcher"
+148-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:116:13-47
+149            android:label="Launch Any App"
+149-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:115:13-43
+150            android:noHistory="true"
+150-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:120:13-37
+151            android:taskAffinity=""
+151-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:118:13-36
+152            android:theme="@style/Theme.AppCompat.Light.Dialog" >
+152-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:117:13-64
+153            <intent-filter>
+153-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:31:13-34:29
+154                <action android:name="android.intent.action.MAIN" />
+154-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:17-69
+154-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:25-66
+155
+156                <category android:name="android.intent.category.LAUNCHER" />
+156-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:17-77
+156-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:27-74
+157            </intent-filter>
+158        </activity>
+159
+160        <!-- Calculator Launcher -->
+161        <activity
+161-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:129:9-141:20
+162            android:name="com.elitesoftware.elitewindowingcomponents.CalculatorLauncherActivity"
+162-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:130:13-55
+163            android:excludeFromRecents="true"
+163-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:134:13-46
+164            android:exported="true"
+164-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:136:13-36
+165            android:icon="@mipmap/ic_launcher"
+165-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:132:13-47
+166            android:label="Elite Calculator"
+166-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:131:13-45
+167            android:noHistory="true"
+167-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:135:13-37
+168            android:taskAffinity="" >
+168-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:133:13-36
+169            <intent-filter>
+169-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:31:13-34:29
+170                <action android:name="android.intent.action.MAIN" />
+170-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:17-69
+170-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:25-66
+171
+172                <category android:name="android.intent.category.LAUNCHER" />
+172-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:17-77
+172-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:27-74
+173            </intent-filter>
+174        </activity>
+175
+176        <!-- Elite Window Framework API Receiver -->
+177        <receiver
+177-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:144:9-150:20
+178            android:name="com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"
+178-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:145:13-46
+179            android:exported="true" >
+179-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:146:13-36
+180            <intent-filter>
+180-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:147:13-149:29
+181                <action android:name="com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW" />
+181-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:148:17-99
+181-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:148:25-96
+182            </intent-filter>
+183        </receiver>
+184
+185        <service
+185-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:152:9-106
+186            android:name="com.elitesoftware.elitewindowingcomponents.FloatingWidgetService"
+186-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:152:18-55
+187            android:enabled="true"
+187-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:152:56-78
+188            android:exported="false" />
+188-->Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:152:79-103
+189
+190        <meta-data
+190-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:13:9-15:36
+191            android:name="moe.shizuku.client.V3_SUPPORT"
+191-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:14:13-57
+192            android:value="true" />
+192-->[dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:15:13-33
+193
+194        <provider
+194-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+195            android:name="androidx.startup.InitializationProvider"
+195-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+196            android:authorities="com.elitesoftware.popupwindowmanager.androidx-startup"
+196-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+197            android:exported="false" >
+197-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+198            <meta-data
+198-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+199                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+199-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+200                android:value="androidx.startup" />
+200-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Administrator\.gradle\caches\transforms-3\c0ce69211c48bb93d7d1ac51ab0d9094\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+201            <meta-data
+201-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Administrator\.gradle\caches\transforms-3\78d3c2aa8dfccd704ee93532120c5e33\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+202                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+202-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Administrator\.gradle\caches\transforms-3\78d3c2aa8dfccd704ee93532120c5e33\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+203                android:value="androidx.startup" />
+203-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Administrator\.gradle\caches\transforms-3\78d3c2aa8dfccd704ee93532120c5e33\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+204        </provider>
+205    </application>
+206
+207</manifest>

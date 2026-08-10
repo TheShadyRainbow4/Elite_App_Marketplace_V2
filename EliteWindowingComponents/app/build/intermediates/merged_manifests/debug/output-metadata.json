@@ -4,15 +4,15 @@
     "type": "MERGED_MANIFESTS",
     "kind": "Directory"
   },
-  "applicationId": "com.elitesoftware.geminiwidget",
+  "applicationId": "com.elitesoftware.popupwindowmanager",
   "variantName": "debug",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 10109,
-      "versionName": "1.0.109",
+      "versionCode": 10110,
+      "versionName": "1.0.110",
       "outputFile": "AndroidManifest.xml"
     }
   ],
