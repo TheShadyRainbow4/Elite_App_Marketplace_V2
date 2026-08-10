@@ -1184,12 +1184,16 @@
       "tags": [],
       "versions": [
         {
+          "file": "Elite_App_Marketplace-Client_v1.0.98.apk",
+          "version": "1.0.98"
+        },
+        {
           "file": "Elite_App_Marketplace-Client_v1.0.97.apk",
           "version": "1.0.97"
         },
         {
-          "version": "1.0.96",
-          "file": "Elite_App_Marketplace-Client_v1.0.96.apk"
+          "file": "Elite_App_Marketplace-Client_v1.0.96.apk",
+          "version": "1.0.96"
         },
         {
           "file": "Elite_App_Marketplace-Client_v1.0.95.apk",

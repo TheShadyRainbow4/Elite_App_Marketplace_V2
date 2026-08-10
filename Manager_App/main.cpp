@@ -2164,9 +2164,9 @@ void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, 
         g_pendingProposals.clear();
         
         auto askGemini = [](const std::string& name, const std::string& pkg, const std::string& desc, const std::string& cat, const std::string& tags) {
-            std::string prompt = "You are an AI tagging assistant for the Elite App Marketplace. Update the following Android App. "
-                                 "You should be aware of the 'entire suite we have built' - our Elite Software Suite includes the Marketplace App, Server Manager, and local ecosystem. "
-                                 "Generate a detailed 3+ paragraph description (mentioning how it fits in our elite suite if applicable), a concise category, a new optimized Display Name, and a comma-separated list of tags. "
+            std::string prompt = "You are an AI tagging assistant. Format the following Android App metadata. "
+                                 "Generate a 1-2 paragraph description, a concise category, and a comma-separated list of tags. "
+                                 "For the name, DO NOT rename it or add 'Elite' to it; ONLY clean up the existing name (e.g., add spaces between CamelCase words, remove weird characters, and make it readable). "
                                  "Respond ONLY in valid JSON format: {\"name\": \"...\", \"category\": \"...\", \"tags\": \"tag1,tag2\", \"description\": \"...\"}.\n"
                                  "Current Info:\nName: " + name + "\nPackage: " + pkg + "\nDesc: " + desc + "\nCategory: " + cat + "\nTags: " + tags;
             std::string raw = GeminiAI::GenerateContent(prompt);
