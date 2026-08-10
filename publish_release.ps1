@@ -120,6 +120,23 @@ foreach ($app in $dbObj.apps) {
             $app.versions = @($newVer) + $app.versions
         }
     }
+    if ($app.package_name -eq "com.elitesoftware.popupwindowmanager" -or $app.package_name -eq "com.elitesoftware.geminiwidget") {
+        $app.package_name = "com.elitesoftware.popupwindowmanager"
+        $app.name = "ElitePopupWindow_manager"
+        $foundWindowing = $false
+        foreach ($v in $app.versions) {
+            if ($v.version -eq $rawVer) {
+                $foundWindowing = $true
+            }
+        }
+        if (-not $foundWindowing) {
+            $newVerWindowing = @{
+                "version" = $rawVer
+                "file" = $windowingApkName
+            }
+            $app.versions = @($newVerWindowing) + $app.versions
+        }
+    }
 }
 $dbObj | ConvertTo-Json -Depth 10 | Set-Content $dbPath
 

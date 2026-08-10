@@ -1894,12 +1894,20 @@
       "category": "Unknown",
       "description": "Auto-discovered APK.",
       "icon": "com.elitesoftware.geminiwidget_icon.png",
-      "name": "Elite Gemini Widget",
-      "package_name": "com.elitesoftware.geminiwidget",
+      "name": "ElitePopupWindow_manager",
+      "package_name": "com.elitesoftware.popupwindowmanager",
       "reviews": [],
       "screenshots": [],
       "tags": [],
       "versions": [
+        {
+          "version": "1.0.111",
+          "file": "EliteWindowingComponents_v1.0.111.apk"
+        },
+        {
+          "version": "1.0.110",
+          "file": "EliteWindowingComponents_v1.0.110.apk"
+        },
         {
           "file": "EliteGeminiWidget_v1.0.26.apk",
           "version": "1.0.26"
