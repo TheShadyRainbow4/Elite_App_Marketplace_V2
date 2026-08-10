@@ -10,8 +10,8 @@ android {
         applicationId "com.elitesoftware.popupwindowmanager"
         minSdk 24
         targetSdk 34
-        versionCode 10110
-        versionName "1.0.110"
+        versionCode 10111
+        versionName "1.0.111"
     }
     buildTypes {
         release {

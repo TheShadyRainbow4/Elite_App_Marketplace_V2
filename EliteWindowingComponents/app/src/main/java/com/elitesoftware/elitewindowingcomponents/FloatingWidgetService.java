@@ -159,20 +159,21 @@ public class FloatingWidgetService extends Service {
             settingsLayout.addView(settingsTitle);
             settingsLayout.addView(infoText);
             contentView = settingsLayout;
-          } else if (pkg != null && !pkg.isEmpty()) {
-              final android.view.SurfaceView surfaceView = new android.view.SurfaceView(uiContext);
-              surfaceView.getHolder().addCallback(new android.view.SurfaceHolder.Callback() {
+            } else if (pkg != null && !pkg.isEmpty()) {
+              final android.view.TextureView textureView = new android.view.TextureView(uiContext);
+              textureView.setSurfaceTextureListener(new android.view.TextureView.SurfaceTextureListener() {
                   android.hardware.display.VirtualDisplay virtualDisplay;
+                  int mDensity = 160;
+                  android.view.Surface mSurface;
                   android.hardware.display.DisplayManager displayManager = (android.hardware.display.DisplayManager) getSystemService(android.content.Context.DISPLAY_SERVICE);
+                  
                   @Override
-                  public void surfaceCreated(android.view.SurfaceHolder holder) {
+                  public void onSurfaceTextureAvailable(android.graphics.SurfaceTexture surface, int width, int height) {
                       android.util.DisplayMetrics metrics = new android.util.DisplayMetrics();
                       ((android.view.WindowManager) getSystemService(android.content.Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
-                      int density = metrics.densityDpi;
+                      mDensity = metrics.densityDpi;
+                      mSurface = new android.view.Surface(surface);
                       
-                      int width = surfaceView.getWidth();
-                      int height = surfaceView.getHeight();
-
                       // Android 10+ requires FLAG_SHOULD_SHOW_SYSTEM_DECORATIONS (512) and FLAG_TRUSTED (1024) to launch activities on virtual displays without developer options
                       int flags = android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC | 
                                   android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY |
@@ -180,22 +181,22 @@ public class FloatingWidgetService extends Service {
                         try {
                             virtualDisplay = displayManager.createVirtualDisplay(
                                     "EliteVirtualDisplay",
-                                    width > 0 ? width : 700, height > 0 ? height : 900, density,
-                                    holder.getSurface(), flags);
+                                    width > 0 ? width : 700, height > 0 ? height : 900, mDensity,
+                                    mSurface, flags);
                         } catch (SecurityException e) {
                             try {
                                 // Fallback without trusted flag if permission denied
                                 virtualDisplay = displayManager.createVirtualDisplay(
                                         "EliteVirtualDisplay",
-                                        width > 0 ? width : 700, height > 0 ? height : 900, density,
-                                        holder.getSurface(), flags & ~1024);
+                                        width > 0 ? width : 700, height > 0 ? height : 900, mDensity,
+                                        mSurface, flags & ~1024);
                             } catch (SecurityException e2) {
                                 try {
                                     // Fallback without PUBLIC flag
                                     virtualDisplay = displayManager.createVirtualDisplay(
                                             "EliteVirtualDisplay",
-                                            width > 0 ? width : 700, height > 0 ? height : 900, density,
-                                            holder.getSurface(), android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION | 512);
+                                            width > 0 ? width : 700, height > 0 ? height : 900, mDensity,
+                                            mSurface, android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION | 512);
                                 } catch (Exception e3) {
                                     e3.printStackTrace();
                                 }
@@ -254,20 +255,31 @@ public class FloatingWidgetService extends Service {
                             }, 500);
                       }
                   }
+
                   @Override
-                  public void surfaceChanged(android.view.SurfaceHolder holder, int format, int width, int height) {
+                  public void onSurfaceTextureSizeChanged(android.graphics.SurfaceTexture surface, int width, int height) {
                       if (virtualDisplay != null && width > 0 && height > 0) {
-                          virtualDisplay.resize(width, height, 160);
+                          virtualDisplay.resize(width, height, mDensity);
+                          virtualDisplay.setSurface(mSurface);
                       }
                   }
+
                   @Override
-                  public void surfaceDestroyed(android.view.SurfaceHolder holder) {
+                  public boolean onSurfaceTextureDestroyed(android.graphics.SurfaceTexture surface) {
                       if (virtualDisplay != null) {
                           virtualDisplay.release();
                       }
+                      if (mSurface != null) {
+                          mSurface.release();
+                      }
+                      return true;
+                  }
+
+                  @Override
+                  public void onSurfaceTextureUpdated(android.graphics.SurfaceTexture surface) {
                   }
               });
-              contentView = surfaceView;
+              contentView = textureView;
         } else {
             final WebView webView = new WebView(uiContext);
             WebSettings webSettings = webView.getSettings();
