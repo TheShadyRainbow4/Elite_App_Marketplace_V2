@@ -5,3 +5,12 @@
 *.o
 *.zip
 *.bin
+
+# Added ignores
+desktop.ini
+gemini.md
+*.tmp
+*.temp
+temp/
+.agents/
+test/
