@@ -104,6 +104,7 @@ struct ClientInfo {
 std::mutex g_clientMutex;
 std::map<std::string, ClientInfo> g_connectedClients;
 std::thread* tCleanup = nullptr;
+bool g_autoTagAllRunning = false;
 
 HWND hwndChin = NULL;
 HWND hwndLogLink = NULL;
@@ -2827,7 +2828,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             }
             EnableWindow(btnAITagSelected, FALSE);
             EnableWindow(btnAIAutoTagAll, FALSE);
-            if (wmId == 21) SetWindowTextA(btnAIAutoTagAll, "Processing...");
+            if (wmId == 21) {
+                SetWindowTextA(btnAIAutoTagAll, "Processing...");
+                g_autoTagAllRunning = true;
+            }
             else SetWindowTextA(btnAITagSelected, "Processing...");
             SetWindowTextA(hwnd, "Local APK Store - Server Manager (AI Processing...)");
             RunAITask(hwnd, wmId == 21, filePath, n, p, d, c, t);

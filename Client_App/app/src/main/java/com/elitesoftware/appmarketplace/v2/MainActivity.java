@@ -375,15 +375,16 @@ public class MainActivity extends AppCompatActivity {
         String currentServerIp = getSharedPreferences("prefs", MODE_PRIVATE).getString("server_ip", "None");
         boolean useWindow = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_popups", false);
         builder.setTitle("Marketplace Settings (" + currentServerIp + ")");
-        String[] options = {"Install Root Certificate", "Install PFX Certificate", "Manually Add Server IP", "Clear Saved Servers", "Refresh App Store", "Theme: Light", "Theme: Dark", "Theme: AMOLED Black", "View Latest Release on GitHub", "View Local Server Website", "Toggle Window Popups: " + (useWindow ? "ON" : "OFF")};
+        String[] options = {"Install Root Certificate", "Install PFX Certificate", "Manually Add Server IP", "Clear Saved Servers", "Refresh App Store", "Theme: Light", "Theme: Dark", "Theme: AMOLED Black", "Check For Client Updates", "Toggle Window Popups: " + (useWindow ? "ON" : "OFF")};
         builder.setItems(options, (dialog, which) -> {
             if (which == 0) installCertificate();
             else if (which == 1) installPfxCertificate();
             else if (which == 2) promptForServerIP();
             else if (which == 3) { appsList.clear(); serverIPs.clear(); getSharedPreferences("prefs", MODE_PRIVATE).edit().remove("server_ip").apply(); filterApps(); }
             else if (which == 4) {
-                if (!serverIPs.isEmpty()) fetchAppsFromServer(serverIPs.iterator().next(), currentSearchQuery);
-                else discoverServers();
+                androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.swipeRefresh);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(true);
+                discoverServers();
             }
             else if (which >= 5 && which <= 7) {
                 android.content.SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
@@ -393,21 +394,9 @@ public class MainActivity extends AppCompatActivity {
                 recreate();
             }
             else if (which == 8) {
-                android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/TheShadyRainbow4/Elite_App_Marketplace_V2/releases/latest"));
-                startActivity(browserIntent);
+                Toast.makeText(this, "Client Update API not yet configured.", Toast.LENGTH_SHORT).show();
             }
             else if (which == 9) {
-                android.content.SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-                String serverIp = prefs.getString("server_ip", "");
-                if (!serverIp.isEmpty()) {
-                    android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("http://" + serverIp + "/"));
-                    startActivity(browserIntent);
-                } else {
-                    if (tvStatus != null) tvStatus.setText("Connected to " + serverIPs.size() + " server(s).");
-                    android.widget.Toast.makeText(this, "No server IP configured. Connect to server first.", android.widget.Toast.LENGTH_SHORT).show();
-                }
-            }
-            else if (which == 10) {
                 android.content.SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
                 boolean current = prefs.getBoolean("window_popups", false);
                 prefs.edit().putBoolean("window_popups", !current).apply();
@@ -951,11 +940,11 @@ public class MainActivity extends AppCompatActivity {
     private static java.util.HashMap<String, android.graphics.Bitmap> imageCache = new java.util.HashMap<>();
     
     private void loadImageAsync(String urlStr, ImageView imageView) {
+        imageView.setTag(urlStr);
         if (imageCache.containsKey(urlStr)) {
             imageView.setImageBitmap(imageCache.get(urlStr));
             return;
         }
-        imageView.setTag(urlStr);
         executor.execute(() -> {
             try {
                 java.net.URL url = new java.net.URL(urlStr);

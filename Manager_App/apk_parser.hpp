@@ -61,8 +61,8 @@ public:
                 if (fnameLower.find("res/") != std::string::npos) score += 10;
                 if (fnameLower.find("mipmap") != std::string::npos) score += 10;
                 if (fnameLower.find("drawable") != std::string::npos) score += 5;
-                if (fnameLower.find("launcher") != std::string::npos) score += 30;
-                if (fnameLower.find("icon") != std::string::npos) score += 20;
+                if (fnameLower.find("launcher") != std::string::npos) score += 1000;
+                if (fnameLower.find("icon") != std::string::npos) score += 500;
 
                 if (fnameLower.find("xxxhdpi") != std::string::npos) score += 50;
                 else if (fnameLower.find("xxhdpi") != std::string::npos) score += 40;

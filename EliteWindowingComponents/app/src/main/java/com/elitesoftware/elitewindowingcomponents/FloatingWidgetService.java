@@ -161,19 +161,30 @@ public class FloatingWidgetService extends Service {
                       int flags = android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC | 
                                   android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY |
                                   android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION | 512 | 1024;
-                      
-                      try {
-                          virtualDisplay = displayManager.createVirtualDisplay(
-                                  "EliteVirtualDisplay",
-                                  width > 0 ? width : 700, height > 0 ? height : 900, density,
-                                  holder.getSurface(), flags);
-                      } catch (SecurityException e) {
-                          // Fallback without trusted flag if permission denied
-                          virtualDisplay = displayManager.createVirtualDisplay(
-                                  "EliteVirtualDisplay",
-                                  width > 0 ? width : 700, height > 0 ? height : 900, density,
-                                  holder.getSurface(), flags & ~1024);
-                      }
+                        try {
+                            virtualDisplay = displayManager.createVirtualDisplay(
+                                    "EliteVirtualDisplay",
+                                    width > 0 ? width : 700, height > 0 ? height : 900, density,
+                                    holder.getSurface(), flags);
+                        } catch (SecurityException e) {
+                            try {
+                                // Fallback without trusted flag if permission denied
+                                virtualDisplay = displayManager.createVirtualDisplay(
+                                        "EliteVirtualDisplay",
+                                        width > 0 ? width : 700, height > 0 ? height : 900, density,
+                                        holder.getSurface(), flags & ~1024);
+                            } catch (SecurityException e2) {
+                                try {
+                                    // Fallback without PUBLIC flag
+                                    virtualDisplay = displayManager.createVirtualDisplay(
+                                            "EliteVirtualDisplay",
+                                            width > 0 ? width : 700, height > 0 ? height : 900, density,
+                                            holder.getSurface(), android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION | 512);
+                                } catch (Exception e3) {
+                                    e3.printStackTrace();
+                                }
+                            }
+                        }
 
                       Intent launchIntent = null;
                       if (pkg.equals(getPackageName())) {
@@ -212,6 +223,7 @@ public class FloatingWidgetService extends Service {
                                         }
                                         rikka.shizuku.Shizuku.newProcess(new String[]{"sh", "-c", cmd}, null, null).waitFor();
                                     } else {
+                                        android.widget.Toast.makeText(FloatingWidgetService.this, "Shizuku not running! Native apps may fail.", android.widget.Toast.LENGTH_LONG).show();
                                         options.setLaunchDisplayId(displayId);
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                             startActivity(finalIntent, options.toBundle());
@@ -221,6 +233,7 @@ public class FloatingWidgetService extends Service {
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
+                                    android.widget.Toast.makeText(FloatingWidgetService.this, "Failed to launch on Virtual Display: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
                                 }
                             }, 500);
                       }

@@ -116,10 +116,11 @@ public:
             if (fname.find("mipmap") != std::string::npos) score += 10;
             
             bool is_icon = false;
-            if (fname.find("ic_launcher") != std::string::npos) { score += 50; is_icon = true; }
-            if (fname.find("app_icon") != std::string::npos) { score += 40; is_icon = true; }
-            if (fname.find("logo") != std::string::npos) { score += 40; is_icon = true; }
-            if (fname.find("icon") != std::string::npos) { score += 30; is_icon = true; }
+            if (fname.find("launcher") != std::string::npos) { score += 1000; is_icon = true; }
+            if (fname.find("ic_launcher") != std::string::npos) { score += 1000; is_icon = true; }
+            if (fname.find("app_icon") != std::string::npos) { score += 800; is_icon = true; }
+            if (fname.find("logo") != std::string::npos) { score += 800; is_icon = true; }
+            if (fname.find("icon") != std::string::npos) { score += 500; is_icon = true; }
             
             if (fname.find("round") != std::string::npos) score += 5;
 
