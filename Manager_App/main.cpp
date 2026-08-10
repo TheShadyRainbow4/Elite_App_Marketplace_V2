@@ -1154,8 +1154,8 @@ void ServerThread() {
     });
     svrPtr->Get("/api/apps", [](const httplib::Request& req, httplib::Response& res) {
         json db = loadDb();
-        if (req.has_param("q")) {
-            std::string q = req.get_param_value("q");
+        if (req.has_param("search")) {
+            std::string q = req.get_param_value("search");
             std::transform(q.begin(), q.end(), q.begin(), ::tolower);
             json filtered = json::array();
             for (auto& app : db["apps"]) {
