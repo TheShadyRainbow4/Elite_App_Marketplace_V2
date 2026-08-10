@@ -6,7 +6,7 @@ $ErrorActionPreference = 'Stop'
 if ([string]::IsNullOrWhiteSpace($Version)) {
     $dbObj = Get-Content "Manager_App/db.json" -Raw | ConvertFrom-Json
     foreach ($app in $dbObj.apps) {
-        if ($app.package_name -eq "com.elitesoftware.appmarketplace") {
+        if ($app.package_name -eq "com.elitesoftware.appmarketplace.v2") {
             $sortedVers = $app.versions | Sort-Object { [version]($_.version -replace '^v?(\d+\.\d+)$', "`$1.0" -replace '^v?(\d+\.\d+\.\d+).*', "`$1") } -Descending
             $latestVer = $sortedVers[0].version
             $verParts = $latestVer.Split('.')
@@ -102,7 +102,7 @@ $dbPath = "Manager_App/db.json"
 $dbStr = Get-Content $dbPath -Raw
 $dbObj = $dbStr | ConvertFrom-Json
 foreach ($app in $dbObj.apps) {
-    if ($app.package_name -eq "com.elitesoftware.appmarketplace") {
+    if ($app.package_name -eq "com.elitesoftware.appmarketplace.v2") {
         $found = $false
         foreach ($v in $app.versions) {
             if ($v.version -eq $rawVer) {
