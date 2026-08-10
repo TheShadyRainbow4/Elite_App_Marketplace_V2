@@ -370,6 +370,14 @@ public class MainActivity extends AppCompatActivity {
                 boolean current = prefs.getBoolean("window_popups", false);
                 prefs.edit().putBoolean("window_popups", !current).apply();
                 android.widget.Toast.makeText(this, "Window Popups: " + (!current ? "ON" : "OFF"), android.widget.Toast.LENGTH_SHORT).show();
+                if (!current) {
+                    Intent intent = new Intent("com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW");
+                    intent.setComponent(new android.content.ComponentName("com.elitesoftware.elitewindowingcomponents", "com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"));
+                    intent.putExtra("package", getPackageName());
+                    intent.putExtra("title", "Elite Marketplace");
+                    sendBroadcast(intent);
+                    finish();
+                }
             }
         });
         builder.show();

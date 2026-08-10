@@ -1,18 +1,10 @@
 {
-    "apk_dir": "apks",
-    "img_dir": "images",
-    "list_cols": [
-        193,
-        311,
-        55,
-        60,
-        70
-    ],
-    "listview_width": 927,
+    "data_dir": "Z:\\Local_APK_Store\\Manager_App",
+    "listview_width": 350,
     "server_port": 8553,
-    "window_height": 1012,
+    "window_height": 700,
     "window_maximized": false,
-    "window_width": 1461,
-    "window_x": 379,
-    "window_y": 49
+    "window_width": 1000,
+    "window_x": -1,
+    "window_y": -1
 }

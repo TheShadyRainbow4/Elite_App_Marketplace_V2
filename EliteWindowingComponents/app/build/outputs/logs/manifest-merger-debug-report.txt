@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:2:1-148:12
-INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:2:1-148:12
-INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:2:1-148:12
-INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:2:1-148:12
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:2:1-149:12
+INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:2:1-149:12
+INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:2:1-149:12
+INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:2:1-149:12
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\008bcc2ac37c45e0b6c2af0ef0e4f592\transformed\material-1.9.0\AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Administrator\.gradle\caches\transforms-3\658eeb8089f59ec9aaceb176bc125398\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\Administrator\.gradle\caches\transforms-3\38005d0967da2438e72a781bbeb70620\transformed\jetified-appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
@@ -74,9 +74,15 @@ ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManif
 		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:8:76-111
 	android:name
 		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:8:22-75
+uses-permission#moe.shizuku.manager.permission.API_V23
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:9:5-78
+MERGED from [dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:10:5-78
+MERGED from [dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:10:5-78
+	android:name
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:9:22-75
 application
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:10:5-147:19
-INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:10:5-147:19
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:11:5-148:19
+INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:11:5-148:19
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\008bcc2ac37c45e0b6c2af0ef0e4f592\transformed\material-1.9.0\AndroidManifest.xml:24:5-20
 MERGED from [com.google.android.material:material:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\008bcc2ac37c45e0b6c2af0ef0e4f592\transformed\material-1.9.0\AndroidManifest.xml:24:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\Administrator\.gradle\caches\transforms-3\658eeb8089f59ec9aaceb176bc125398\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -98,183 +104,183 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\Ad
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.9.0] C:\Users\Administrator\.gradle\caches\transforms-3\932d3a5bfa228eca10b2b24a0d8c086c\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:14:9-35
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:15:9-35
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:13:9-41
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:14:9-41
 	android:hardwareAccelerated
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:16:9-43
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:17:9-43
 	tools:ignore
 		ADDED from [dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:12:18-69
 	android:icon
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:12:9-43
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:13:9-43
 	android:allowBackup
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:11:9-35
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:12:9-35
 	android:theme
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:15:9-65
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:16:9-65
 	android:usesCleartextTraffic
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:17:9-44
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:18:9-44
 activity#com.elitesoftware.elitewindowingcomponents.MainActivity
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:20:9-29:20
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:21:9-30:20
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:22:13-42
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:23:13-42
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:24:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:25:13-36
 	android:icon
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:23:13-47
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:24:13-47
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:21:13-41
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:22:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:25:13-28:29
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:13-29:29
 action#android.intent.action.MAIN
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:17-69
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:17-69
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:26:25-66
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:25-66
 category#android.intent.category.LAUNCHER
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:17-77
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:17-77
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:27:27-74
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:28:27-74
 activity#com.elitesoftware.elitewindowingcomponents.CustomFrameActivity
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:32:9-41:20
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:9-42:20
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:34:13-41
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:35:13-41
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:36:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:37:13-36
 	android:icon
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:35:13-51
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:36:13-51
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:33:13-48
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:34:13-48
 activity#com.elitesoftware.elitewindowingcomponents.GeminiLauncherActivity
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:44:9-56:20
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:45:9-57:20
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:46:13-41
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:47:13-41
 	android:excludeFromRecents
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:49:13-46
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:50:13-46
 	android:noHistory
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:50:13-37
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:51:13-37
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:51:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:52:13-36
 	android:icon
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:47:13-50
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:48:13-50
 	android:taskAffinity
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:48:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:49:13-36
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:45:13-51
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:46:13-51
 activity#com.elitesoftware.elitewindowingcomponents.SettingsLauncherActivity
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:59:9-71:20
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:60:9-72:20
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:61:13-43
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:62:13-43
 	android:excludeFromRecents
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:64:13-46
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:65:13-46
 	android:noHistory
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:65:13-37
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:66:13-37
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:66:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:67:13-36
 	android:icon
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:62:13-47
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:63:13-47
 	android:taskAffinity
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:63:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:64:13-36
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:60:13-53
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:61:13-53
 activity#com.elitesoftware.elitewindowingcomponents.ShareReceiverActivity
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:74:9-83:20
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:75:9-84:20
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:76:13-48
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:77:13-48
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:77:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:78:13-36
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:75:13-50
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:76:13-50
 intent-filter#action:name:android.intent.action.SEND+category:name:android.intent.category.DEFAULT+data:mimeType:text/plain
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:78:13-82:29
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:79:13-83:29
 action#android.intent.action.SEND
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:79:17-69
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:80:17-69
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:79:25-66
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:80:25-66
 category#android.intent.category.DEFAULT
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:80:17-76
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:81:17-76
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:80:27-73
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:81:27-73
 data
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:81:17-55
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:82:17-55
 	android:mimeType
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:81:23-52
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:82:23-52
 activity#com.elitesoftware.elitewindowingcomponents.TestAppLauncherActivity
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:86:9-98:20
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:87:9-99:20
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:88:13-43
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:89:13-43
 	android:excludeFromRecents
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:91:13-46
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:92:13-46
 	android:noHistory
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:92:13-37
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:93:13-37
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:93:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:94:13-36
 	android:icon
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:89:13-47
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:90:13-47
 	android:taskAffinity
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:90:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:91:13-36
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:87:13-52
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:88:13-52
 activity#com.elitesoftware.elitewindowingcomponents.TestAppActivity
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:101:9-104:39
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:102:9-105:39
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:103:13-37
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:104:13-37
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:104:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:105:13-36
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:102:13-44
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:103:13-44
 activity#com.elitesoftware.elitewindowingcomponents.PackageLauncherActivity
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:107:9-120:20
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:108:9-121:20
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:109:13-43
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:110:13-43
 	android:excludeFromRecents
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:113:13-46
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:114:13-46
 	android:noHistory
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:114:13-37
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:115:13-37
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:115:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:116:13-36
 	android:icon
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:110:13-47
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:111:13-47
 	android:theme
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:111:13-64
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:112:13-64
 	android:taskAffinity
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:112:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:113:13-36
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:108:13-52
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:109:13-52
 activity#com.elitesoftware.elitewindowingcomponents.CalculatorLauncherActivity
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:123:9-135:20
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:124:9-136:20
 	android:label
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:125:13-45
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:126:13-45
 	android:excludeFromRecents
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:128:13-46
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:129:13-46
 	android:noHistory
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:129:13-37
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:130:13-37
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:130:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:131:13-36
 	android:icon
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:126:13-47
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:127:13-47
 	android:taskAffinity
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:127:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:128:13-36
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:124:13-55
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:125:13-55
 receiver#com.elitesoftware.elitewindowingcomponents.WindowApiReceiver
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:138:9-144:20
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:139:9-145:20
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:140:13-36
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:141:13-36
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:139:13-46
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:140:13-46
 intent-filter#action:name:com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:141:13-143:29
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:142:13-144:29
 action#com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:142:17-99
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:143:17-99
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:142:25-96
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:143:25-96
 service#com.elitesoftware.elitewindowingcomponents.FloatingWidgetService
-ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:146:9-106
+ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:147:9-106
 	android:enabled
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:146:56-78
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:147:56-78
 	android:exported
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:146:79-103
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:147:79-103
 	android:name
-		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:146:18-55
+		ADDED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml:147:18-55
 uses-sdk
 INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml
@@ -373,10 +379,6 @@ MERGED from [dev.rikka.shizuku:aidl:13.1.0] C:\Users\Administrator\.gradle\cache
 		INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from Z:\Local_APK_Store\EliteWindowingComponents\app\src\main\AndroidManifest.xml
-uses-permission#moe.shizuku.manager.permission.API_V23
-ADDED from [dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:10:5-78
-	android:name
-		ADDED from [dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:10:22-75
 meta-data#moe.shizuku.client.V3_SUPPORT
 ADDED from [dev.rikka.shizuku:provider:13.1.0] C:\Users\Administrator\.gradle\caches\transforms-3\c5139dc2b1d04c401f752c1dfa396bc2\transformed\jetified-provider-13.1.0\AndroidManifest.xml:13:9-15:36
 	android:value

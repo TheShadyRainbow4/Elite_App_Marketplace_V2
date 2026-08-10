@@ -187,20 +187,34 @@ public class FloatingWidgetService extends Service {
                         final Intent finalIntent = launchIntent;
                         
                         // Delay launch to allow SurfaceFlinger to fully register the VirtualDisplay
-                        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
-                            android.app.ActivityOptions options = android.app.ActivityOptions.makeBasic();
-                            try {
-                                options.setLaunchDisplayId(virtualDisplay.getDisplay().getDisplayId());
-                                
-                                android.app.PendingIntent pendingIntent = android.app.PendingIntent.getActivity(
-                                    FloatingWidgetService.this, 0, finalIntent, 
-                                    android.app.PendingIntent.FLAG_UPDATE_CURRENT | android.app.PendingIntent.FLAG_IMMUTABLE
-                                );
-                                pendingIntent.send(FloatingWidgetService.this, 0, null, null, null, null, options.toBundle());
-                            } catch (Exception e) {
-                                android.widget.Toast.makeText(FloatingWidgetService.this, "Launch Failed: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
-                            }
-                        }, 500);
+                          new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                              android.app.ActivityOptions options = android.app.ActivityOptions.makeBasic();
+                              try {
+                                  int displayId = virtualDisplay.getDisplay().getDisplayId();
+                                  boolean shizukuAvailable = false;
+                                  try { shizukuAvailable = rikka.shizuku.Shizuku.pingBinder(); } catch(Exception e){}
+                                  
+                                  if (shizukuAvailable) {
+                                      String cmd;
+                                      if (finalIntent.getComponent() != null) {
+                                          cmd = "am start -n " + finalIntent.getComponent().flattenToShortString() + " --display " + displayId;
+                                      } else {
+                                          cmd = "am start -a " + finalIntent.getAction() + " --display " + displayId;
+                                      }
+                                      rikka.shizuku.Shizuku.newProcess(new String[]{"sh", "-c", cmd}, null, null).waitFor();
+                                  } else {
+                                      options.setLaunchDisplayId(displayId);
+                                      
+                                      android.app.PendingIntent pendingIntent = android.app.PendingIntent.getActivity(
+                                          FloatingWidgetService.this, 0, finalIntent, 
+                                          android.app.PendingIntent.FLAG_UPDATE_CURRENT | android.app.PendingIntent.FLAG_IMMUTABLE
+                                      );
+                                      pendingIntent.send(FloatingWidgetService.this, 0, null, null, null, null, options.toBundle());
+                                  }
+                              } catch (Exception e) {
+                                  android.widget.Toast.makeText(FloatingWidgetService.this, "Launch Failed: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
+                              }
+                          }, 500);
                     }
                 }
                 @Override
