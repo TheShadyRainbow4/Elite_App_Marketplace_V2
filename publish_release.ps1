@@ -61,13 +61,13 @@ Write-Host "Signing Android APKs..."
 $toolsDir = "C:\AndroidBuildTools"
 $apksigner = (Get-ChildItem -Path "$toolsDir\android-sdk\build-tools" -Filter "apksigner.bat" -Recurse | Select-Object -First 1).FullName
 
-& $apksigner sign --ks "C:\Users\Administrator\Desktop\Local_APK_Store\Elite-EasySigner\EliteSoftware_Special.pfx" --ks-pass pass:Minecraft145!! --out "Client_App\app\build\outputs\apk\debug\app-release-signed.apk" "Client_App\app\build\outputs\apk\debug\app-debug.apk"
+& $apksigner sign --ks "Z:\Local_APK_Store\Elite-EasySigner\EliteSoftware_Special.pfx" --ks-pass pass:Minecraft145!! --out "Client_App\app\build\outputs\apk\debug\app-release-signed.apk" "Client_App\app\build\outputs\apk\debug\app-debug.apk"
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error: APK Signing Failed! Aborting release." -ForegroundColor Red
     exit 1
 }
 
-& $apksigner sign --ks "C:\Users\Administrator\Desktop\Local_APK_Store\Elite-EasySigner\EliteSoftware_Special.pfx" --ks-pass pass:Minecraft145!! --out "EliteWindowingComponents\app\build\outputs\apk\debug\app-release-signed.apk" "EliteWindowingComponents\app\build\outputs\apk\debug\app-debug.apk"
+& $apksigner sign --ks "Z:\Local_APK_Store\Elite-EasySigner\EliteSoftware_Special.pfx" --ks-pass pass:Minecraft145!! --out "EliteWindowingComponents\app\build\outputs\apk\debug\app-release-signed.apk" "EliteWindowingComponents\app\build\outputs\apk\debug\app-debug.apk"
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error: Windowing APK Signing Failed! Aborting release." -ForegroundColor Red
     exit 1

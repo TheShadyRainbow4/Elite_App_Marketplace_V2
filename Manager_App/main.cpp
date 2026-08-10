@@ -118,7 +118,7 @@ char filePath[MAX_PATH] = "";
 std::vector<std::string> screenshots;
 json dbCache;
 int selectedAppIndex = -1;
-int serverPort = 8552;
+int serverPort = 8553;
 
 bool serverRunning = false;
 httplib::Server* svrPtr = nullptr;
@@ -696,7 +696,7 @@ void LoadConfig() {
         try {
             std::ifstream i(configFile);
             json j; i >> j;
-            serverPort = j.value("server_port", 8552);
+            serverPort = j.value("server_port", 8553);
             char exeP[MAX_PATH];
             GetModuleFileNameA(NULL, exeP, MAX_PATH);
             fs::path exeD = fs::path(exeP).parent_path();
@@ -1060,7 +1060,7 @@ void UDPDiscoveryThread() {
     sockaddr_in addr = {};
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(8552);
+    addr.sin_port = htons(8553);
     bind(udpSock, (sockaddr*)&addr, sizeof(addr));
     char buffer[256];
     sockaddr_in clientAddr;
@@ -1637,7 +1637,7 @@ LRESULT CALLBACK AboutDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             "Technical Details:\r\n"
             "- Architecture: Win32 API / C++17 (GDI+, httplib, nlohmann_json)\r\n"
             "- Framework Target: Win32 Native Visual Styles (Legacy Aesthetic)\r\n"
-            "- Default Port: 8552\r\n"
+            "- Default Port: 8553\r\n"
             "- Log Path: %SystemDrive%\\EliteSoftware\\Logs\\LocalAPKStore.log\r\n"
             "- Minimum OS: Windows Vista / 7\r\n"
             "- Authors: Zachary Whiteman, Susan Gemm, TheShadyRainbow4, EliteSoftwareTech Co.",
@@ -1749,7 +1749,7 @@ LRESULT CALLBACK HelpDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             "   - Click 'Apply' to save changes to the local db.json repository.\r\n"
             "   - Click 'Delete Selected' to remove an application entry.\r\n\r\n"
             "2. SERVER MONITOR TAB:\r\n"
-            "   - Embedded HTTP server listens on port 8552 (or custom configured port).\r\n"
+            "   - Embedded HTTP server listens on port 8553 (or custom configured port).\r\n"
             "   - View real-time HTTP API logs and server activity.\r\n"
             "   - Click 'Start Server' / 'Stop Server' to toggle server state.\r\n\r\n"
             "3. LOG FILE INTEGRATION:\r\n"

@@ -43,6 +43,7 @@ public class FloatingWidgetService extends Service {
         String url = "https://gemini.google.com/";
         String title = "Elite Gemini";
         String pkg = null;
+        int displayId = android.view.Display.DEFAULT_DISPLAY;
         
         if (intent != null) {
             if (intent.hasExtra("url")) {
@@ -53,13 +54,27 @@ public class FloatingWidgetService extends Service {
                 pkg = intent.getStringExtra("package");
                 title = intent.getStringExtra("title");
             }
+            if (intent.hasExtra("displayId")) {
+                displayId = intent.getIntExtra("displayId", android.view.Display.DEFAULT_DISPLAY);
+            }
         }
-        createWindow(url, title, pkg);
+        createWindow(url, title, pkg, displayId);
         return START_STICKY;
     }
 
-    private void createWindow(String url, String titleText, String pkg) {
-        final LinearLayout mFloatingWidget = new LinearLayout(this);
+    private void createWindow(String url, String titleText, String pkg, int displayId) {
+        android.content.Context uiContext = this;
+        WindowManager windowManager = mWindowManager;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            android.hardware.display.DisplayManager dm = (android.hardware.display.DisplayManager) getSystemService(android.content.Context.DISPLAY_SERVICE);
+            android.view.Display display = dm.getDisplay(displayId);
+            if (display != null) {
+                uiContext = createDisplayContext(display).createWindowContext(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, null);
+                windowManager = (WindowManager) uiContext.getSystemService(WINDOW_SERVICE);
+            }
+        }
+        final WindowManager finalWindowManager = windowManager;
+        final LinearLayout mFloatingWidget = new LinearLayout(uiContext);
         mFloatingWidget.setOrientation(LinearLayout.VERTICAL);
         mFloatingWidget.setBackgroundColor(Color.TRANSPARENT);
 
@@ -69,7 +84,7 @@ public class FloatingWidgetService extends Service {
         frameDrawable.setStroke(2, Color.argb(200, 255, 255, 255)); // Bright glass edge
         frameDrawable.setCornerRadii(new float[]{20, 20, 20, 20, 20, 20, 20, 20});
 
-        final LinearLayout windowFrame = new LinearLayout(this);
+        final LinearLayout windowFrame = new LinearLayout(uiContext);
         windowFrame.setOrientation(LinearLayout.VERTICAL);
         windowFrame.setBackground(frameDrawable);
         windowFrame.setPadding(8, 8, 8, 8);
@@ -82,13 +97,13 @@ public class FloatingWidgetService extends Service {
         );
         titleDrawable.setCornerRadii(new float[]{16, 16, 16, 16, 0, 0, 0, 0});
         
-        final LinearLayout header = new LinearLayout(this);
+        final LinearLayout header = new LinearLayout(uiContext);
         header.setBackground(titleDrawable);
         header.setOrientation(LinearLayout.HORIZONTAL);
         header.setGravity(Gravity.CENTER_VERTICAL);
         header.setPadding(15, 4, 8, 4);
 
-        TextView titleView = new TextView(this);
+        TextView titleView = new TextView(uiContext);
         titleView.setText(titleText);
         titleView.setTextColor(Color.BLACK);
         titleView.setTypeface(null, Typeface.BOLD);
@@ -98,7 +113,7 @@ public class FloatingWidgetService extends Service {
         LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
         header.addView(titleView, titleParams);
 
-        SeekBar alphaSlider = new SeekBar(this);
+        SeekBar alphaSlider = new SeekBar(uiContext);
         alphaSlider.setMax(255);
         alphaSlider.setProgress(255);
         alphaSlider.setVisibility(View.GONE);
@@ -107,14 +122,15 @@ public class FloatingWidgetService extends Service {
 
         // Toggle slider is now handled by custom drag listener logic
 
+
         // Vista Style Window Buttons
-        LinearLayout buttonContainer = new LinearLayout(this);
+        LinearLayout buttonContainer = new LinearLayout(uiContext);
         buttonContainer.setOrientation(LinearLayout.HORIZONTAL);
         buttonContainer.setPadding(0, 0, 0, 0);
 
-        Button minBtn = createVistaButton("_", false, false);
-        Button maxBtn = createVistaButton("\u25A1", false, true);
-        Button closeBtn = createVistaButton("X", true, false);
+        Button minBtn = createVistaButton(uiContext, "_", false, false);
+        Button maxBtn = createVistaButton(uiContext, "\u25A1", false, true);
+        Button closeBtn = createVistaButton(uiContext, "X", true, false);
 
         buttonContainer.addView(minBtn);
         buttonContainer.addView(maxBtn);
@@ -124,18 +140,18 @@ public class FloatingWidgetService extends Service {
         View contentView = null;
         if ("elite_settings".equals(pkg)) {
             // Custom Elite Settings View
-            LinearLayout settingsLayout = new LinearLayout(this);
+            LinearLayout settingsLayout = new LinearLayout(uiContext);
             settingsLayout.setOrientation(LinearLayout.VERTICAL);
             settingsLayout.setPadding(20, 20, 20, 20);
             settingsLayout.setBackgroundColor(Color.argb(230, 250, 250, 250));
             
-            TextView settingsTitle = new TextView(this);
+            TextView settingsTitle = new TextView(uiContext);
             settingsTitle.setText("Elite Window Framework - Global Settings");
             settingsTitle.setTextSize(18);
             settingsTitle.setTypeface(null, Typeface.BOLD);
             settingsTitle.setTextColor(Color.BLACK);
             
-            TextView infoText = new TextView(this);
+            TextView infoText = new TextView(uiContext);
             infoText.setText("Default Opacity: 100%\nSaved Logins: 0\nAero Theme: Enabled\nVirtual Display: Active");
             infoText.setPadding(0, 20, 0, 0);
             infoText.setTextColor(Color.DKGRAY);
@@ -144,7 +160,7 @@ public class FloatingWidgetService extends Service {
             settingsLayout.addView(infoText);
             contentView = settingsLayout;
           } else if (pkg != null && !pkg.isEmpty()) {
-              final android.view.SurfaceView surfaceView = new android.view.SurfaceView(this);
+              final android.view.SurfaceView surfaceView = new android.view.SurfaceView(uiContext);
               surfaceView.getHolder().addCallback(new android.view.SurfaceHolder.Callback() {
                   android.hardware.display.VirtualDisplay virtualDisplay;
                   android.hardware.display.DisplayManager displayManager = (android.hardware.display.DisplayManager) getSystemService(android.content.Context.DISPLAY_SERVICE);
@@ -253,7 +269,7 @@ public class FloatingWidgetService extends Service {
               });
               contentView = surfaceView;
         } else {
-            final WebView webView = new WebView(this);
+            final WebView webView = new WebView(uiContext);
             WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webSettings.setDomStorageEnabled(true);
@@ -266,18 +282,18 @@ public class FloatingWidgetService extends Service {
             contentView = webView;
         }
 
-        final ImageView collapsedIcon = new ImageView(this);
+        final ImageView collapsedIcon = new ImageView(uiContext);
         collapsedIcon.setImageResource(R.mipmap.ic_launcher);
         collapsedIcon.setVisibility(View.GONE);
 
         // Grab Handle for Resizing
-        ImageView grabHandle = new ImageView(this);
+        ImageView grabHandle = new ImageView(uiContext);
         grabHandle.setImageResource(android.R.drawable.ic_menu_sort_by_size);
         LinearLayout.LayoutParams grabParams = new LinearLayout.LayoutParams(60, 60);
         grabParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
         
         // Add content
-        LinearLayout contentLayout = new LinearLayout(this);
+        LinearLayout contentLayout = new LinearLayout(uiContext);
         contentLayout.setOrientation(LinearLayout.VERTICAL);
         contentLayout.addView(contentView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1.0f));
         contentLayout.addView(grabHandle, grabParams);
@@ -304,7 +320,7 @@ public class FloatingWidgetService extends Service {
         params.x = (activeWindows.size() * 50) % 300; 
         params.y = 100 + (activeWindows.size() * 50) % 300;
 
-        mWindowManager.addView(mFloatingWidget, params);
+        finalWindowManager.addView(mFloatingWidget, params);
         activeWindows.add(mFloatingWidget);
 
         // Set entire window alpha
@@ -319,7 +335,7 @@ public class FloatingWidgetService extends Service {
 
         // Close logic
         closeBtn.setOnClickListener(v -> {
-            mWindowManager.removeView(mFloatingWidget);
+            finalWindowManager.removeView(mFloatingWidget);
             activeWindows.remove(mFloatingWidget);
             if (activeWindows.isEmpty()) stopSelf();
         });
@@ -339,7 +355,7 @@ public class FloatingWidgetService extends Service {
                 params.width = oldSize[0];
                 params.height = oldSize[1];
             }
-            mWindowManager.updateViewLayout(mFloatingWidget, params);
+            finalWindowManager.updateViewLayout(mFloatingWidget, params);
         };
         minBtn.setOnClickListener(toggleCollapse);
         collapsedIcon.setOnClickListener(toggleCollapse);
@@ -396,7 +412,7 @@ public class FloatingWidgetService extends Service {
                         if (isMoving) {
                             params.x = initialX + (int) (event.getRawX() - initialTouchX);
                             params.y = initialY + (int) (event.getRawY() - initialTouchY);
-                            mWindowManager.updateViewLayout(mFloatingWidget, params);
+                            finalWindowManager.updateViewLayout(mFloatingWidget, params);
                         }
                         return true;
                     case MotionEvent.ACTION_UP:
@@ -429,7 +445,7 @@ public class FloatingWidgetService extends Service {
                 params.x = 0;
                 params.y = 0;
             }
-            mWindowManager.updateViewLayout(mFloatingWidget, params);
+            finalWindowManager.updateViewLayout(mFloatingWidget, params);
         });
 
         // Resize logic (Grab Handle)
@@ -448,7 +464,7 @@ public class FloatingWidgetService extends Service {
                         params.height = initialHeight + (int) (event.getRawY() - initialTouchY);
                         if (params.width < 300) params.width = 300;
                         if (params.height < 400) params.height = 400;
-                        mWindowManager.updateViewLayout(mFloatingWidget, params);
+                        finalWindowManager.updateViewLayout(mFloatingWidget, params);
                         return true;
                 }
                 return false;
@@ -456,8 +472,8 @@ public class FloatingWidgetService extends Service {
         });
     }
 
-    private Button createVistaButton(String text, boolean isClose, boolean isMax) {
-        Button btn = new Button(this);
+    private Button createVistaButton(android.content.Context uiContext, String text, boolean isClose, boolean isMax) {
+        Button btn = new Button(uiContext);
         btn.setText(text);
         btn.setSingleLine(true);
         btn.setTextSize(isMax ? 12 : 14);
@@ -490,10 +506,13 @@ public class FloatingWidgetService extends Service {
     public void onDestroy() {
         super.onDestroy();
         for (View v : activeWindows) {
-            if (v != null) mWindowManager.removeView(v);
+            if (v != null) {
+                WindowManager wm = (WindowManager) v.getContext().getSystemService(WINDOW_SERVICE);
+                if (wm != null) {
+                    try { wm.removeView(v); } catch(Exception e) {}
+                }
+            }
         }
         activeWindows.clear();
     }
 }
-
-

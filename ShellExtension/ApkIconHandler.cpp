@@ -297,29 +297,42 @@ private:
                 fnameLower.find(".jpeg") == std::string::npos) continue;
 
             int score = 0;
+            
+            // Base location
             if (fnameLower.find("res/") != std::string::npos) score += 10;
-            if (fnameLower.find("mipmap") != std::string::npos) score += 10;
-            if (fnameLower.find("drawable") != std::string::npos) score += 5;
+            if (fnameLower.find("mipmap") != std::string::npos) score += 20; // mipmap is preferred for launcher icons
+            else if (fnameLower.find("drawable") != std::string::npos) score += 10;
+
+            // Adaptive icon parts (penalize heavily so we don't just pick solid background colors)
+            if (fnameLower.find("background") != std::string::npos || fnameLower.find("_bg") != std::string::npos) {
+                score -= 1000;
+            }
+            if (fnameLower.find("foreground") != std::string::npos || fnameLower.find("_fg") != std::string::npos) {
+                score -= 1000;
+            }
+            // Small UI icons (penalize heavily so we don't pick a back button or notification glyph)
+            if (fnameLower.find("notification") != std::string::npos || fnameLower.find("stat_sys") != std::string::npos || fnameLower.find("status_bar") != std::string::npos) {
+                score -= 1000;
+            }
+
+            // Filename matches (check the actual file name, not the path)
+            std::string name_only = fnameLower.substr(fnameLower.find_last_of('/') + 1);
             
-            bool is_icon = false;
-            if (fnameLower.find("launcher") != std::string::npos) { score += 1000; is_icon = true; }
-            if (fnameLower.find("ic_launcher") != std::string::npos) { score += 1000; is_icon = true; }
-            if (fnameLower.find("app_icon") != std::string::npos) { score += 800; is_icon = true; }
-            if (fnameLower.find("logo") != std::string::npos) { score += 800; is_icon = true; }
-            if (fnameLower.find("icon") != std::string::npos) { score += 500; is_icon = true; }
-            
-            if (fnameLower.find("round") != std::string::npos) score += 5;
+            if (name_only.find("ic_launcher") != std::string::npos) score += 500;
+            else if (name_only.find("launcher") != std::string::npos) score += 400;
+            else if (name_only.find("app_icon") != std::string::npos) score += 300;
+            else if (name_only == "icon.png" || name_only == "icon.jpg") score += 250;
+            else if (name_only.find("logo") != std::string::npos) score += 200;
+            else if (name_only.find("icon") != std::string::npos) score += 50;
+
+            if (name_only.find("round") != std::string::npos) score += 50;
 
             // Resolution priority
-            if (fnameLower.find("xxxhdpi") != std::string::npos) score += 50;
-            else if (fnameLower.find("xxhdpi") != std::string::npos) score += 40;
-            else if (fnameLower.find("xhdpi") != std::string::npos) score += 30;
-            else if (fnameLower.find("hdpi") != std::string::npos) score += 20;
-            else if (fnameLower.find("mdpi") != std::string::npos) score += 10;
-
-            if (!is_icon && (fnameLower.find("bg_") != std::string::npos || fnameLower.find("background") != std::string::npos)) {
-                score -= 100; 
-            }
+            if (fnameLower.find("xxxhdpi") != std::string::npos) score += 100;
+            else if (fnameLower.find("xxhdpi") != std::string::npos) score += 80;
+            else if (fnameLower.find("xhdpi") != std::string::npos) score += 60;
+            else if (fnameLower.find("hdpi") != std::string::npos) score += 40;
+            else if (fnameLower.find("mdpi") != std::string::npos) score += 20;
 
             candidates.push_back({i, score});
         }

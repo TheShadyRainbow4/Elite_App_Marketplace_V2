@@ -35,7 +35,8 @@ public class PackageLauncherActivity extends Activity {
                 Intent intent = new Intent(this, FloatingWidgetService.class);
                 intent.putExtra("package", pkg);
                 intent.putExtra("title", pkg);
-                startService(intent);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) { try { intent.putExtra("displayId", getDisplay().getDisplayId()); } catch (Exception e) {} }
+        startService(intent);
                 finish();
             } else {
                 Toast.makeText(this, "Package name cannot be empty", Toast.LENGTH_SHORT).show();
@@ -46,3 +47,4 @@ public class PackageLauncherActivity extends Activity {
         setContentView(layout);
     }
 }
+
