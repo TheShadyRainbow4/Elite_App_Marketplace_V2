@@ -4,7 +4,9 @@ All notable changes to the Local APK Store ecosystem will be documented in this 
 
 ## [Unreleased]
 ### Fixed
-- **Shell Extension Icon Loading:** Corrected the shell extension behavior by adding the `GIL_NOTFILENAME` flag in `GetIconLocation`. This instructs the Windows Shell to correctly invoke the extension's custom `Extract` method to retrieve the icon dynamically from the APK file, rather than attempting to parse the APK file directly as an icon resource source, which previously resulted in a generic fallback icon for all APK files.
+- **Shell Extension Dual Thumbnail & Icon Handlers:** Completely restored the shell extension's dual functionality as both a thumbnail preview provider (`IThumbnailProvider`/`IInitializeWithStream`) and a dynamic icon extractor (`IExtractIconW`/`IPersistFile`). Corrected registration scripts (`install.bat` and `uninstall.bat`) to bind both shell interfaces to the DLL.
+- **Robust XML Icon Fallback:** Redesigned the APK extraction pipeline within the DLL to query, rank, and score all candidate images in the archive (sorting by location, size, and DPI qualifier). If the primary icon resource defined in the APK is XML-based (e.g. adaptive icons), the shell extension automatically falls back to and loads the highest-scoring raster PNG/JPEG equivalent, solving the blank/generic icon issue on modern apps.
+- **Shell Registration Flags:** Set the `GIL_NOTFILENAME` flag alongside `GIL_PERINSTANCE` in `GetIconLocation` to force the Windows Shell to delegate rendering directly to our custom handler instead of failing to parse the raw APK structure.
 
 ### Added
 - **Expanded Project Scope:** The client app is now named **"Elite App Marketplace"**. It will support categorization, tags, user reviews, comments, and the ability to seamlessly downgrade, upgrade, uninstall, and reinstall APK versions via Shizuku.
