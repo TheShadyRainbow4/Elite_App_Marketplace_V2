@@ -353,7 +353,7 @@ public class AppDetailActivity extends AppCompatActivity {
                                     }
                                 } catch (Exception ex) {}
                                 detailInstallBtn.setOnClickListener(v2 -> {
-                                    boolean windowMode = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_mode", false);
+                                    boolean windowMode = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_popups", false);
                                     if (windowMode) {
                                         Intent winIntent = new Intent("com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW");
                                         winIntent.setComponent(new android.content.ComponentName("com.elitesoftware.elitewindowingcomponents", "com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"));
@@ -391,7 +391,7 @@ public class AppDetailActivity extends AppCompatActivity {
                                     finish();
                                     return;
                                 }
-                                boolean windowMode = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_mode", false);
+                                boolean windowMode = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_popups", false);
                                 if (windowMode) {
                                     Intent winIntent = new Intent("com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW");
                                     winIntent.setComponent(new android.content.ComponentName("com.elitesoftware.elitewindowingcomponents", "com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"));

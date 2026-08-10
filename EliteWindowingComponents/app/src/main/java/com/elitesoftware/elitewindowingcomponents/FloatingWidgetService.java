@@ -197,9 +197,9 @@ public class FloatingWidgetService extends Service {
                                   if (shizukuAvailable) {
                                       String cmd;
                                       if (finalIntent.getComponent() != null) {
-                                          cmd = "am start -n " + finalIntent.getComponent().flattenToShortString() + " --display " + displayId;
+                                          cmd = "am start -f 0x18008000 -n " + finalIntent.getComponent().flattenToShortString() + " --display " + displayId;
                                       } else {
-                                          cmd = "am start -a " + finalIntent.getAction() + " --display " + displayId;
+                                          cmd = "am start -f 0x18008000 -a " + finalIntent.getAction() + " --display " + displayId;
                                       }
                                       rikka.shizuku.Shizuku.newProcess(new String[]{"sh", "-c", cmd}, null, null).waitFor();
                                   } else {

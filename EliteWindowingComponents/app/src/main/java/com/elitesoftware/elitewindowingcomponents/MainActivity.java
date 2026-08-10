@@ -41,6 +41,17 @@ public class MainActivity extends Activity {
         });
         layout.addView(btnPerm);
         
+        Button btnTest = new Button(this);
+        btnTest.setText("Launch Test Window");
+        btnTest.setOnClickListener(v -> {
+            Intent intent = new Intent("com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW");
+            intent.setComponent(new android.content.ComponentName("com.elitesoftware.elitewindowingcomponents", "com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"));
+            intent.putExtra("package", getPackageName());
+            intent.putExtra("title", "Test Window");
+            sendBroadcast(intent);
+        });
+        layout.addView(btnTest);
+        
         setContentView(layout);
     }
 }
