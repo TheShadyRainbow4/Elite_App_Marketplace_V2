@@ -55,24 +55,45 @@ public:
                 std::string fname = file_stat.m_filename;
                 std::string fnameLower = fname;
                 std::transform(fnameLower.begin(), fnameLower.end(), fnameLower.begin(), ::tolower);
-                if (fnameLower.find(".png") == std::string::npos && fnameLower.find(".webp") == std::string::npos) continue;
+                if (fnameLower.find(".png") == std::string::npos && fnameLower.find(".webp") == std::string::npos && fnameLower.find(".jpg") == std::string::npos && fnameLower.find(".jpeg") == std::string::npos) continue;
+
+                // Never use 9-patch images (they are stretchable UI borders, not icons)
+                if (fnameLower.find(".9.png") != std::string::npos) continue;
 
                 int score = 0;
                 if (fnameLower.find("res/") != std::string::npos) score += 10;
                 if (fnameLower.find("mipmap") != std::string::npos) score += 10;
                 if (fnameLower.find("drawable") != std::string::npos) score += 5;
-                if (fnameLower.find("launcher") != std::string::npos) score += 1000;
-                if (fnameLower.find("icon") != std::string::npos) score += 500;
-
-                if (fnameLower.find("xxxhdpi") != std::string::npos) score += 50;
-                else if (fnameLower.find("xxhdpi") != std::string::npos) score += 40;
-                else if (fnameLower.find("xhdpi") != std::string::npos) score += 30;
-                else if (fnameLower.find("hdpi") != std::string::npos) score += 20;
-                else if (fnameLower.find("mdpi") != std::string::npos) score += 10;
                 
-                if (fnameLower.find("round") != std::string::npos) score += 5;
+                // Adaptive icon parts
+                if (fnameLower.find("background") != std::string::npos || fnameLower.find("_bg") != std::string::npos) score -= 1000;
+                if (fnameLower.find("foreground") != std::string::npos || fnameLower.find("_fg") != std::string::npos) score -= 50;
 
-                if (score > best_score) {
+                // Small UI icons
+                if (fnameLower.find("notification") != std::string::npos || fnameLower.find("stat_sys") != std::string::npos || fnameLower.find("status_bar") != std::string::npos) score -= 1000;
+                if (fnameLower.find("abc_") != std::string::npos || fnameLower.find("divider") != std::string::npos) score -= 1000;
+
+                std::string name_only = fnameLower.substr(fnameLower.find_last_of('/') + 1);
+                
+                if (name_only.find("ic_launcher") != std::string::npos) score += 500;
+                else if (name_only.find("launcher") != std::string::npos) score += 400;
+                else if (name_only.find("app_icon") != std::string::npos) score += 300;
+                else if (name_only == "icon.png" || name_only == "icon.jpg" || name_only == "icon.webp") score += 250;
+                else if (name_only.find("logo") != std::string::npos) score += 200;
+                else if (name_only.find("icon") != std::string::npos) score += 50;
+                else if (name_only.find("main") != std::string::npos) score += 50;
+                else if (name_only.find("app") != std::string::npos) score += 50;
+
+                if (name_only.find("round") != std::string::npos) score += 50;
+
+                if (fnameLower.find("xxxhdpi") != std::string::npos) score += 100;
+                else if (fnameLower.find("xxhdpi") != std::string::npos) score += 80;
+                else if (fnameLower.find("xhdpi") != std::string::npos) score += 60;
+                else if (fnameLower.find("hdpi") != std::string::npos) score += 40;
+                else if (fnameLower.find("mdpi") != std::string::npos) score += 20;
+                
+                // Only consider it a candidate if it scored some keyword points
+                if (score > 40 && score > best_score) {
                     best_score = score;
                     best_idx = i;
                     iconPath = fname;
