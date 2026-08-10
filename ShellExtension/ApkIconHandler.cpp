@@ -31,7 +31,8 @@ class CApkIconHandler :
     public IInitializeWithStream, 
     public IThumbnailProvider, 
     public IPersistFile, 
-    public IExtractIconW
+    public IExtractIconW,
+    public IExtractIconA
 {
 public:
     CApkIconHandler() : _cRef(1), _pStream(NULL) { 
@@ -57,6 +58,8 @@ public:
             *ppv = static_cast<IPersistFile*>(this);
         } else if (riid == IID_IExtractIconW) {
             *ppv = static_cast<IExtractIconW*>(this);
+        } else if (riid == IID_IExtractIconA) {
+            *ppv = static_cast<IExtractIconA*>(this);
         } else {
             return E_NOINTERFACE;
         }
@@ -155,12 +158,47 @@ public:
             szIconFile[0] = 0;
         }
         *piIndex = 0;
-        *pwFlags = GIL_PERINSTANCE | GIL_NOTFILENAME; // Force Extract to be called
+        *pwFlags = GIL_PERINSTANCE; // Maintain standard compatibility with all file managers
         
         return S_OK;
     }
 
     IFACEMETHODIMP Extract(LPCWSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize) {
+        return ExtractIcons(phiconLarge, phiconSmall, nIconSize);
+    }
+
+    // IExtractIconA
+    IFACEMETHODIMP GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT cchMax, int *piIndex, UINT *pwFlags) {
+        if (_szFile[0] == 0 && !_pStream) return S_FALSE;
+        
+        if (_szFile[0] != 0) {
+            char szFileA[MAX_PATH];
+            WideCharToMultiByte(CP_ACP, 0, _szFile, -1, szFileA, MAX_PATH, NULL, NULL);
+            strncpy_s(szIconFile, cchMax, szFileA, _TRUNCATE);
+        } else {
+            szIconFile[0] = 0;
+        }
+        *piIndex = 0;
+        *pwFlags = GIL_PERINSTANCE; // Maintain standard compatibility with all file managers
+        
+        return S_OK;
+    }
+
+    IFACEMETHODIMP Extract(LPCSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize) {
+        return ExtractIcons(phiconLarge, phiconSmall, nIconSize);
+    }
+
+private:
+    struct Candidate {
+        int index;
+        int score;
+    };
+
+    static bool CompareCandidates(const Candidate& a, const Candidate& b) {
+        return a.score > b.score;
+    }
+
+    HRESULT ExtractIcons(HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize) {
         Gdiplus::GdiplusStartupInput gdiplusStartupInput;
         ULONG_PTR gdiplusToken;
         Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
@@ -202,16 +240,6 @@ public:
 
         Gdiplus::GdiplusShutdown(gdiplusToken);
         return hr;
-    }
-
-private:
-    struct Candidate {
-        int index;
-        int score;
-    };
-
-    static bool CompareCandidates(const Candidate& a, const Candidate& b) {
-        return a.score > b.score;
     }
 
     HRESULT ExtractBitmapFromApk(Gdiplus::Bitmap** ppBitmap) {
