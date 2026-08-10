@@ -106,6 +106,7 @@ $dbStr = Get-Content $dbPath -Raw
 $dbObj = $dbStr | ConvertFrom-Json
 foreach ($app in $dbObj.apps) {
     if ($app.package_name -eq "com.elitesoftware.appmarketplace.v2") {
+        $app.name = "Elite Marketplace v2"
         $found = $false
         foreach ($v in $app.versions) {
             if ($v.version -eq $rawVer) {

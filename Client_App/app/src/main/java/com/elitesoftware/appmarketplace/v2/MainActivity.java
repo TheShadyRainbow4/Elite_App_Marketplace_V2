@@ -167,6 +167,10 @@ public class MainActivity extends AppCompatActivity {
         loadCachedApps();
         
         String savedServer = getSharedPreferences("prefs", MODE_PRIVATE).getString("server_ip", "");
+        if (savedServer.contains("8552")) {
+            getSharedPreferences("prefs", MODE_PRIVATE).edit().remove("server_ip").apply();
+            savedServer = "";
+        }
         if (!savedServer.isEmpty()) {
             serverIPs.add(savedServer);
             fetchAppsFromServer(savedServer, currentSearchQuery);

@@ -181,7 +181,7 @@ public class UpdateCheckService extends Service {
                 String ver = versions.getJSONObject(j).getString("version");
                 if (compareVersions(ver, latestVer) > 0) {
                     latestVer = ver;
-                    downloadUrl = versions.getJSONObject(j).getString("url");
+                    downloadUrl = "/apks/" + versions.getJSONObject(j).getString("file");
                 }
             }
             if (downloadUrl.isEmpty()) return;

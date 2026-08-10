@@ -1490,19 +1490,23 @@
       "category": "Unknown",
       "description": "Auto-discovered APK.",
       "icon": "com.elitesoftware.appmarketplace.v2_icon.png",
-      "name": "Market",
+      "name": "Elite Marketplace v2",
       "package_name": "com.elitesoftware.appmarketplace.v2",
       "reviews": [],
       "screenshots": [],
       "tags": [],
       "versions": [
         {
+          "file": "Elite_App_Marketplace-Client_v1.0.112.apk",
+          "version": "1.0.112"
+        },
+        {
           "file": "Elite_App_Marketplace-Client_v1.0.111.apk",
           "version": "1.0.111"
         },
         {
-          "version": "1.0.110",
-          "file": "Elite_App_Marketplace-Client_v1.0.110.apk"
+          "file": "Elite_App_Marketplace-Client_v1.0.110.apk",
+          "version": "1.0.110"
         },
         {
           "file": "Elite_App_Marketplace-Client_v1.0.109.apk",
@@ -1893,6 +1897,22 @@
     {
       "category": "Unknown",
       "description": "Auto-discovered APK.",
+      "icon": "com.elitesoftware.icon.pack.ios.app_icon.png",
+      "name": "iOS-6_Icons_1.3.6.336.apk",
+      "package_name": "com.elitesoftware.icon.pack.ios.app",
+      "reviews": [],
+      "screenshots": [],
+      "tags": [],
+      "versions": [
+        {
+          "file": "iOS-6_Icons_1.3.6.336.apk",
+          "version": "1.3.6.336"
+        }
+      ]
+    },
+    {
+      "category": "Unknown",
+      "description": "Auto-discovered APK.",
       "icon": "com.elitesoftware.geminiwidget_icon.png",
       "name": "ElitePopupWindow_manager",
       "package_name": "com.elitesoftware.popupwindowmanager",
@@ -1901,12 +1921,16 @@
       "tags": [],
       "versions": [
         {
-          "version": "1.0.111",
-          "file": "EliteWindowingComponents_v1.0.111.apk"
+          "file": "EliteWindowingComponents_v1.0.112.apk",
+          "version": "1.0.112"
         },
         {
-          "version": "1.0.110",
-          "file": "EliteWindowingComponents_v1.0.110.apk"
+          "file": "EliteWindowingComponents_v1.0.111.apk",
+          "version": "1.0.111"
+        },
+        {
+          "file": "EliteWindowingComponents_v1.0.110.apk",
+          "version": "1.0.110"
         },
         {
           "file": "EliteGeminiWidget_v1.0.26.apk",
@@ -2015,22 +2039,6 @@
         {
           "file": "EliteGeminiWidget_v1.0.8.apk",
           "version": "1.0.8"
-        }
-      ]
-    },
-    {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
-      "icon": "com.elitesoftware.icon.pack.ios.app_icon.png",
-      "name": "iOS-6_Icons_1.3.6.336.apk",
-      "package_name": "com.elitesoftware.icon.pack.ios.app",
-      "reviews": [],
-      "screenshots": [],
-      "tags": [],
-      "versions": [
-        {
-          "file": "iOS-6_Icons_1.3.6.336.apk",
-          "version": "1.3.6.336"
         }
       ]
     },

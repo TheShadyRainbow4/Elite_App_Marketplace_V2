@@ -238,7 +238,23 @@ public class FloatingWidgetService extends Service {
                                         } else {
                                             cmd = "am start -f 0x18008000 -a " + finalIntent.getAction() + " --display " + displayId;
                                         }
-                                        rikka.shizuku.Shizuku.newProcess(new String[]{"sh", "-c", cmd}, null, null).waitFor();
+                                        Process process = rikka.shizuku.Shizuku.newProcess(new String[]{"sh", "-c", cmd}, null, null);
+                                        java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(process.getInputStream()));
+                                        java.io.BufferedReader errorReader = new java.io.BufferedReader(new java.io.InputStreamReader(process.getErrorStream()));
+                                        StringBuilder output = new StringBuilder();
+                                        String line;
+                                        while ((line = reader.readLine()) != null) output.append(line).append("\n");
+                                        while ((line = errorReader.readLine()) != null) output.append(line).append("\n");
+                                        process.waitFor();
+                                        
+                                        final String outStr = output.toString();
+                                        new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+                                            if (!outStr.isEmpty() && (outStr.toLowerCase().contains("error") || outStr.toLowerCase().contains("exception"))) {
+                                                android.widget.Toast.makeText(FloatingWidgetService.this, "Launch output:\n" + outStr, android.widget.Toast.LENGTH_LONG).show();
+                                            } else {
+                                                android.widget.Toast.makeText(FloatingWidgetService.this, "App Launched on Display " + displayId, android.widget.Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     } else {
                                         android.widget.Toast.makeText(FloatingWidgetService.this, "Shizuku not running! Native apps may fail.", android.widget.Toast.LENGTH_LONG).show();
                                         options.setLaunchDisplayId(displayId);
@@ -250,7 +266,10 @@ public class FloatingWidgetService extends Service {
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    android.widget.Toast.makeText(FloatingWidgetService.this, "Failed to launch on Virtual Display: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show();
+                                    final String errMsg = e.getMessage();
+                                    new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+                                        android.widget.Toast.makeText(FloatingWidgetService.this, "Failed to launch on Virtual Display: " + errMsg, android.widget.Toast.LENGTH_LONG).show();
+                                    });
                                 }
                             }, 500);
                       }

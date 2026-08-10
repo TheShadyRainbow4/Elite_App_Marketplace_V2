@@ -2,9 +2,12 @@ package com.elitesoftware.elitewindowingcomponents;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.net.Uri;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,33 +28,41 @@ public class MainActivity extends Activity {
         layout.addView(title);
         
         TextView desc = new TextView(this);
-        desc.setText("This app provides background services and a broadcast API to render native floating windows.");
+        desc.setText("Global Settings and Window Frame Launcher.");
         desc.setPadding(0, 0, 0, 32);
         layout.addView(desc);
-        
-        Button btnPerm = new Button(this);
-        btnPerm.setText("Grant Overlay Permission");
-        btnPerm.setOnClickListener(v -> {
-            if (!Settings.canDrawOverlays(this)) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, android.net.Uri.parse("package:" + getPackageName()));
+
+        Button btnOverlay = new Button(this);
+        btnOverlay.setText("Grant Overlay Permission");
+        btnOverlay.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Permission already granted!", Toast.LENGTH_SHORT).show();
             }
         });
-        layout.addView(btnPerm);
-        
-        Button btnTest = new Button(this);
-        btnTest.setText("Launch Test Window");
-        btnTest.setOnClickListener(v -> {
-            Intent intent = new Intent("com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW");
-            intent.setComponent(new android.content.ComponentName("com.elitesoftware.elitewindowingcomponents", "com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"));
-            intent.putExtra("package", getPackageName());
-            intent.putExtra("title", "Test Window");
-            sendBroadcast(intent);
+
+        EditText pkgInput = new EditText(this);
+        pkgInput.setHint("Enter Package Name (e.g. com.android.settings)");
+
+        Button launchBtn = new Button(this);
+        launchBtn.setText("Launch Custom Frame");
+        launchBtn.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+                Toast.makeText(this, "Need Overlay Permission!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String pkg = pkgInput.getText().toString();
+            Intent intent = new Intent(MainActivity.this, FloatingWidgetService.class);
+            intent.putExtra("package", pkg);
+            intent.putExtra("title", "Elite Frame: " + pkg);
+            startService(intent);
         });
-        layout.addView(btnTest);
-        
+
+        layout.addView(btnOverlay);
+        layout.addView(pkgInput);
+        layout.addView(launchBtn);
         setContentView(layout);
     }
 }
