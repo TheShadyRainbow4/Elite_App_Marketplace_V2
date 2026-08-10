@@ -141,7 +141,7 @@ public class AppDetailActivity extends AppCompatActivity {
             
             if (app.has("icon") && !app.optString("icon").isEmpty()) {
                 String iconVal = app.optString("icon");
-                String iconUrl = iconVal.startsWith("local://") ? iconVal : "http://" + ip + ":8553/images/" + iconVal.replace(" ", "%20");
+                String iconUrl = iconVal.startsWith("local://") ? iconVal : "http://" + ip + "/images/" + iconVal.replace(" ", "%20");
                 loadImageAsync(iconUrl, detailIcon);
             }
             
@@ -156,7 +156,7 @@ public class AppDetailActivity extends AppCompatActivity {
                 org.json.JSONArray screenshots = app.getJSONArray("screenshots");
                 for (int i = 0; i < screenshots.length(); i++) {
                     String screenshotName = screenshots.getString(i);
-                    String screenshotUrl = "http://" + ip + ":8553/images/" + screenshotName.replace(" ", "%20");
+                    String screenshotUrl = "http://" + ip + "/images/" + screenshotName.replace(" ", "%20");
                     
                     ImageView imgView = new ImageView(this);
                     android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(
@@ -205,7 +205,7 @@ public class AppDetailActivity extends AppCompatActivity {
                             if(selectedIdx < 0) selectedIdx = 0;
                             
                             org.json.JSONObject verObj = finalVersionsArr.getJSONObject(selectedIdx);
-                            String apkUrl = "http://" + ip + ":8553/apks/" + verObj.getString("file").replace(" ", "%20");
+                            String apkUrl = "http://" + ip + "/apks/" + verObj.getString("file").replace(" ", "%20");
                             selectedVer = verObj.getString("version");
                             
                             URL url = new URL(apkUrl);

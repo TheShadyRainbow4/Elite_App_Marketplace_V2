@@ -356,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String currentServerIp = getSharedPreferences("prefs", MODE_PRIVATE).getString("server_ip", "None");
         boolean useWindow = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_popups", false);
-        builder.setTitle("Marketplace Settings (" + currentServerIp + ":8553)");
+        builder.setTitle("Marketplace Settings (" + currentServerIp + ")");
         String[] options = {"Install Root Certificate", "Install PFX Certificate", "Manually Add Server IP", "Refresh Store", "Theme: Light", "Theme: Dark", "Theme: AMOLED Black", "View Latest Release on GitHub", "View Local Server Website", "Toggle Window Popups: " + (useWindow ? "ON" : "OFF")};
         builder.setItems(options, (dialog, which) -> {
             if (which == 0) installCertificate();
@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
                 android.content.SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
                 String serverIp = prefs.getString("server_ip", "");
                 if (!serverIp.isEmpty()) {
-                    android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("http://" + serverIp + ":8553/"));
+                    android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("http://" + serverIp + "/"));
                     startActivity(browserIntent);
                 } else {
                     if (tvStatus != null) tvStatus.setText("Connected to " + serverIPs.size() + " server(s).");
@@ -502,7 +502,9 @@ public class MainActivity extends AppCompatActivity {
                         if (response.startsWith("ELITE_MARKET_HERE")) {
                             String ip = receivePacket.getAddress().getHostAddress();
                             if (response.contains(":")) {
-                                ip = response.split(":")[1];
+                                ip = ip + ":" + response.split(":")[1];
+                            } else {
+                                ip = ip + ":8553";
                             }
                             final String finalIp = ip;
                             getSharedPreferences("prefs", MODE_PRIVATE).edit().putString("server_ip", finalIp).apply();
@@ -542,7 +544,7 @@ public class MainActivity extends AppCompatActivity {
         executor.execute(() -> {
             try {
                 AppDetailActivity.clearImageCache();
-                String urlStr = "http://" + ip + ":8553/api/apps";
+                String urlStr = "http://" + ip + "/api/apps";
                 if (query != null && !query.isEmpty()) {
                     urlStr += "?q=" + java.net.URLEncoder.encode(query, "UTF-8");
                 }
@@ -659,7 +661,7 @@ public class MainActivity extends AppCompatActivity {
             
             if (app.has("icon") && !app.optString("icon").isEmpty()) {
                 String iconVal = app.optString("icon");
-                String iconUrl = iconVal.startsWith("local://") ? iconVal : "http://" + app.optString("_server_ip") + ":8553/images/" + iconVal;
+                String iconUrl = iconVal.startsWith("local://") ? iconVal : "http://" + app.optString("_server_ip") + "/images/" + iconVal;
                 loadImageAsync(iconUrl, ivAppIcon);
             }
 
@@ -709,7 +711,7 @@ public class MainActivity extends AppCompatActivity {
                     
                     new Thread(() -> {
                         try {
-                            String apkUrl = "http://" + app.optString("_server_ip") + ":8553/apks/" + app.getJSONArray("versions").getJSONObject(0).getString("file");
+                            String apkUrl = "http://" + app.optString("_server_ip") + "/apks/" + app.getJSONArray("versions").getJSONObject(0).getString("file");
                             java.net.URL url = new java.net.URL(apkUrl);
                             java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
                             conn.connect();
@@ -997,7 +999,7 @@ public class MainActivity extends AppCompatActivity {
 
             for (String ip : ipsCopy) {
                 try {
-                    java.net.URL url = new java.net.URL("http://" + ip + ":8553/api/heartbeat");
+                    java.net.URL url = new java.net.URL("http://" + ip + "/api/heartbeat");
                     java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/json");
@@ -1037,7 +1039,7 @@ public class MainActivity extends AppCompatActivity {
 
                 for (String ip : ipsCopy) {
                     try {
-                        java.net.URL url = new java.net.URL("http://" + ip + ":8553/api/disconnect");
+                        java.net.URL url = new java.net.URL("http://" + ip + "/api/disconnect");
                         java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("POST");
                         conn.setRequestProperty("Content-Type", "application/json");

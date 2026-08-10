@@ -1059,7 +1059,7 @@ void UDPDiscoveryThread() {
     sockaddr_in addr = {};
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(serverPort);
+    addr.sin_port = htons(8553);
     bind(udpSock, (sockaddr*)&addr, sizeof(addr));
     char buffer[256];
     sockaddr_in clientAddr;
@@ -1069,7 +1069,7 @@ void UDPDiscoveryThread() {
         if (bytes > 0) {
             buffer[bytes] = '\0';
             if (strcmp(buffer, "ELITE_MARKET_DISCOVER") == 0) {
-                std::string reply = "ELITE_MARKET_HERE";
+                std::string reply = "ELITE_MARKET_HERE:" + std::to_string(serverPort);
                 LogMessage("UDP Broadcast Received: Replying " + reply);
                 sendto(udpSock, reply.c_str(), reply.length(), 0, (sockaddr*)&clientAddr, clientLen);
             }
