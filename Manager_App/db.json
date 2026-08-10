@@ -48,14 +48,21 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "category": "",
+      "description": "Universal Installer is a comprehensive utility designed to streamline the installation process for a wide array of applications and packages on your Android device. It acts as a central hub, simplifying the management and deployment of software without complex manual steps, ensuring a smooth and efficient setup experience for users.\n\nThis powerful tool aims to enhance user convenience by providing a robust and easy-to-use interface for handling various installation types. Whether you're dealing with standard APKs or other package formats, Universal Installer ensures that your apps are installed correctly and efficiently, making it an indispensable asset for managing your device's software.",
       "icon": "app.pwhs.universalinstaller_icon.png",
-      "name": "Universal Installer_1.9.11.apk",
+      "name": "Universal Installer",
       "package_name": "app.pwhs.universalinstaller",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "installer",
+        "utility",
+        "app management",
+        "package manager",
+        "system tool",
+        "software installation"
+      ],
       "versions": [
         {
           "file": "Universal Installer_1.9.11.apk",
@@ -127,7 +134,7 @@
       ]
     },
     {
-      "category": "Unknown",
+      "category": "",
       "description": "Auto-discovered APK.",
       "icon": "by4a.setedit22_icon.png",
       "name": "4A Settings Database Editor_2023.11.16.apk",
@@ -1184,12 +1191,16 @@
       "tags": [],
       "versions": [
         {
+          "version": "1.0.101",
+          "file": "Elite_App_Marketplace-Client_v1.0.101.apk"
+        },
+        {
           "file": "Elite_App_Marketplace-Client_v1.0.100.apk",
           "version": "1.0.100"
         },
         {
-          "version": "1.0.99",
-          "file": "Elite_App_Marketplace-Client_v1.0.99.apk"
+          "file": "Elite_App_Marketplace-Client_v1.0.99.apk",
+          "version": "1.0.99"
         },
         {
           "file": "Elite_App_Marketplace-Client_v1.0.98.apk",

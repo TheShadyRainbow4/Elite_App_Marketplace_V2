@@ -2220,15 +2220,20 @@ void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, 
                 return;
             }
         } else {
+            int count = 0;
             for (size_t i = 0; i < dbCache["apps"].size(); i++) {
                 auto& app = dbCache["apps"][i];
+                if (app.value("ai_tagged", false) == true) continue;
+                
                 std::string aname = app.value("name", "");
                 std::string apkg = app.value("package_name", "");
                 std::string adesc = app.value("description", "");
                 std::string acat = app.value("category", "");
                 std::string atags = "";
                 if (app.contains("tags") && app["tags"].is_array()) {
-                    for (auto& tag : app["tags"]) atags += tag.get<std::string>() + ",";
+                    for (auto& tag : app["tags"]) {
+                        if (tag.is_string()) atags += tag.get<std::string>() + ",";
+                    }
                 }
                 if (!atags.empty()) atags.pop_back();
 
@@ -2246,6 +2251,9 @@ void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, 
                     pObj.originalTags = atags;
                     pObj.newTags = j.value("tags", atags);
                     g_pendingProposals.push_back(pObj);
+                    
+                    count++;
+                    if (count >= 10) break;
                 } catch(...) {
                     // Skip failures in batch
                 }
@@ -2861,6 +2869,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                         if (!t.empty()) tags.push_back(t);
                         
                         app["tags"] = tags;
+                        app["ai_tagged"] = true;
                     }
                 }
             }
