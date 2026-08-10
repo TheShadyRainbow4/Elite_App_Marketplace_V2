@@ -9,10 +9,11 @@ if %errorLevel% neq 0 (
     exit /b
 )
 
-echo Unregistering APK Icon Handler...
+echo Unregistering APK Shell Extension (Thumbnail Provider and Icon Handler)...
 
 reg delete "HKCR\CLSID\{1B851216-724B-4D6F-96AF-C6ACED29BDB8}" /f
 reg delete "HKCR\apkfile\ShellEx\IconHandler" /f
+reg delete "HKCR\apkfile\ShellEx\{E357FCCD-A995-4576-B01F-234630154E96}" /f
 
 echo Restarting explorer to apply changes...
 taskkill /f /im explorer.exe

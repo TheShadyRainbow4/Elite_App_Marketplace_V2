@@ -2,6 +2,7 @@
 #include <shobjidl.h>
 #include <shlobj.h>
 #include <shlwapi.h>
+#include <thumbcache.h>
 #include <gdiplus.h>
 #include <new>
 #include <string>
@@ -16,20 +17,29 @@
 const CLSID CLSID_ApkIconHandler = 
 { 0x1b851216, 0x724b, 0x4d6f, { 0x96, 0xaf, 0xc6, 0xac, 0xed, 0x29, 0xbd, 0xb8 } };
 
+// {E357FCCD-A995-4576-B01F-234630154E96}
+const IID IID_IThumbnailProvider = 
+{ 0xe357fccd, 0xa995, 0x4576, { 0xb0, 0x1f, 0x23, 0x46, 0x30, 0x15, 0x4e, 0x96 } };
+
 long g_cRef = 0;
 HINSTANCE g_hInst = NULL;
 
 void DllAddRef() { InterlockedIncrement(&g_cRef); }
 void DllRelease() { InterlockedDecrement(&g_cRef); }
 
-class CApkIconHandler : public IPersistFile, public IExtractIconW
+class CApkIconHandler : 
+    public IInitializeWithStream, 
+    public IThumbnailProvider, 
+    public IPersistFile, 
+    public IExtractIconW
 {
 public:
-    CApkIconHandler() : _cRef(1) { 
+    CApkIconHandler() : _cRef(1), _pStream(NULL) { 
         _szFile[0] = 0;
         DllAddRef(); 
     }
     ~CApkIconHandler() {
+        if (_pStream) _pStream->Release();
         DllRelease();
     }
 
@@ -37,7 +47,13 @@ public:
     IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv) {
         if (!ppv) return E_POINTER;
         *ppv = NULL;
-        if (riid == IID_IUnknown || riid == IID_IPersist || riid == IID_IPersistFile) {
+        if (riid == IID_IUnknown) {
+            *ppv = static_cast<IUnknown*>(static_cast<IThumbnailProvider*>(this));
+        } else if (riid == IID_IInitializeWithStream) {
+            *ppv = static_cast<IInitializeWithStream*>(this);
+        } else if (riid == IID_IThumbnailProvider) {
+            *ppv = static_cast<IThumbnailProvider*>(this);
+        } else if (riid == IID_IPersist || riid == IID_IPersistFile) {
             *ppv = static_cast<IPersistFile*>(this);
         } else if (riid == IID_IExtractIconW) {
             *ppv = static_cast<IExtractIconW*>(this);
@@ -52,6 +68,65 @@ public:
         ULONG cRef = InterlockedDecrement(&_cRef);
         if (0 == cRef) delete this;
         return cRef;
+    }
+
+    // IInitializeWithStream
+    IFACEMETHODIMP Initialize(IStream *pStream, DWORD grfMode) {
+        if (_pStream) {
+            _pStream->Release();
+            _pStream = NULL;
+        }
+        _pStream = pStream;
+        if (_pStream) _pStream->AddRef();
+        return S_OK;
+    }
+
+    // IThumbnailProvider
+    IFACEMETHODIMP GetThumbnail(UINT cx, HBITMAP *phbmp, WTS_ALPHATYPE *pdwAlpha) {
+        Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+        ULONG_PTR gdiplusToken;
+        Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+        HRESULT hr = E_FAIL;
+        Gdiplus::Bitmap* pBitmap = NULL;
+        
+        if (SUCCEEDED(ExtractBitmapFromApk(&pBitmap)) && pBitmap) {
+            BITMAPINFO bmi = {};
+            bmi.bmiHeader.biSize = sizeof(bmi.bmiHeader);
+            bmi.bmiHeader.biWidth = pBitmap->GetWidth();
+            bmi.bmiHeader.biHeight = -(INT)pBitmap->GetHeight(); // top-down
+            bmi.bmiHeader.biPlanes = 1;
+            bmi.bmiHeader.biBitCount = 32;
+            bmi.bmiHeader.biCompression = BI_RGB;
+
+            void* pBits = NULL;
+            HDC hdc = GetDC(NULL);
+            HBITMAP hDIB = CreateDIBSection(hdc, &bmi, DIB_RGB_COLORS, &pBits, NULL, 0);
+            ReleaseDC(NULL, hdc);
+
+            if (hDIB) {
+                Gdiplus::BitmapData bitmapData;
+                Gdiplus::Rect rect(0, 0, pBitmap->GetWidth(), pBitmap->GetHeight());
+                if (pBitmap->LockBits(&rect, Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &bitmapData) == Gdiplus::Ok) {
+                    for (UINT y = 0; y < pBitmap->GetHeight(); ++y) {
+                        BYTE* pDstLine = (BYTE*)pBits + y * bmi.bmiHeader.biWidth * 4;
+                        BYTE* pSrcLine = (BYTE*)bitmapData.Scan0 + y * bitmapData.Stride;
+                        memcpy(pDstLine, pSrcLine, pBitmap->GetWidth() * 4);
+                    }
+                    pBitmap->UnlockBits(&bitmapData);
+                    
+                    *phbmp = hDIB;
+                    if (pdwAlpha) *pdwAlpha = WTSAT_ARGB;
+                    hr = S_OK;
+                } else {
+                    DeleteObject(hDIB);
+                }
+            }
+            delete pBitmap;
+        }
+
+        Gdiplus::GdiplusShutdown(gdiplusToken);
+        return hr;
     }
 
     // IPersist
@@ -72,33 +147,112 @@ public:
 
     // IExtractIconW
     IFACEMETHODIMP GetIconLocation(UINT uFlags, LPWSTR szIconFile, UINT cchMax, int *piIndex, UINT *pwFlags) {
-        if (_szFile[0] == 0) return S_FALSE;
+        if (_szFile[0] == 0 && !_pStream) return S_FALSE;
         
-        wcsncpy_s(szIconFile, cchMax, _szFile, _TRUNCATE);
+        if (_szFile[0] != 0) {
+            wcsncpy_s(szIconFile, cchMax, _szFile, _TRUNCATE);
+        } else {
+            szIconFile[0] = 0;
+        }
         *piIndex = 0;
-        *pwFlags = GIL_PERINSTANCE | GIL_NOTFILENAME; // Cache properly, and force Extract to be called
+        *pwFlags = GIL_PERINSTANCE | GIL_NOTFILENAME; // Force Extract to be called
         
         return S_OK;
     }
 
     IFACEMETHODIMP Extract(LPCWSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize) {
+        Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+        ULONG_PTR gdiplusToken;
+        Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+        HRESULT hr = S_FALSE;
+        Gdiplus::Bitmap* pBitmap = NULL;
+        
+        if (SUCCEEDED(ExtractBitmapFromApk(&pBitmap)) && pBitmap) {
+            int cxLarge = LOWORD(nIconSize);
+            int cxSmall = HIWORD(nIconSize);
+            
+            bool largeSuccess = false;
+            bool smallSuccess = false;
+
+            if (phiconLarge) {
+                Gdiplus::Bitmap* pLarge = (Gdiplus::Bitmap*)pBitmap->GetThumbnailImage(cxLarge, cxLarge, NULL, NULL);
+                if (pLarge) {
+                    if (pLarge->GetHICON(phiconLarge) == Gdiplus::Ok) {
+                        largeSuccess = true;
+                    }
+                    delete pLarge;
+                }
+            }
+            if (phiconSmall) {
+                Gdiplus::Bitmap* pSmall = (Gdiplus::Bitmap*)pBitmap->GetThumbnailImage(cxSmall, cxSmall, NULL, NULL);
+                if (pSmall) {
+                    if (pSmall->GetHICON(phiconSmall) == Gdiplus::Ok) {
+                        smallSuccess = true;
+                    }
+                    delete pSmall;
+                }
+            }
+            
+            if (largeSuccess || smallSuccess) {
+                hr = S_OK;
+            }
+            delete pBitmap;
+        }
+
+        Gdiplus::GdiplusShutdown(gdiplusToken);
+        return hr;
+    }
+
+private:
+    struct Candidate {
+        int index;
+        int score;
+    };
+
+    static bool CompareCandidates(const Candidate& a, const Candidate& b) {
+        return a.score > b.score;
+    }
+
+    HRESULT ExtractBitmapFromApk(Gdiplus::Bitmap** ppBitmap) {
+        if (!ppBitmap) return E_POINTER;
+        *ppBitmap = NULL;
+
+        std::vector<BYTE> buffer;
+        bool isStream = false;
+
+        if (_pStream) {
+            STATSTG stat;
+            if (SUCCEEDED(_pStream->Stat(&stat, STATFLAG_NONAME))) {
+                ULONG cbSize = stat.cbSize.LowPart;
+                buffer.resize(cbSize);
+                LARGE_INTEGER liZero = {0};
+                _pStream->Seek(liZero, STREAM_SEEK_SET, NULL);
+                ULONG cbRead = 0;
+                if (SUCCEEDED(_pStream->Read(buffer.data(), cbSize, &cbRead)) && cbRead == cbSize) {
+                    isStream = true;
+                }
+            }
+        }
+
         mz_zip_archive zip_archive;
         memset(&zip_archive, 0, sizeof(zip_archive));
 
-        // Open file mapping or read to memory. Reading whole zip to memory is fine for small files, but an APK can be large.
-        // Let's use miniz's file initialization.
-        
-        // Convert wide char to utf8/mbcs
-        char szPathA[MAX_PATH];
-        WideCharToMultiByte(CP_UTF8, 0, _szFile, -1, szPathA, MAX_PATH, NULL, NULL);
-
-        if (!mz_zip_reader_init_file(&zip_archive, szPathA, 0)) {
-            return S_FALSE;
+        if (isStream) {
+            if (!mz_zip_reader_init_mem(&zip_archive, buffer.data(), buffer.size(), 0)) {
+                return E_FAIL;
+            }
+        } else {
+            if (_szFile[0] == 0) return E_FAIL;
+            char szPathA[MAX_PATH];
+            WideCharToMultiByte(CP_UTF8, 0, _szFile, -1, szPathA, MAX_PATH, NULL, NULL);
+            if (!mz_zip_reader_init_file(&zip_archive, szPathA, 0)) {
+                return E_FAIL;
+            }
         }
 
         int num_files = mz_zip_reader_get_num_files(&zip_archive);
-        int best_idx = -1;
-        int best_score = -1;
+        std::vector<Candidate> candidates;
 
         for (int i = 0; i < num_files; i++) {
             mz_zip_archive_file_stat file_stat;
@@ -106,95 +260,79 @@ public:
             if (mz_zip_reader_is_file_a_directory(&zip_archive, i)) continue;
 
             std::string fname = file_stat.m_filename;
-            std::transform(fname.begin(), fname.end(), fname.begin(), ::tolower);
+            std::string fnameLower = fname;
+            std::transform(fnameLower.begin(), fnameLower.end(), fnameLower.begin(), ::tolower);
 
-            if (fname.find(".png") == std::string::npos) continue;
-            
-            // Exclude common non-icons if we can, but let's just positively score
+            // GDI+ natively reads PNG, JPEG. We restrict to PNG and JPEGs.
+            if (fnameLower.find(".png") == std::string::npos && 
+                fnameLower.find(".jpg") == std::string::npos && 
+                fnameLower.find(".jpeg") == std::string::npos) continue;
+
             int score = 0;
-            if (fname.find("res/") != std::string::npos) score += 10;
-            if (fname.find("mipmap") != std::string::npos) score += 10;
+            if (fnameLower.find("res/") != std::string::npos) score += 10;
+            if (fnameLower.find("mipmap") != std::string::npos) score += 10;
+            if (fnameLower.find("drawable") != std::string::npos) score += 5;
             
             bool is_icon = false;
-            if (fname.find("launcher") != std::string::npos) { score += 1000; is_icon = true; }
-            if (fname.find("ic_launcher") != std::string::npos) { score += 1000; is_icon = true; }
-            if (fname.find("app_icon") != std::string::npos) { score += 800; is_icon = true; }
-            if (fname.find("logo") != std::string::npos) { score += 800; is_icon = true; }
-            if (fname.find("icon") != std::string::npos) { score += 500; is_icon = true; }
+            if (fnameLower.find("launcher") != std::string::npos) { score += 1000; is_icon = true; }
+            if (fnameLower.find("ic_launcher") != std::string::npos) { score += 1000; is_icon = true; }
+            if (fnameLower.find("app_icon") != std::string::npos) { score += 800; is_icon = true; }
+            if (fnameLower.find("logo") != std::string::npos) { score += 800; is_icon = true; }
+            if (fnameLower.find("icon") != std::string::npos) { score += 500; is_icon = true; }
             
-            if (fname.find("round") != std::string::npos) score += 5;
+            if (fnameLower.find("round") != std::string::npos) score += 5;
 
-            // resolution fallback
-            if (fname.find("xxxhdpi") != std::string::npos) score += 20;
-            else if (fname.find("xxhdpi") != std::string::npos) score += 15;
-            else if (fname.find("xhdpi") != std::string::npos) score += 10;
-            else if (fname.find("hdpi") != std::string::npos) score += 5;
+            // Resolution priority
+            if (fnameLower.find("xxxhdpi") != std::string::npos) score += 50;
+            else if (fnameLower.find("xxhdpi") != std::string::npos) score += 40;
+            else if (fnameLower.find("xhdpi") != std::string::npos) score += 30;
+            else if (fnameLower.find("hdpi") != std::string::npos) score += 20;
+            else if (fnameLower.find("mdpi") != std::string::npos) score += 10;
 
-            // Exclude backgrounds if it doesn't have an icon name
-            if (!is_icon && (fname.find("bg_") != std::string::npos || fname.find("background") != std::string::npos)) {
+            if (!is_icon && (fnameLower.find("bg_") != std::string::npos || fnameLower.find("background") != std::string::npos)) {
                 score -= 100; 
             }
 
-            if (score > best_score) {
-                best_score = score;
-                best_idx = i;
+            candidates.push_back({i, score});
+        }
+
+        std::sort(candidates.begin(), candidates.end(), CompareCandidates);
+
+        Gdiplus::Bitmap* pBitmap = NULL;
+        for (const auto& cand : candidates) {
+            size_t img_size = 0;
+            void *img_data = mz_zip_reader_extract_to_heap(&zip_archive, cand.index, &img_size, 0);
+            if (!img_data) continue;
+
+            IStream *pImgStream = SHCreateMemStream((const BYTE*)img_data, (UINT)img_size);
+            mz_free(img_data);
+
+            if (pImgStream) {
+                pBitmap = Gdiplus::Bitmap::FromStream(pImgStream);
+                if (pBitmap && pBitmap->GetLastStatus() == Gdiplus::Ok && pBitmap->GetWidth() > 0) {
+                    pImgStream->Release();
+                    *ppBitmap = pBitmap;
+                    break;
+                }
+                if (pBitmap) {
+                    delete pBitmap;
+                    pBitmap = NULL;
+                }
+                pImgStream->Release();
             }
         }
 
-        if (best_idx == -1) {
-            mz_zip_reader_end(&zip_archive);
-            return S_FALSE;
-        }
-
-        size_t png_size = 0;
-        void *png_data = mz_zip_reader_extract_to_heap(&zip_archive, best_idx, &png_size, 0);
         mz_zip_reader_end(&zip_archive);
 
-        if (!png_data) return S_FALSE;
-
-        IStream *pPngStream = SHCreateMemStream((const BYTE*)png_data, (UINT)png_size);
-        mz_free(png_data);
-
-        if (!pPngStream) return S_FALSE;
-
-        Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-        ULONG_PTR gdiplusToken;
-        Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-
-        HRESULT hr = S_FALSE;
-        {
-            Gdiplus::Bitmap *pBitmap = Gdiplus::Bitmap::FromStream(pPngStream);
-            if (pBitmap && pBitmap->GetLastStatus() == Gdiplus::Ok) {
-                int cxLarge = LOWORD(nIconSize);
-                int cxSmall = HIWORD(nIconSize);
-                
-                if (phiconLarge) {
-                    Gdiplus::Bitmap* pLarge = (Gdiplus::Bitmap*)pBitmap->GetThumbnailImage(cxLarge, cxLarge, NULL, NULL);
-                    if (pLarge) {
-                        pLarge->GetHICON(phiconLarge);
-                        delete pLarge;
-                    }
-                }
-                if (phiconSmall) {
-                    Gdiplus::Bitmap* pSmall = (Gdiplus::Bitmap*)pBitmap->GetThumbnailImage(cxSmall, cxSmall, NULL, NULL);
-                    if (pSmall) {
-                        pSmall->GetHICON(phiconSmall);
-                        delete pSmall;
-                    }
-                }
-                hr = S_OK;
-            }
-            if (pBitmap) delete pBitmap;
+        if (*ppBitmap) {
+            return S_OK;
         }
 
-        Gdiplus::GdiplusShutdown(gdiplusToken);
-        pPngStream->Release();
-
-        return hr;
+        return E_FAIL;
     }
 
-private:
     long _cRef;
+    IStream *_pStream;
     WCHAR _szFile[MAX_PATH];
 };
 

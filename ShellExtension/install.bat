@@ -12,17 +12,16 @@ if %errorLevel% neq 0 (
 set "DLL_PATH=%~dp0ApkIconHandler.dll"
 set "DLL_PATH=%DLL_PATH:\=\\%"
 
-echo Registering APK Icon Handler...
+echo Registering APK Shell Extension (Thumbnail Provider and Icon Handler)...
 
-reg add "HKCR\CLSID\{1B851216-724B-4D6F-96AF-C6ACED29BDB8}" /ve /d "APK Icon Handler" /f
+reg add "HKCR\CLSID\{1B851216-724B-4D6F-96AF-C6ACED29BDB8}" /ve /d "APK Shell Extension Handler" /f
 reg add "HKCR\CLSID\{1B851216-724B-4D6F-96AF-C6ACED29BDB8}\InprocServer32" /ve /d "%DLL_PATH%" /f
 reg add "HKCR\CLSID\{1B851216-724B-4D6F-96AF-C6ACED29BDB8}\InprocServer32" /v ThreadingModel /d "Apartment" /f
 
 reg add "HKCR\.apk" /ve /d "apkfile" /f
 reg add "HKCR\apkfile\DefaultIcon" /ve /d "%%1" /f
 reg add "HKCR\apkfile\ShellEx\IconHandler" /ve /d "{1B851216-724B-4D6F-96AF-C6ACED29BDB8}" /f
-rem Remove old thumbnail provider just in case
-reg delete "HKCR\apkfile\ShellEx\{E357FCCD-A995-4576-B01F-234630154E96}" /f >nul 2>&1
+reg add "HKCR\apkfile\ShellEx\{E357FCCD-A995-4576-B01F-234630154E96}" /ve /d "{1B851216-724B-4D6F-96AF-C6ACED29BDB8}" /f
 
 echo Restarting explorer to apply changes...
 taskkill /f /im explorer.exe
