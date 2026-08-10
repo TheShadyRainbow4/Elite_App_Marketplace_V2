@@ -2184,10 +2184,12 @@ void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, 
         };
 
         if (!allApps) {
-            if (n.empty()) {
+            if (n.empty() && p.empty()) {
                 MessageBoxA(hwnd, "No app selected to AI Tag.", "Error", MB_OK);
                 return;
             }
+            std::string progressTitle = "AI Tagging: " + (n.empty() ? p : n);
+            SetWindowTextA(hwnd, progressTitle.c_str());
             std::string res = askGemini(n, p, d, c, t);
             try {
                 json j = json::parse(res);
@@ -2236,6 +2238,9 @@ void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, 
                     }
                 }
                 if (!atags.empty()) atags.pop_back();
+
+                std::string progressTitle = "AI Auto-Tagging " + std::to_string(count+1) + "/10: " + aname;
+                SetWindowTextA(hwnd, progressTitle.c_str());
 
                 std::string res = askGemini(aname, apkg, adesc, acat, atags);
                 try {
@@ -2810,15 +2815,21 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 MessageBoxA(hwnd, "GEMINI_API_KEY environment variable not set!", "Error", MB_OK | MB_ICONERROR);
                 break;
             }
-            char n[256] = {0}, p[256] = {0}, v[256] = {0}, d[4096] = {0}, c[256] = {0}, t[512] = {0};
+            char n[256] = "", p[256] = "", d[4096] = "", c[256] = "", t[512] = "";
             if (wmId == 20) {
                 GetWindowTextA(hwndName, n, 256); GetWindowTextA(hwndPackage, p, 256);
                 GetWindowTextA(hwndDesc, d, 4096); GetWindowTextA(hwndCat, c, 256); GetWindowTextA(hwndTags, t, 512);
+                if (n[0] == '\0' && p[0] == '\0' && selectedAppIndex >= 0) {
+                    LoadAppIntoForm(selectedAppIndex);
+                    GetWindowTextA(hwndName, n, 256); GetWindowTextA(hwndPackage, p, 256);
+                    GetWindowTextA(hwndDesc, d, 4096); GetWindowTextA(hwndCat, c, 256); GetWindowTextA(hwndTags, t, 512);
+                }
             }
             EnableWindow(btnAITagSelected, FALSE);
             EnableWindow(btnAIAutoTagAll, FALSE);
             if (wmId == 21) SetWindowTextA(btnAIAutoTagAll, "Processing...");
             else SetWindowTextA(btnAITagSelected, "Processing...");
+            SetWindowTextA(hwnd, "Local APK Store - Server Manager (AI Processing...)");
             RunAITask(hwnd, wmId == 21, filePath, n, p, d, c, t);
         }
         else if (wmId == 2) { // Apply
@@ -2835,6 +2846,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         break;
     }
     case WM_AI_DONE: {
+        SetWindowTextA(hwnd, "Local APK Store - Server Manager");
         EnableWindow(btnAITagSelected, TRUE);
         EnableWindow(btnAIAutoTagAll, TRUE);
         SetWindowTextA(btnAITagSelected, "AI Tag Selected");

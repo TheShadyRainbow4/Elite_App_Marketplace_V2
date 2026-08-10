@@ -459,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void promptForServerIP() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Server IP");
+        builder.setTitle("Enter Server IP (e.g. 192.168.1.5:8553)");
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
@@ -559,6 +559,8 @@ public class MainActivity extends AppCompatActivity {
                     if (tvStatus != null) tvStatus.setText("No servers found.");
                     Toast.makeText(this, "No servers found. Add IP manually in Settings.", Toast.LENGTH_LONG).show();
                 }
+                androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefresh = findViewById(R.id.swipeRefresh);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
             });
         });
     }
