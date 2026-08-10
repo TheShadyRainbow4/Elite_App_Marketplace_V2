@@ -1184,6 +1184,10 @@
       "tags": [],
       "versions": [
         {
+          "file": "Elite_App_Marketplace-Client_v1.0.91.apk",
+          "version": "1.0.91"
+        },
+        {
           "version": "1.0.90",
           "file": "Elite_App_Marketplace-Client_v1.0.90.apk"
         },

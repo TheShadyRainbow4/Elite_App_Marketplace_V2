@@ -351,14 +351,14 @@ public class MainActivity extends AppCompatActivity {
                 recreate();
             }
             else if (which == 7) {
-                android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/TheShadyRainbow4/Local_APK_Store/releases/latest"));
+                android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/TheShadyRainbow4/Elite_App_Marketplace_V2/releases/latest"));
                 startActivity(browserIntent);
             }
             else if (which == 8) {
                 android.content.SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
                 String serverIp = prefs.getString("server_ip", "");
                 if (!serverIp.isEmpty()) {
-                    android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("http://" + serverIp + ":8552/"));
+                    android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("http://" + serverIp + ":8553/"));
                     startActivity(browserIntent);
                 } else {
                     if (tvStatus != null) tvStatus.setText("Connected to " + serverIPs.size() + " server(s).");
