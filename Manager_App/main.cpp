@@ -2181,7 +2181,7 @@ void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, 
         };
 
         if (!allApps) {
-            if (currentFile.empty()) {
+            if (n.empty()) {
                 MessageBoxA(hwnd, "No app selected to AI Tag.", "Error", MB_OK);
                 return;
             }
@@ -2804,6 +2804,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 GetWindowTextA(hwndName, n, 256); GetWindowTextA(hwndPackage, p, 256);
                 GetWindowTextA(hwndDesc, d, 4096); GetWindowTextA(hwndCat, c, 256); GetWindowTextA(hwndTags, t, 512);
             }
+            EnableWindow(btnAITagSelected, FALSE);
+            EnableWindow(btnAIAutoTagAll, FALSE);
+            if (wmId == 21) SetWindowTextA(btnAIAutoTagAll, "Processing...");
+            else SetWindowTextA(btnAITagSelected, "Processing...");
             RunAITask(hwnd, wmId == 21, filePath, n, p, d, c, t);
         }
         else if (wmId == 2) { // Apply
@@ -2820,6 +2824,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         break;
     }
     case WM_AI_DONE: {
+        EnableWindow(btnAITagSelected, TRUE);
+        EnableWindow(btnAIAutoTagAll, TRUE);
+        SetWindowTextA(btnAITagSelected, "AI Tag Selected");
+        SetWindowTextA(btnAIAutoTagAll, "AI Auto-Tag All");
         if (ShowAIVerifyDialog(hwnd)) {
             for (auto& prop : g_pendingProposals) {
                 if (prop.selected) {

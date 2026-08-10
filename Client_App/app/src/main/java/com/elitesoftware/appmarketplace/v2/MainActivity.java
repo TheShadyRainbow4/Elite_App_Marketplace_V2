@@ -117,6 +117,16 @@ public class MainActivity extends AppCompatActivity {
                     swipeRefresh.setRefreshing(false);
                 }
             });
+            swipeRefresh.setOnChildScrollUpCallback((parent, child) -> {
+                ListView currentLvApps = findViewById(R.id.lvApps);
+                ListView currentLvCats = findViewById(R.id.lvCategories);
+                if (currentLvApps != null && currentLvApps.getVisibility() == android.view.View.VISIBLE) {
+                    return currentLvApps.canScrollVertically(-1);
+                } else if (currentLvCats != null && currentLvCats.getVisibility() == android.view.View.VISIBLE) {
+                    return currentLvCats.canScrollVertically(-1);
+                }
+                return false;
+            });
         }
 
         lvApps.setOnItemClickListener((parent, view, position, id) -> {
@@ -155,6 +165,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         loadCachedApps();
+        
+        String savedServer = getSharedPreferences("prefs", MODE_PRIVATE).getString("server_ip", "");
+        if (!savedServer.isEmpty()) {
+            serverIPs.add(savedServer);
+            fetchAppsFromServer(savedServer, currentSearchQuery);
+            startHeartbeat();
+        }
+        
         discoverServers();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -357,12 +375,12 @@ public class MainActivity extends AppCompatActivity {
         String currentServerIp = getSharedPreferences("prefs", MODE_PRIVATE).getString("server_ip", "None");
         boolean useWindow = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_popups", false);
         builder.setTitle("Marketplace Settings (" + currentServerIp + ")");
-        String[] options = {"Install Root Certificate", "Install PFX Certificate", "Manually Add Server IP", "Refresh Store", "Theme: Light", "Theme: Dark", "Theme: AMOLED Black", "View Latest Release on GitHub", "View Local Server Website", "Toggle Window Popups: " + (useWindow ? "ON" : "OFF")};
+        String[] options = {"Install Root Certificate", "Install PFX Certificate", "Manually Add Server IP", "Clear Servers & Refresh Store", "Theme: Light", "Theme: Dark", "Theme: AMOLED Black", "View Latest Release on GitHub", "View Local Server Website", "Toggle Window Popups: " + (useWindow ? "ON" : "OFF")};
         builder.setItems(options, (dialog, which) -> {
             if (which == 0) installCertificate();
             else if (which == 1) installPfxCertificate();
             else if (which == 2) promptForServerIP();
-            else if (which == 3) { appsList.clear(); serverIPs.clear(); filterApps(); discoverServers(); }
+            else if (which == 3) { appsList.clear(); serverIPs.clear(); getSharedPreferences("prefs", MODE_PRIVATE).edit().remove("server_ip").apply(); filterApps(); discoverServers(); }
             else if (which >= 4 && which <= 6) {
                 android.content.SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
                 if (which == 4) prefs.edit().putString("theme", "light").apply();
@@ -443,6 +461,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(input);
         builder.setPositiveButton("Add", (dialog, which) -> {
             String ip = input.getText().toString();
+            if (!ip.contains(":")) ip += ":8553";
             getSharedPreferences("prefs", MODE_PRIVATE).edit().putString("server_ip", ip).apply();
             synchronized (serverIPs) {
                 if (!serverIPs.contains(ip)) {
@@ -550,6 +569,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 java.net.URL url = new java.net.URL(urlStr);
                 java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(3000);
+                conn.setReadTimeout(5000);
                 conn.setRequestMethod("GET");
                 java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
                 String inputLine;
@@ -932,7 +953,10 @@ public class MainActivity extends AppCompatActivity {
         executor.execute(() -> {
             try {
                 java.net.URL url = new java.net.URL(urlStr);
-                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(15000);
+                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(conn.getInputStream());
                 if (bmp != null) imageCache.put(urlStr, bmp);
                 runOnUiThread(() -> {
                     if (urlStr.equals(imageView.getTag())) {
@@ -1041,6 +1065,8 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         java.net.URL url = new java.net.URL("http://" + ip + "/api/disconnect");
                         java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                        conn.setConnectTimeout(2000);
+                        conn.setReadTimeout(2000);
                         conn.setRequestMethod("POST");
                         conn.setRequestProperty("Content-Type", "application/json");
                         conn.setDoOutput(true);

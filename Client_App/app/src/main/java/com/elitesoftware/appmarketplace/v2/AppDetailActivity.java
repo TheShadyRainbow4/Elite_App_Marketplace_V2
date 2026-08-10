@@ -210,6 +210,8 @@ public class AppDetailActivity extends AppCompatActivity {
                             
                             URL url = new URL(apkUrl);
                             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setConnectTimeout(5000);
+                            conn.setReadTimeout(15000);
                             conn.connect();
                             int fileLength = conn.getContentLength();
                             
@@ -465,7 +467,10 @@ public class AppDetailActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 java.net.URL url = new java.net.URL(urlStr);
-                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(15000);
+                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(conn.getInputStream());
                 if (bmp != null) imageCache.put(urlStr, bmp);
                 runOnUiThread(() -> {
                     if (urlStr.equals(imageView.getTag())) {

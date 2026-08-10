@@ -51,6 +51,8 @@ public class UpdateCheckService extends Service {
         try {
             URL url = new URL("http://" + serverIp + "/api/apps");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(3000);
+            conn.setReadTimeout(5000);
             conn.setRequestMethod("GET");
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
