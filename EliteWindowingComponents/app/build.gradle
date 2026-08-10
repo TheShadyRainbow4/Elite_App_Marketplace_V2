@@ -10,8 +10,8 @@ android {
         applicationId "com.elitesoftware.geminiwidget"
         minSdk 24
         targetSdk 34
-        versionCode 10092
-        versionName "1.0.92"
+        versionCode 10093
+        versionName "1.0.93"
     }
     buildTypes {
         release {

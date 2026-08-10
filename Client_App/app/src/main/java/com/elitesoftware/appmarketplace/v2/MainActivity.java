@@ -356,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String currentServerIp = getSharedPreferences("prefs", MODE_PRIVATE).getString("server_ip", "None");
         boolean useWindow = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_popups", false);
-        builder.setTitle("Marketplace Settings (" + currentServerIp + ":8552)");
+        builder.setTitle("Marketplace Settings (" + currentServerIp + ":8553)");
         String[] options = {"Install Root Certificate", "Install PFX Certificate", "Manually Add Server IP", "Refresh Store", "Theme: Light", "Theme: Dark", "Theme: AMOLED Black", "View Latest Release on GitHub", "View Local Server Website", "Toggle Window Popups: " + (useWindow ? "ON" : "OFF")};
         builder.setItems(options, (dialog, which) -> {
             if (which == 0) installCertificate();
