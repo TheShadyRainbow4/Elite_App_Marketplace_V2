@@ -2795,7 +2795,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         else if (wmId == 6) DeleteSelectedApp();
         else if (wmId == 7) ShowWindow(hwnd, SW_HIDE);
         else if (wmId == 20 || wmId == 21) {
-            if (!getenv("GEMINI_API_KEY")) {
+            if (GeminiAI::GetApiKey().empty()) {
                 MessageBoxA(hwnd, "GEMINI_API_KEY environment variable not set!", "Error", MB_OK | MB_ICONERROR);
                 break;
             }

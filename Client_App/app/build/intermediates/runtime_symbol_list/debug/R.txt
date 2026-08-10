@@ -3470,9 +3470,9 @@ int id supportScrollUp 0x7f0801c6
 int id swipeRefresh 0x7f0801c7
 int id tabApps 0x7f0801c8
 int id tabCategories 0x7f0801c9
-int id tabDownloads 0x7f0801ca
-int id tabGames 0x7f0801cb
-int id tabMode 0x7f0801cc
+int id tabGames 0x7f0801ca
+int id tabMode 0x7f0801cb
+int id tabUpdates 0x7f0801cc
 int id tag_accessibility_actions 0x7f0801cd
 int id tag_accessibility_clickable_spans 0x7f0801ce
 int id tag_accessibility_heading 0x7f0801cf

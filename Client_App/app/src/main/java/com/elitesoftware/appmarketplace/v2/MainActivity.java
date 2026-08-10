@@ -205,14 +205,14 @@ public class MainActivity extends AppCompatActivity {
     private void setupTabs() {
         TextView tabApps = findViewById(R.id.tabApps);
         TextView tabGames = findViewById(R.id.tabGames);
-        TextView tabDownloads = findViewById(R.id.tabDownloads);
+        TextView tabUpdates = findViewById(R.id.tabUpdates);
         TextView tabCategories = findViewById(R.id.tabCategories);
 
         android.view.View.OnClickListener tabListener = v -> {
             int unselectedColor = android.graphics.Color.parseColor("#888888"); 
             tabApps.setTextColor(unselectedColor);
             tabGames.setTextColor(unselectedColor);
-            tabDownloads.setTextColor(unselectedColor);
+            tabUpdates.setTextColor(unselectedColor);
             if (tabCategories != null) tabCategories.setTextColor(unselectedColor);
             
             ((TextView) v).setTextColor(android.graphics.Color.parseColor("#A4C639"));
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (v == tabGames) {
                 currentTab = 1; 
                 currentCategoryFilter = ""; 
-            } else if (v == tabDownloads) {
+            } else if (v == tabUpdates) {
                 currentTab = 2; 
                 currentCategoryFilter = ""; 
             } else if (v == tabCategories) {
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
         
         tabApps.setOnClickListener(tabListener);
         tabGames.setOnClickListener(tabListener);
-        tabDownloads.setOnClickListener(tabListener);
+        tabUpdates.setOnClickListener(tabListener);
         if (tabCategories != null) tabCategories.setOnClickListener(tabListener);
         tabApps.setTextColor(android.graphics.Color.parseColor("#A4C639"));
         
@@ -294,13 +294,33 @@ public class MainActivity extends AppCompatActivity {
                 if (app.optString("category", "").toLowerCase().contains("game")) {
                     displayedAppsList.add(app);
                 }
-            } else if (currentTab == 2) {
-                boolean installed = false;
+            } else if (currentTab == 2) { // UPDATES
+                boolean updateAvailable = false;
                 try {
-                    getPackageManager().getPackageInfo(app.optString("package_name"), 0);
-                    installed = true;
+                    android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(app.optString("package_name"), 0);
+                    String installedVersion = pi.versionName;
+                    org.json.JSONArray versions = app.optJSONArray("versions");
+                    if (versions != null && versions.length() > 0) {
+                        String latestVersion = versions.getJSONObject(0).getString("version");
+                        
+                        // Compare versions using split logic (like in AppDetailActivity/AppAdapter)
+                        String[] v1 = latestVersion.split("\\.");
+                        String[] v2 = installedVersion.split("\\.");
+                        int length = Math.max(v1.length, v2.length);
+                        int cmp = 0;
+                        for (int i = 0; i < length; i++) {
+                            int num1 = i < v1.length ? Integer.parseInt(v1[i]) : 0;
+                            int num2 = i < v2.length ? Integer.parseInt(v2[i]) : 0;
+                            if (num1 < num2) { cmp = -1; break; }
+                            if (num1 > num2) { cmp = 1; break; }
+                        }
+                        
+                        if (cmp > 0) {
+                            updateAvailable = true;
+                        }
+                    }
                 } catch (Exception e) {}
-                if (installed) displayedAppsList.add(app);
+                if (updateAvailable) displayedAppsList.add(app);
             }
         }
         

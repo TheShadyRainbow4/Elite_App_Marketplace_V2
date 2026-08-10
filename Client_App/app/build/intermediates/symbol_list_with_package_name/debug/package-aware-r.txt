@@ -3471,9 +3471,9 @@ id supportScrollUp
 id swipeRefresh
 id tabApps
 id tabCategories
-id tabDownloads
 id tabGames
 id tabMode
+id tabUpdates
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
 id tag_accessibility_heading

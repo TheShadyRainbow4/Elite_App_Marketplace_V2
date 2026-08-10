@@ -9,15 +9,37 @@ using json = nlohmann::json;
 
 class GeminiAI {
 public:
+    static std::string GetApiKey() {
+        if (const char* env = getenv("GEMINI_API_KEY")) return std::string(env);
+        char buf[2048] = {0};
+        if (GetEnvironmentVariableA("GEMINI_API_KEY", buf, sizeof(buf))) return std::string(buf);
+        HKEY hKey;
+        if (RegOpenKeyExA(HKEY_CURRENT_USER, "Environment", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+            DWORD size = sizeof(buf);
+            if (RegQueryValueExA(hKey, "GEMINI_API_KEY", NULL, NULL, (LPBYTE)buf, &size) == ERROR_SUCCESS) {
+                RegCloseKey(hKey); return std::string(buf);
+            }
+            RegCloseKey(hKey);
+        }
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+            DWORD size = sizeof(buf);
+            if (RegQueryValueExA(hKey, "GEMINI_API_KEY", NULL, NULL, (LPBYTE)buf, &size) == ERROR_SUCCESS) {
+                RegCloseKey(hKey); return std::string(buf);
+            }
+            RegCloseKey(hKey);
+        }
+        return "";
+    }
+
     static std::string GenerateContent(const std::string& prompt) {
-        const char* apiKey = getenv("GEMINI_API_KEY");
-        if (!apiKey) {
+        std::string apiKey = GetApiKey();
+        if (apiKey.empty()) {
             return "ERROR: GEMINI_API_KEY environment variable not set.";
         }
 
         std::string host = "generativelanguage.googleapis.com";
         // Let's use gemini-2.5-flash as it's the standard for general fast text tasks.
-        std::string path = "/v1beta/models/gemini-2.5-flash:generateContent?key=" + std::string(apiKey);
+        std::string path = "/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey;
 
         HINTERNET hSession = WinHttpOpen(L"EliteManager/1.0", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
         if (!hSession) return "ERROR: WinHttpOpen failed";
