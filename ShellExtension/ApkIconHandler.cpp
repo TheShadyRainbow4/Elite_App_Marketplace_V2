@@ -76,7 +76,7 @@ public:
         
         wcsncpy_s(szIconFile, cchMax, _szFile, _TRUNCATE);
         *piIndex = 0;
-        *pwFlags = GIL_PERINSTANCE; // Cache properly
+        *pwFlags = GIL_PERINSTANCE | GIL_NOTFILENAME; // Cache properly, and force Extract to be called
         
         return S_OK;
     }

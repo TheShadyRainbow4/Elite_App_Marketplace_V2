@@ -3,6 +3,9 @@
 All notable changes to the Local APK Store ecosystem will be documented in this file.
 
 ## [Unreleased]
+### Fixed
+- **Shell Extension Icon Loading:** Corrected the shell extension behavior by adding the `GIL_NOTFILENAME` flag in `GetIconLocation`. This instructs the Windows Shell to correctly invoke the extension's custom `Extract` method to retrieve the icon dynamically from the APK file, rather than attempting to parse the APK file directly as an icon resource source, which previously resulted in a generic fallback icon for all APK files.
+
 ### Added
 - **Expanded Project Scope:** The client app is now named **"Elite App Marketplace"**. It will support categorization, tags, user reviews, comments, and the ability to seamlessly downgrade, upgrade, uninstall, and reinstall APK versions via Shizuku.
 - **APK Signing Pipeline:** Integrated plans to use the `Elite-EasySigner` certificate (`EliteSoftware_Special.pfx`) to strictly sign all uploaded APKs and the App Store client itself.
