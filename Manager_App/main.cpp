@@ -1154,16 +1154,19 @@ void ServerThread() {
     });
     svrPtr->Get("/api/apps", [](const httplib::Request& req, httplib::Response& res) {
         json db = loadDb();
-        if (req.has_param("search")) {
-            std::string q = req.get_param_value("search");
+        if (req.has_param("q") || req.has_param("search")) {
+            std::string q = req.has_param("q") ? req.get_param_value("q") : req.get_param_value("search");
             std::transform(q.begin(), q.end(), q.begin(), ::tolower);
             json filtered = json::array();
             for (auto& app : db["apps"]) {
-                std::string n = app.value("name", "");
-                std::string d = app.value("description", "");
-                std::transform(n.begin(), n.end(), n.begin(), ::tolower);
-                std::transform(d.begin(), d.end(), d.begin(), ::tolower);
-                if (n.find(q) != std::string::npos || d.find(q) != std::string::npos) filtered.push_back(app);
+                std::string all_text = app.value("name", "") + " " + app.value("description", "") + " " + app.value("category", "") + " " + app.value("package_name", "");
+                if (app.contains("tags") && app["tags"].is_array()) {
+                    for (auto& t : app["tags"]) {
+                        if (t.is_string()) all_text += " " + t.get<std::string>();
+                    }
+                }
+                std::transform(all_text.begin(), all_text.end(), all_text.begin(), ::tolower);
+                if (all_text.find(q) != std::string::npos) filtered.push_back(app);
             }
             json out; out["apps"] = filtered;
             res.set_content(out.dump(), "application/json");
