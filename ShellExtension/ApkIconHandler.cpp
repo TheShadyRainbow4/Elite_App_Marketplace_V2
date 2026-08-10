@@ -158,7 +158,7 @@ public:
             szIconFile[0] = 0;
         }
         *piIndex = 0;
-        *pwFlags = GIL_PERINSTANCE; // Maintain standard compatibility with all file managers
+        *pwFlags = GIL_PERINSTANCE | GIL_NOTFILENAME; // Maintain standard compatibility with all file managers
         
         return S_OK;
     }
@@ -179,7 +179,7 @@ public:
             szIconFile[0] = 0;
         }
         *piIndex = 0;
-        *pwFlags = GIL_PERINSTANCE; // Maintain standard compatibility with all file managers
+        *pwFlags = GIL_PERINSTANCE | GIL_NOTFILENAME; // Maintain standard compatibility with all file managers
         
         return S_OK;
     }
