@@ -170,7 +170,7 @@ public class UploadActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                String baseUrl = "http://" + serverIp + ":8553";
+                String baseUrl = "http://" + serverIp;
                 
                 String apkFileName = null;
                 if (apkUri != null) {

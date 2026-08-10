@@ -1,14 +1,24 @@
 {
   "apps": [
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Personalization",
+      "description": "Discover a unique typographic experience with the Sandoll 미생체 FlipFont. This application allows users with compatible Android devices to transform their system font to the distinctive Sandoll 미생체 style. Known for its elegant and modern aesthetic, the Misaeng font offers a refreshing visual update for your device's interface, menus, and text.\n\nPerfect for individuals looking to personalize their smartphone or tablet, this FlipFont integrates seamlessly to provide a cohesive and stylish look. Enhance readability and express your personal taste with this high-quality font from Sandoll, a renowned name in typography.",
       "icon": "Sandoll미생체.FlipFont.ver.1.4.build.5_icon.png",
-      "name": "Sandoll미생체.FlipFont.ver.1.4.build.5.apk",
+      "name": "Sandoll 미생체 FlipFont",
       "package_name": "Sandoll미생체.FlipFont.ver.1.4.build.5",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "Sandoll",
+        "FlipFont",
+        "font",
+        "typography",
+        "personalization",
+        "theme",
+        "Korean font",
+        "미생체"
+      ],
       "versions": [
         {
           "file": "Sandoll미생체.FlipFont.ver.1.4.build.5.apk",
@@ -17,14 +27,25 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "System Tools",
+      "description": "This application represents a fundamental component of the Android operating system, crucial for the core functionality and stability of your device. It likely encompasses essential system services, framework components, or background processes that ensure the smooth operation of all other applications and the overall user interface.\n\nAs an internal system APK, it is not a standalone user-facing application but rather a vital part of the underlying infrastructure that enables the Android platform to function correctly. Its presence is indicative of a necessary system file required for a fully operational Android environment.",
       "icon": "android_icon.png",
-      "name": "Android System_16.apk",
+      "name": "Android System",
       "package_name": "android",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "android",
+        "system",
+        "OS",
+        "core",
+        "utility",
+        "tools",
+        "internal",
+        "component",
+        "framework"
+      ],
       "versions": [
         {
           "file": "Android System_16.apk",
@@ -33,13 +54,23 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
-      "name": "ConfigAPK",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "Config APK (android.autoinstalls.config.samsung) is a core system component typically found on Samsung Android devices. Its primary function is to manage and facilitate the auto-installation and configuration of various APKs and system settings, ensuring the device operates correctly and efficiently. \n\nThis utility likely runs in the background and is not designed for direct user interaction. It plays a crucial role in maintaining device integrity, applying necessary updates, and setting up specific configurations required for Samsung's ecosystem or carrier-specific functionalities.",
+      "name": "Config APK",
       "package_name": "android.autoinstalls.config.samsung",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "configuration",
+        "APK",
+        "Samsung",
+        "system app",
+        "auto install",
+        "device management",
+        "utility",
+        "core service"
+      ],
       "versions": [
         {
           "file": "ConfigAPK_1005.apk",
@@ -48,7 +79,8 @@
       ]
     },
     {
-      "category": "",
+      "ai_tagged": true,
+      "category": "Tools",
       "description": "Universal Installer is a comprehensive utility designed to streamline the installation process for a wide array of applications and packages on your Android device. It acts as a central hub, simplifying the management and deployment of software without complex manual steps, ensuring a smooth and efficient setup experience for users.\n\nThis powerful tool aims to enhance user convenience by providing a robust and easy-to-use interface for handling various installation types. Whether you're dealing with standard APKs or other package formats, Universal Installer ensures that your apps are installed correctly and efficiently, making it an indispensable asset for managing your device's software.",
       "icon": "app.pwhs.universalinstaller_icon.png",
       "name": "Universal Installer",
@@ -71,14 +103,26 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "ReVanced Manager is a powerful utility designed to facilitate the patching and modification of various Android applications. It serves as the central hub for users looking to enhance their app experience by applying custom ReVanced patches, which can introduce new features, remove unwanted elements, or unlock premium functionalities.\n\nThis manager streamlines the process of customizing popular apps, most notably YouTube, by enabling features such as ad-blocking, background playback, sponsorblock integration, and advanced theming. It empowers users with greater control over their applications, offering a tailored and improved user experience through its intuitive interface and robust patching capabilities.",
       "icon": "app.revanced.manager.flutter_icon.png",
-      "name": "ReVanced Manager_2.6.0.apk",
+      "name": "ReVanced Manager",
       "package_name": "app.revanced.manager.flutter",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "ReVanced",
+        "Manager",
+        "Patching",
+        "Modding",
+        "Customization",
+        "YouTube",
+        "Android",
+        "Utility",
+        "App Management",
+        "Open Source"
+      ],
       "versions": [
         {
           "file": "ReVanced Manager_2.6.0.apk",
@@ -87,14 +131,24 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "Apk Extractor is a powerful utility designed to extract application packages (APKs) from apps already installed on your Android device. It provides a simple and efficient way to save the installation files of your favorite applications directly to your device's storage, allowing for easy access and management.\n\nThis tool is invaluable for creating backups of your applications, especially for those not available on app stores or specific versions you wish to preserve. You can easily share extracted APKs with friends, transfer them to other devices, or simply keep them for future re-installation without needing an internet connection.",
       "icon": "axp.tool.apkextractor_icon.png",
-      "name": "Apk Extractor_1.4.apk",
+      "name": "Apk Extractor",
       "package_name": "axp.tool.apkextractor",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "APK",
+        "extractor",
+        "backup",
+        "share",
+        "utility",
+        "tool",
+        "application",
+        "manage apps"
+      ],
       "versions": [
         {
           "file": "Apk Extractor_1.4.apk",
@@ -103,14 +157,24 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "Better Internet Tiles is an Android application designed to enhance your device's Quick Settings panel with improved and more functional internet-related tiles. It provides users with convenient shortcuts and advanced controls for various network functionalities directly from their notification shade, allowing for quicker access and management of connectivity options without navigating through complex system settings.\n\nThis utility aims to streamline your interaction with your device's internet settings, offering a more efficient and personalized experience. Whether you need to toggle Wi-Fi, manage mobile data, or access other network configurations, Better Internet Tiles offers a 'better' way to do so, integrating seamlessly into your Android Quick Settings.",
       "icon": "be.casperverswijvelt.unifiedinternetqs_icon.png",
-      "name": "Better Internet Tiles_3.1.2-fdroid.apk",
+      "name": "Better Internet Tiles",
       "package_name": "be.casperverswijvelt.unifiedinternetqs",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "internet",
+        "tiles",
+        "quick settings",
+        "utility",
+        "connectivity",
+        "network",
+        "customization",
+        "open source"
+      ],
       "versions": [
         {
           "file": "Better Internet Tiles_3.1.2-fdroid.apk",
@@ -119,13 +183,26 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
-      "name": "Audio Output Switcher_1.0.10.apk",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "Audio Output Switcher is a utility designed to provide users with seamless control over their device's audio output. This application simplifies the process of switching between various sound output devices, such as internal speakers, connected headphones, Bluetooth headsets, or USB audio devices. It aims to offer a convenient way to manage where your audio plays without delving into complex system settings.\n\nWhether you're moving from a private listening session to sharing audio with others, or simply need to quickly reroute sound to a preferred device, Audio Output Switcher streamlines the experience. It enhances convenience for users who frequently toggle between different audio setups, ensuring your sound is always directed to the right place with minimal effort.",
+      "name": "Audio Output Switcher",
       "package_name": "br.com.wasystems.audiooutputswitcher",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "audio",
+        "sound",
+        "output",
+        "switcher",
+        "device",
+        "management",
+        "control",
+        "speaker",
+        "headphones",
+        "bluetooth",
+        "utility"
+      ],
       "versions": [
         {
           "file": "Audio Output Switcher_1.0.10.apk",
@@ -134,14 +211,28 @@
       ]
     },
     {
-      "category": "",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "Tools",
+      "description": "The 4A Settings Database Editor is an advanced utility designed for power users and developers to directly manage and modify system settings on Android devices. This powerful tool allows for granular control over various configuration parameters, including those not typically exposed through standard Android settings menus.\n\nUsers can leverage this editor for deep system customization, troubleshooting issues, or activating hidden features that require direct manipulation of the device's settings database. Due to its direct interaction with core system settings, caution is advised when making changes, as incorrect modifications could potentially impact device stability or functionality.",
       "icon": "by4a.setedit22_icon.png",
-      "name": "4A Settings Database Editor_2023.11.16.apk",
+      "name": "4A Settings Database Editor",
       "package_name": "by4a.setedit22",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "settings",
+        "database",
+        "editor",
+        "Android",
+        "system",
+        "root",
+        "customization",
+        "utility",
+        "modify",
+        "tweak",
+        "advanced",
+        "hidden settings"
+      ],
       "versions": [
         {
           "file": "4A Settings Database Editor_2023.11.16.apk",
@@ -150,14 +241,25 @@
       ]
     },
     {
-      "category": "Unknown",
-      "description": "Auto-discovered APK.",
+      "ai_tagged": true,
+      "category": "App Stores",
+      "description": "Aptoide is an independent, community-driven Android app store that offers an alternative way to discover, download, and install applications directly onto your device. Unlike traditional app marketplaces, Aptoide allows users to manage their own 'stores' and share apps, fostering a decentralized ecosystem for Android software. It provides a platform for developers and users to distribute and access a vast selection of applications, often including apps not found on other mainstream platforms.\n\nThis versatile app market provides access to a comprehensive catalog of Android packages (APKs), enabling users to find and install everything from games and utility tools to productivity apps. Key features include the ability to easily update installed applications, revert to older app versions, and explore user-uploaded content, all within a user-friendly interface designed for seamless app discovery and management.",
       "icon": "cm.aptoide.pt_icon.png",
       "name": "Aptoide",
       "package_name": "cm.aptoide.pt",
       "reviews": [],
       "screenshots": [],
-      "tags": [],
+      "tags": [
+        "app store",
+        "android apps",
+        "APK download",
+        "alternative market",
+        "third-party app store",
+        "app installer",
+        "free apps",
+        "app management",
+        "package installer"
+      ],
       "versions": [
         {
           "file": "emoji-font-3.apk",
@@ -377,7 +479,7 @@
       ]
     },
     {
-      "category": "Unknown",
+      "category": "",
       "description": "Auto-discovered APK.",
       "name": "Call Log Backup_Restore_16.apk",
       "package_name": "com.android.calllogbackup",
@@ -1191,12 +1293,16 @@
       "tags": [],
       "versions": [
         {
-          "version": "1.0.102",
-          "file": "Elite_App_Marketplace-Client_v1.0.102.apk"
+          "file": "Elite_App_Marketplace-Client_v1.0.103.apk",
+          "version": "1.0.103"
         },
         {
-          "version": "1.0.101",
-          "file": "Elite_App_Marketplace-Client_v1.0.101.apk"
+          "file": "Elite_App_Marketplace-Client_v1.0.102.apk",
+          "version": "1.0.102"
+        },
+        {
+          "file": "Elite_App_Marketplace-Client_v1.0.101.apk",
+          "version": "1.0.101"
         },
         {
           "file": "Elite_App_Marketplace-Client_v1.0.100.apk",

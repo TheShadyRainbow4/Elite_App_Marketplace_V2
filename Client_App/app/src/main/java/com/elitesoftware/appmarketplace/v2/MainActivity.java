@@ -459,13 +459,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void promptForServerIP() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Server IP (e.g. 192.168.1.5:8553)");
+        builder.setTitle("Enter Server IP (e.g. 192.168.1.5:8552)");
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
         builder.setPositiveButton("Add", (dialog, which) -> {
             String ip = input.getText().toString();
-            if (!ip.contains(":")) ip += ":8553";
+            if (!ip.contains(":")) ip += ":8552";
             getSharedPreferences("prefs", MODE_PRIVATE).edit().putString("server_ip", ip).apply();
             synchronized (serverIPs) {
                 if (!serverIPs.contains(ip)) {
@@ -494,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
                 
                 try {
                     java.net.InetAddress broadcastAddr = java.net.InetAddress.getByName("255.255.255.255");
-                    socket.send(new java.net.DatagramPacket(sendData, sendData.length, broadcastAddr, 8553));
+                    socket.send(new java.net.DatagramPacket(sendData, sendData.length, broadcastAddr, 8552));
                 } catch(Exception e){}
                 
                 try {
@@ -506,14 +506,14 @@ public class MainActivity extends AppCompatActivity {
                             for (int k = 0; k < 4; k++)
                                 quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
                             java.net.InetAddress actualBroadcast = java.net.InetAddress.getByAddress(quads);
-                            socket.send(new java.net.DatagramPacket(sendData, sendData.length, actualBroadcast, 8553));
+                            socket.send(new java.net.DatagramPacket(sendData, sendData.length, actualBroadcast, 8552));
                         }
                     }
                 } catch(Exception e){}
 
                 try {
                     java.net.InetAddress b2 = java.net.InetAddress.getByName("192.168.1.255");
-                    socket.send(new java.net.DatagramPacket(sendData, sendData.length, b2, 8553));
+                    socket.send(new java.net.DatagramPacket(sendData, sendData.length, b2, 8552));
                 } catch(Exception e){}
 
                 while (true) {
@@ -527,7 +527,7 @@ public class MainActivity extends AppCompatActivity {
                             if (response.contains(":")) {
                                 ip = ip + ":" + response.split(":")[1];
                             } else {
-                                ip = ip + ":8553";
+                                ip = ip + ":8552";
                             }
                             final String finalIp = ip;
                             getSharedPreferences("prefs", MODE_PRIVATE).edit().putString("server_ip", finalIp).apply();
