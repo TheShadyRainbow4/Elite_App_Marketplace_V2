@@ -49,7 +49,7 @@ public class UpdateCheckService extends Service {
     private void checkForUpdates() {
         if (serverIp == null || serverIp.isEmpty()) return;
         try {
-            URL url = new URL("http://" + serverIp + ":8552/api/apps");
+            URL url = new URL("http://" + serverIp + ":8553/api/apps");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));

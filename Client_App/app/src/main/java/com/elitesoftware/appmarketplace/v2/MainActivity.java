@@ -45,8 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private HashSet<String> serverIPs = new HashSet<>();
     private ArrayList<JSONObject> appsList = new ArrayList<>();
     private ArrayList<JSONObject> displayedAppsList = new ArrayList<>();
-    private int currentTab = 0; // 0=APPS, 1=GAMES, 2=DOWNLOADS
+    private int currentTab = 0; // 0=APPS, 1=GAMES, 2=DOWNLOADS, 3=CATEGORIES
     private String currentSearchQuery = "";
+    private String currentCategoryFilter = "";
     private AppAdapter adapter;
     private android.widget.TextView tvStatus;
     private android.widget.ListView lvApps;
@@ -202,38 +203,93 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupTabs() {
-
-        
         TextView tabApps = findViewById(R.id.tabApps);
         TextView tabGames = findViewById(R.id.tabGames);
         TextView tabDownloads = findViewById(R.id.tabDownloads);
+        TextView tabCategories = findViewById(R.id.tabCategories);
 
         android.view.View.OnClickListener tabListener = v -> {
-            int unselectedColor = android.graphics.Color.parseColor("#888888"); // A neutral grey that looks fine in light and dark mode, or use context color
+            int unselectedColor = android.graphics.Color.parseColor("#888888"); 
             tabApps.setTextColor(unselectedColor);
             tabGames.setTextColor(unselectedColor);
             tabDownloads.setTextColor(unselectedColor);
+            if (tabCategories != null) tabCategories.setTextColor(unselectedColor);
             
             ((TextView) v).setTextColor(android.graphics.Color.parseColor("#A4C639"));
             
-            if (v == tabApps) currentTab = 0;
-            else if (v == tabGames) currentTab = 1;
-            else if (v == tabDownloads) currentTab = 2;
+            if (v == tabApps) {
+                currentTab = 0;
+            } else if (v == tabGames) {
+                currentTab = 1; 
+                currentCategoryFilter = ""; 
+            } else if (v == tabDownloads) {
+                currentTab = 2; 
+                currentCategoryFilter = ""; 
+            } else if (v == tabCategories) {
+                currentTab = 3; 
+                currentCategoryFilter = ""; 
+            }
             
-            filterApps();
+            ListView lvApps = findViewById(R.id.lvApps);
+            ListView lvCategories = findViewById(R.id.lvCategories);
+            if (lvCategories != null) {
+                if (currentTab == 3) {
+                    lvApps.setVisibility(android.view.View.GONE);
+                    lvCategories.setVisibility(android.view.View.VISIBLE);
+                    updateCategoriesList();
+                } else {
+                    lvApps.setVisibility(android.view.View.VISIBLE);
+                    lvCategories.setVisibility(android.view.View.GONE);
+                    filterApps();
+                }
+            } else {
+                filterApps();
+            }
         };
         
         tabApps.setOnClickListener(tabListener);
         tabGames.setOnClickListener(tabListener);
         tabDownloads.setOnClickListener(tabListener);
+        if (tabCategories != null) tabCategories.setOnClickListener(tabListener);
         tabApps.setTextColor(android.graphics.Color.parseColor("#A4C639"));
+        
+        ListView lvCategories = findViewById(R.id.lvCategories);
+        if (lvCategories != null) {
+            lvCategories.setOnItemClickListener((parent, view, position, id) -> {
+                String cat = (String) lvCategories.getItemAtPosition(position);
+                currentCategoryFilter = cat;
+                tabApps.performClick();
+            });
+        }
+    }
+    
+    private void updateCategoriesList() {
+        java.util.HashSet<String> cats = new java.util.HashSet<>();
+        for (JSONObject app : appsList) {
+            String cat = app.optString("category", "Unknown").trim();
+            if (!cat.isEmpty()) cats.add(cat);
+        }
+        java.util.List<String> catList = new java.util.ArrayList<>(cats);
+        java.util.Collections.sort(catList);
+        
+        ListView lvCategories = findViewById(R.id.lvCategories);
+        if (lvCategories != null) {
+            android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(this, android.R.layout.simple_list_item_1, catList);
+            lvCategories.setAdapter(adapter);
+        }
     }
     
     private void filterApps() {
         displayedAppsList.clear();
         for (JSONObject app : appsList) {
             if (currentTab == 0) {
-                displayedAppsList.add(app);
+                if (currentCategoryFilter != null && !currentCategoryFilter.isEmpty()) {
+                    if (app.optString("category", "").equalsIgnoreCase(currentCategoryFilter)) {
+                        displayedAppsList.add(app);
+                    }
+                } else {
+                    displayedAppsList.add(app);
+                }
             } else if (currentTab == 1) {
                 if (app.optString("category", "").toLowerCase().contains("game")) {
                     displayedAppsList.add(app);
@@ -279,8 +335,9 @@ public class MainActivity extends AppCompatActivity {
     private void showSettingsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String currentServerIp = getSharedPreferences("prefs", MODE_PRIVATE).getString("server_ip", "None");
+        boolean useWindow = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_popups", false);
         builder.setTitle("Marketplace Settings (" + currentServerIp + ":8552)");
-        String[] options = {"Install Root Certificate", "Install PFX Certificate", "Manually Add Server IP", "Refresh Store", "Theme: Light", "Theme: Dark", "Theme: AMOLED Black", "View Latest Release on GitHub", "View Local Server Website"};
+        String[] options = {"Install Root Certificate", "Install PFX Certificate", "Manually Add Server IP", "Refresh Store", "Theme: Light", "Theme: Dark", "Theme: AMOLED Black", "View Latest Release on GitHub", "View Local Server Website", "Toggle Window Popups: " + (useWindow ? "ON" : "OFF")};
         builder.setItems(options, (dialog, which) -> {
             if (which == 0) installCertificate();
             else if (which == 1) installPfxCertificate();
@@ -307,6 +364,12 @@ public class MainActivity extends AppCompatActivity {
                     if (tvStatus != null) tvStatus.setText("Connected to " + serverIPs.size() + " server(s).");
                     android.widget.Toast.makeText(this, "No server IP configured. Connect to server first.", android.widget.Toast.LENGTH_SHORT).show();
                 }
+            }
+            else if (which == 9) {
+                android.content.SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+                boolean current = prefs.getBoolean("window_popups", false);
+                prefs.edit().putBoolean("window_popups", !current).apply();
+                android.widget.Toast.makeText(this, "Window Popups: " + (!current ? "ON" : "OFF"), android.widget.Toast.LENGTH_SHORT).show();
             }
         });
         builder.show();
@@ -380,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
                 
                 try {
                     java.net.InetAddress broadcastAddr = java.net.InetAddress.getByName("255.255.255.255");
-                    socket.send(new java.net.DatagramPacket(sendData, sendData.length, broadcastAddr, 8552));
+                    socket.send(new java.net.DatagramPacket(sendData, sendData.length, broadcastAddr, 8553));
                 } catch(Exception e){}
                 
                 try {
@@ -392,14 +455,14 @@ public class MainActivity extends AppCompatActivity {
                             for (int k = 0; k < 4; k++)
                                 quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
                             java.net.InetAddress actualBroadcast = java.net.InetAddress.getByAddress(quads);
-                            socket.send(new java.net.DatagramPacket(sendData, sendData.length, actualBroadcast, 8552));
+                            socket.send(new java.net.DatagramPacket(sendData, sendData.length, actualBroadcast, 8553));
                         }
                     }
                 } catch(Exception e){}
 
                 try {
                     java.net.InetAddress b2 = java.net.InetAddress.getByName("192.168.1.255");
-                    socket.send(new java.net.DatagramPacket(sendData, sendData.length, b2, 8552));
+                    socket.send(new java.net.DatagramPacket(sendData, sendData.length, b2, 8553));
                 } catch(Exception e){}
 
                 while (true) {
@@ -451,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
         executor.execute(() -> {
             try {
                 AppDetailActivity.clearImageCache();
-                String urlStr = "http://" + ip + ":8552/api/apps";
+                String urlStr = "http://" + ip + ":8553/api/apps";
                 if (query != null && !query.isEmpty()) {
                     urlStr += "?q=" + java.net.URLEncoder.encode(query, "UTF-8");
                 }
@@ -568,7 +631,7 @@ public class MainActivity extends AppCompatActivity {
             
             if (app.has("icon") && !app.optString("icon").isEmpty()) {
                 String iconVal = app.optString("icon");
-                String iconUrl = iconVal.startsWith("local://") ? iconVal : "http://" + app.optString("_server_ip") + ":8552/images/" + iconVal;
+                String iconUrl = iconVal.startsWith("local://") ? iconVal : "http://" + app.optString("_server_ip") + ":8553/images/" + iconVal;
                 loadImageAsync(iconUrl, ivAppIcon);
             }
 
@@ -618,7 +681,7 @@ public class MainActivity extends AppCompatActivity {
                     
                     new Thread(() -> {
                         try {
-                            String apkUrl = "http://" + app.optString("_server_ip") + ":8552/apks/" + app.getJSONArray("versions").getJSONObject(0).getString("file");
+                            String apkUrl = "http://" + app.optString("_server_ip") + ":8553/apks/" + app.getJSONArray("versions").getJSONObject(0).getString("file");
                             java.net.URL url = new java.net.URL(apkUrl);
                             java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
                             conn.connect();
@@ -770,8 +833,17 @@ public class MainActivity extends AppCompatActivity {
                                 });
                             }
                             btnInstall.setOnClickListener(v2 -> {
-                                Intent launchIntent = MainActivity.this.getPackageManager().getLaunchIntentForPackage(app.optString("package_name"));
-                                if (launchIntent != null) MainActivity.this.startActivity(launchIntent);
+                                boolean windowMode = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_mode", false);
+                                if (windowMode) {
+                                    Intent winIntent = new Intent("com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW");
+                                    winIntent.setComponent(new android.content.ComponentName("com.elitesoftware.elitewindowingcomponents", "com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"));
+                                    winIntent.putExtra("package", app.optString("package_name"));
+                                    winIntent.putExtra("title", app.optString("name"));
+                                    MainActivity.this.sendBroadcast(winIntent);
+                                } else {
+                                    Intent launchIntent = MainActivity.this.getPackageManager().getLaunchIntentForPackage(app.optString("package_name"));
+                                    if (launchIntent != null) MainActivity.this.startActivity(launchIntent);
+                                }
                             });
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -792,12 +864,21 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "You are already using this app!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Intent launchIntent = MainActivity.this.getPackageManager().getLaunchIntentForPackage(app.optString("package_name"));
-                    if (launchIntent != null) {
-                        MainActivity.this.startActivity(launchIntent);
+                    boolean useWindowPopups = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_popups", false);
+                    if (useWindowPopups) {
+                        Intent intent = new Intent("com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW");
+                        intent.setComponent(new android.content.ComponentName("com.elitesoftware.elitewindowingcomponents", "com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"));
+                        intent.putExtra("package", app.optString("package_name"));
+                        intent.putExtra("title", app.optString("name", "Elite App"));
+                        MainActivity.this.sendBroadcast(intent);
+                        Toast.makeText(MainActivity.this, "Launching in Window Popup...", Toast.LENGTH_SHORT).show();
                     } else {
-                    if (tvStatus != null) tvStatus.setText("Connected to " + serverIPs.size() + " server(s).");
-                        Toast.makeText(MainActivity.this, "App cannot be opened.", Toast.LENGTH_SHORT).show();
+                        Intent launchIntent = MainActivity.this.getPackageManager().getLaunchIntentForPackage(app.optString("package_name"));
+                        if (launchIntent != null) {
+                            MainActivity.this.startActivity(launchIntent);
+                        } else {
+                            Toast.makeText(MainActivity.this, "App cannot be opened.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             } else {
@@ -888,7 +969,7 @@ public class MainActivity extends AppCompatActivity {
 
             for (String ip : ipsCopy) {
                 try {
-                    java.net.URL url = new java.net.URL("http://" + ip + ":8552/api/heartbeat");
+                    java.net.URL url = new java.net.URL("http://" + ip + ":8553/api/heartbeat");
                     java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/json");
@@ -928,7 +1009,7 @@ public class MainActivity extends AppCompatActivity {
 
                 for (String ip : ipsCopy) {
                     try {
-                        java.net.URL url = new java.net.URL("http://" + ip + ":8552/api/disconnect");
+                        java.net.URL url = new java.net.URL("http://" + ip + ":8553/api/disconnect");
                         java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("POST");
                         conn.setRequestProperty("Content-Type", "application/json");

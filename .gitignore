@@ -1,2 +1,7 @@
-desktop.ini
-Manager_App/apks/iOS-6_Icons_1.3.6.336_2007.apk
+*.apk
+*.exe
+*.dll
+*.res
+*.o
+*.zip
+*.bin

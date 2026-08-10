@@ -141,7 +141,7 @@ public class AppDetailActivity extends AppCompatActivity {
             
             if (app.has("icon") && !app.optString("icon").isEmpty()) {
                 String iconVal = app.optString("icon");
-                String iconUrl = iconVal.startsWith("local://") ? iconVal : "http://" + ip + ":8552/images/" + iconVal.replace(" ", "%20");
+                String iconUrl = iconVal.startsWith("local://") ? iconVal : "http://" + ip + ":8553/images/" + iconVal.replace(" ", "%20");
                 loadImageAsync(iconUrl, detailIcon);
             }
             
@@ -156,7 +156,7 @@ public class AppDetailActivity extends AppCompatActivity {
                 org.json.JSONArray screenshots = app.getJSONArray("screenshots");
                 for (int i = 0; i < screenshots.length(); i++) {
                     String screenshotName = screenshots.getString(i);
-                    String screenshotUrl = "http://" + ip + ":8552/images/" + screenshotName.replace(" ", "%20");
+                    String screenshotUrl = "http://" + ip + ":8553/images/" + screenshotName.replace(" ", "%20");
                     
                     ImageView imgView = new ImageView(this);
                     android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(
@@ -205,7 +205,7 @@ public class AppDetailActivity extends AppCompatActivity {
                             if(selectedIdx < 0) selectedIdx = 0;
                             
                             org.json.JSONObject verObj = finalVersionsArr.getJSONObject(selectedIdx);
-                            String apkUrl = "http://" + ip + ":8552/apks/" + verObj.getString("file").replace(" ", "%20");
+                            String apkUrl = "http://" + ip + ":8553/apks/" + verObj.getString("file").replace(" ", "%20");
                             selectedVer = verObj.getString("version");
                             
                             URL url = new URL(apkUrl);
@@ -353,8 +353,17 @@ public class AppDetailActivity extends AppCompatActivity {
                                     }
                                 } catch (Exception ex) {}
                                 detailInstallBtn.setOnClickListener(v2 -> {
-                                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(app.optString("package_name"));
-                                    if (launchIntent != null) startActivity(launchIntent);
+                                    boolean windowMode = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_mode", false);
+                                    if (windowMode) {
+                                        Intent winIntent = new Intent("com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW");
+                                        winIntent.setComponent(new android.content.ComponentName("com.elitesoftware.elitewindowingcomponents", "com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"));
+                                        winIntent.putExtra("package", app.optString("package_name"));
+                                        winIntent.putExtra("title", app.optString("name"));
+                                        sendBroadcast(winIntent);
+                                    } else {
+                                        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(app.optString("package_name"));
+                                        if (launchIntent != null) startActivity(launchIntent);
+                                    }
                                 });
                             });
                         } catch (Exception e) {
@@ -382,9 +391,18 @@ public class AppDetailActivity extends AppCompatActivity {
                                     finish();
                                     return;
                                 }
-                                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pkgName);
-                                if (launchIntent != null) startActivity(launchIntent);
-                                else Toast.makeText(AppDetailActivity.this, "App cannot be opened.", Toast.LENGTH_SHORT).show();
+                                boolean windowMode = getSharedPreferences("prefs", MODE_PRIVATE).getBoolean("window_mode", false);
+                                if (windowMode) {
+                                    Intent winIntent = new Intent("com.elitesoftware.elitewindowingcomponents.LAUNCH_WINDOW");
+                                    winIntent.setComponent(new android.content.ComponentName("com.elitesoftware.elitewindowingcomponents", "com.elitesoftware.elitewindowingcomponents.WindowApiReceiver"));
+                                    winIntent.putExtra("package", pkgName);
+                                    winIntent.putExtra("title", app.optString("name"));
+                                    sendBroadcast(winIntent);
+                                } else {
+                                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pkgName);
+                                    if (launchIntent != null) startActivity(launchIntent);
+                                    else Toast.makeText(AppDetailActivity.this, "App cannot be opened.", Toast.LENGTH_SHORT).show();
+                                }
                             });
                         } else {
                             int cmp = compareVersions(selected, installedVersion);

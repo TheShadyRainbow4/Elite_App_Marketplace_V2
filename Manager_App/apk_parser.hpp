@@ -44,6 +44,42 @@ public:
             ParseArsc(arscData, iconId, labelId, descId);
         }
 
+        if (iconPath.empty() || iconPath.find(".xml") != std::string::npos) {
+            int num_files = mz_zip_reader_get_num_files(&zip_archive);
+            int best_idx = -1;
+            int best_score = -1;
+            for (int i = 0; i < num_files; i++) {
+                mz_zip_archive_file_stat file_stat;
+                if (!mz_zip_reader_file_stat(&zip_archive, i, &file_stat)) continue;
+                if (mz_zip_reader_is_file_a_directory(&zip_archive, i)) continue;
+                std::string fname = file_stat.m_filename;
+                std::string fnameLower = fname;
+                std::transform(fnameLower.begin(), fnameLower.end(), fnameLower.begin(), ::tolower);
+                if (fnameLower.find(".png") == std::string::npos && fnameLower.find(".webp") == std::string::npos) continue;
+
+                int score = 0;
+                if (fnameLower.find("res/") != std::string::npos) score += 10;
+                if (fnameLower.find("mipmap") != std::string::npos) score += 10;
+                if (fnameLower.find("drawable") != std::string::npos) score += 5;
+                if (fnameLower.find("launcher") != std::string::npos) score += 30;
+                if (fnameLower.find("icon") != std::string::npos) score += 20;
+
+                if (fnameLower.find("xxxhdpi") != std::string::npos) score += 50;
+                else if (fnameLower.find("xxhdpi") != std::string::npos) score += 40;
+                else if (fnameLower.find("xhdpi") != std::string::npos) score += 30;
+                else if (fnameLower.find("hdpi") != std::string::npos) score += 20;
+                else if (fnameLower.find("mdpi") != std::string::npos) score += 10;
+                
+                if (fnameLower.find("round") != std::string::npos) score += 5;
+
+                if (score > best_score) {
+                    best_score = score;
+                    best_idx = i;
+                    iconPath = fname;
+                }
+            }
+        }
+
         mz_zip_reader_end(&zip_archive);
         return true;
     }
@@ -80,16 +116,28 @@ private:
             uint32_t* stringOffsets = (uint32_t*)&data[offset + 28];
             for (uint32_t i = 0; i < stringCount; i++) {
                 uint32_t strOff = offset + stringsOffset + stringOffsets[i];
+                if (strOff >= data.size()) {
+                    stringPool.push_back("");
+                    continue;
+                }
                 if (isUTF8) {
-                    uint8_t len1 = data[strOff];
-                    uint8_t len2 = data[strOff + 1]; // Skipping length decoding for simplicity
-                    std::string s((char*)&data[strOff + 2]);
+                    uint32_t strDataOff = strOff;
+                    if (strDataOff < data.size() && (data[strDataOff] & 0x80)) strDataOff += 2; else strDataOff += 1;
+                    if (strDataOff < data.size() && (data[strDataOff] & 0x80)) strDataOff += 2; else strDataOff += 1;
+                    std::string s;
+                    while (strDataOff < data.size() && data[strDataOff] != 0) {
+                        s += (char)data[strDataOff++];
+                    }
                     stringPool.push_back(s);
                 } else {
-                    uint16_t len = *(uint16_t*)&data[strOff];
+                    uint32_t strDataOff = strOff;
+                    if (strDataOff + 1 < data.size() && (data[strDataOff + 1] & 0x80)) strDataOff += 4; else strDataOff += 2;
                     std::string s;
-                    for (int j = 0; j < len; j++) {
-                        s += (char)data[strOff + 2 + j * 2]; // hacky utf16 to ascii
+                    while (strDataOff + 1 < data.size()) {
+                        uint16_t c = data[strDataOff] | (data[strDataOff + 1] << 8);
+                        if (c == 0) break;
+                        if (c < 128) s += (char)c; // hacky utf16 to ascii
+                        strDataOff += 2;
                     }
                     stringPool.push_back(s);
                 }
@@ -102,7 +150,9 @@ private:
             uint32_t type = *(uint32_t*)&data[offset];
             uint32_t size = *(uint32_t*)&data[offset + 4];
             
-            if (type == 0x00100102) { // START_TAG
+            if (size < 8) break; // Prevent infinite loop on invalid size
+            
+            if (type == 0x00100102 && offset + 36 <= data.size()) { // START_TAG
                 uint32_t nameIdx = *(uint32_t*)&data[offset + 20];
                 std::string tagName = (nameIdx < stringPool.size()) ? stringPool[nameIdx] : "";
                 
@@ -110,6 +160,7 @@ private:
                 uint32_t attrOffset = offset + 36;
 
                 for (uint32_t i = 0; i < attrCount; i++) {
+                    if (attrOffset + i * 20 + 20 > data.size()) break;
                     uint32_t attrNameIdx = *(uint32_t*)&data[attrOffset + i * 20 + 4];
                     uint32_t attrValStrIdx = *(uint32_t*)&data[attrOffset + i * 20 + 8];
                     uint32_t attrType = *(uint32_t*)&data[attrOffset + i * 20 + 12];
@@ -157,23 +208,28 @@ private:
             uint32_t* stringOffsets = (uint32_t*)&data[offset + 28];
             for (uint32_t i = 0; i < stringCount; i++) {
                 uint32_t strOff = offset + stringsOffset + stringOffsets[i];
-                if (strOff >= data.size()) continue;
+                if (strOff >= data.size()) {
+                    stringPool.push_back("");
+                    continue;
+                }
                 if (isUTF8) {
-                    uint8_t len1 = data[strOff];
-                    uint32_t strDataOff = strOff + 2;
-                    if ((len1 & 0x80) != 0) strDataOff++; 
-                    uint8_t len2 = data[strOff+1];
-                    if ((len2 & 0x80) != 0) strDataOff++;
-                    std::string s((char*)&data[strDataOff]);
+                    uint32_t strDataOff = strOff;
+                    if (strDataOff < data.size() && (data[strDataOff] & 0x80)) strDataOff += 2; else strDataOff += 1;
+                    if (strDataOff < data.size() && (data[strDataOff] & 0x80)) strDataOff += 2; else strDataOff += 1;
+                    std::string s;
+                    while (strDataOff < data.size() && data[strDataOff] != 0) {
+                        s += (char)data[strDataOff++];
+                    }
                     stringPool.push_back(s);
                 } else {
-                    uint16_t len = *(uint16_t*)&data[strOff];
-                    uint32_t strDataOff = strOff + 2;
-                    if ((len & 0x8000) != 0) strDataOff += 2;
+                    uint32_t strDataOff = strOff;
+                    if (strDataOff + 1 < data.size() && (data[strDataOff + 1] & 0x80)) strDataOff += 4; else strDataOff += 2;
                     std::string s;
-                    for (int j = 0; j < len; j++) {
-                        if (strDataOff + j * 2 < data.size())
-                            s += (char)data[strDataOff + j * 2];
+                    while (strDataOff + 1 < data.size()) {
+                        uint16_t c = data[strDataOff] | (data[strDataOff + 1] << 8);
+                        if (c == 0) break;
+                        if (c < 128) s += (char)c;
+                        strDataOff += 2;
                     }
                     stringPool.push_back(s);
                 }
@@ -189,24 +245,30 @@ private:
             uint16_t type = *(uint16_t*)&data[offset];
             uint32_t size = *(uint32_t*)&data[offset + 4];
             
-            if (type == 0x0200) { // RES_TABLE_PACKAGE_TYPE
+            if (size < 8) break; // Prevent infinite loop on invalid size
+            
+            if (type == 0x0200 && offset + 288 <= data.size()) { // RES_TABLE_PACKAGE_TYPE
                 uint32_t typeStringsOff = *(uint32_t*)&data[offset + 268];
                 uint32_t keyStringsOff = *(uint32_t*)&data[offset + 276];
                 
                 uint32_t innerOffset = offset + 288;
-                while (innerOffset + 8 <= offset + size) {
+                while (innerOffset + 8 <= offset + size && innerOffset + 8 <= data.size()) {
                     uint16_t innerType = *(uint16_t*)&data[innerOffset];
                     uint32_t innerSize = *(uint32_t*)&data[innerOffset + 4];
                     
-                    if (innerType == 0x0201) { // RES_TABLE_TYPE_TYPE
+                    if (innerSize < 8) break; // Prevent infinite loop
+
+                    if (innerType == 0x0201 && innerOffset + 20 <= data.size()) { // RES_TABLE_TYPE_TYPE
                         uint8_t id = data[innerOffset + 6]; // type ID
                         uint32_t entryCount = *(uint32_t*)&data[innerOffset + 12];
                         uint32_t entriesStart = *(uint32_t*)&data[innerOffset + 16];
                         
                         uint32_t* entryOffsets = (uint32_t*)&data[innerOffset + 20];
                         for (uint32_t i = 0; i < entryCount; i++) {
+                            if (innerOffset + 20 + i * 4 + 4 > data.size()) break;
                             if (entryOffsets[i] != 0xFFFFFFFF) {
                                 uint32_t entryOff = innerOffset + entriesStart + entryOffsets[i];
+                                if (entryOff + 16 > data.size()) continue;
                                 uint16_t entrySize = *(uint16_t*)&data[entryOff];
                                 uint16_t flags = *(uint16_t*)&data[entryOff + 2];
                                 

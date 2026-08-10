@@ -16,11 +16,18 @@
 #include <gdiplus.h>
 #include <memory>
 #include <array>
+#include "gemini_ai.hpp"
+#include "ai_dialog.hpp"
 
 #pragma comment(linker,"\"/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #pragma comment(lib, "gdiplus.lib")
 #pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "winhttp.lib")
+
+#define WM_AI_DONE (WM_APP + 1)
+
+void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, std::string p, std::string d, std::string c, std::string t);
 
 using namespace Gdiplus;
 using json = nlohmann::json;
@@ -70,6 +77,8 @@ HWND btnApply = NULL;
 HWND btnExit = NULL;
 HWND btnDelete = NULL;
 HWND btnClearForm = NULL;
+HWND btnAITagSelected = NULL;
+HWND btnAIAutoTagAll = NULL;
 HWND btnAddScreenshot = NULL;
 HWND btnClearScreenshots = NULL;
 HWND lstScreenshots = NULL;
@@ -108,7 +117,7 @@ char filePath[MAX_PATH] = "";
 std::vector<std::string> screenshots;
 json dbCache;
 int selectedAppIndex = -1;
-int serverPort = 8552;
+int serverPort = 8553;
 
 bool serverRunning = false;
 httplib::Server* svrPtr = nullptr;
@@ -120,8 +129,9 @@ HBITMAP hPreviewBitmap = NULL;
 ULONG_PTR gdiplusToken;
 
 std::string dbFile = "db.json";
-std::string apkDir = "apks";
-std::string imgDir = "images";
+std::string dataDir = "";
+std::string GetApkDir() { return dataDir + "\\apks"; }
+std::string GetImgDir() { return dataDir + "\\images"; }
 std::string configFile = "config.json";
 int g_windowWidth = 1000;
 int g_windowHeight = 700;
@@ -483,9 +493,9 @@ void ExtractApkMetadataAndIcon(const std::string& apkPath, json& appNode) {
 
     std::string candidatePng = parser.iconPath;
 
-    fs::create_directories(imgDir);
+    fs::create_directories(GetImgDir());
     std::string outIconName = pkgNameStr + "_icon.png";
-    std::string outIconPath = imgDir + "\\" + outIconName;
+    std::string outIconPath = GetImgDir() + "\\" + outIconName;
     std::string absOutIconPath = fs::absolute(outIconPath).string();
 
     mz_zip_archive zip_archive;
@@ -495,6 +505,40 @@ void ExtractApkMetadataAndIcon(const std::string& apkPath, json& appNode) {
         if (!candidatePng.empty()) {
             target_index = mz_zip_reader_locate_file(&zip_archive, candidatePng.c_str(), NULL, 0);
         }
+        if (target_index < 0) {
+            mz_uint num_files = mz_zip_reader_get_num_files(&zip_archive);
+            mz_uint64 max_size = 0;
+            int best_icon = -1;
+            int best_priority = -1; // 0 = best, 4 = worst
+
+            for (mz_uint i = 0; i < num_files; i++) {
+                mz_zip_archive_file_stat stat;
+                if (mz_zip_reader_file_stat(&zip_archive, i, &stat)) {
+                    std::string name = stat.m_filename;
+                    std::string nameLower = name;
+                    std::transform(nameLower.begin(), nameLower.end(), nameLower.begin(), ::tolower);
+
+                    if (nameLower.length() >= 4 && nameLower.substr(nameLower.length() - 4) == ".png" && nameLower.find(".9.png") == std::string::npos) {
+                        int priority = 4;
+                        if (nameLower.find("ic_launcher") != std::string::npos) priority = 0;
+                        else if (nameLower.find("app_icon") != std::string::npos) priority = 1;
+                        else if (nameLower.find("icon") != std::string::npos) priority = 2;
+                        else if (nameLower.find("logo") != std::string::npos) priority = 3;
+
+                        // Only consider files inside res/ or ones that match a priority keyword
+                        if (priority < 4 || nameLower.find("res/") != std::string::npos) {
+                            if (best_priority == -1 || priority < best_priority || (priority == best_priority && stat.m_uncomp_size > max_size)) {
+                                best_priority = priority;
+                                max_size = stat.m_uncomp_size;
+                                best_icon = i;
+                            }
+                        }
+                    }
+                }
+            }
+            if (best_icon >= 0) target_index = best_icon;
+        }
+
         if (target_index >= 0) {
             mz_zip_reader_extract_to_file(&zip_archive, target_index, absOutIconPath.c_str(), 0);
         }
@@ -606,8 +650,7 @@ void RemoveTrayIcon(HWND hwnd) {
 void SaveConfig(HWND hwnd) {
     json j;
     j["server_port"] = serverPort;
-    j["apk_dir"] = apkDir;
-    j["img_dir"] = imgDir;
+    j["data_dir"] = dataDir;
     
     WINDOWPLACEMENT wp;
     wp.length = sizeof(WINDOWPLACEMENT);
@@ -652,16 +695,12 @@ void LoadConfig() {
         try {
             std::ifstream i(configFile);
             json j; i >> j;
-            serverPort = j.value("server_port", 8552);
+            serverPort = j.value("server_port", 8553);
             char exeP[MAX_PATH];
             GetModuleFileNameA(NULL, exeP, MAX_PATH);
             fs::path exeD = fs::path(exeP).parent_path();
             
-            std::string defApkDir = (exeD / "apks").string();
-            std::string defImgDir = (exeD / "images").string();
-            
-            apkDir = j.value("apk_dir", defApkDir);
-            imgDir = j.value("img_dir", defImgDir);
+            dataDir = j.value("data_dir", exeD.string());
             g_windowWidth = j.value("window_width", 1000);
             g_windowHeight = j.value("window_height", 700);
             g_windowX = j.value("window_x", CW_USEDEFAULT);
@@ -679,8 +718,7 @@ void LoadConfig() {
         char exeP[MAX_PATH];
         GetModuleFileNameA(NULL, exeP, MAX_PATH);
         fs::path exeD = fs::path(exeP).parent_path();
-        apkDir = (exeD / "apks").string();
-        imgDir = (exeD / "images").string();
+        dataDir = exeD.string();
         SaveConfig(NULL);
     }
 }
@@ -715,8 +753,8 @@ void RefreshAppList() {
     LogToFileAndUI("Starting RefreshAppList...");
     dbCache = loadDb();
     bool dbUpdated = false;
-    if (fs::exists(apkDir)) {
-        for (const auto& entry : fs::directory_iterator(apkDir)) {
+    if (fs::exists(GetApkDir())) {
+        for (const auto& entry : fs::directory_iterator(GetApkDir())) {
             std::string ext = entry.path().extension().string();
             std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
             
@@ -767,13 +805,13 @@ void RefreshAppList() {
         std::string pkg = app.value("package_name", "");
         std::string iconVal = app.value("icon", "");
         LogToFileAndUI("Checking app pkg: " + pkg + ", iconVal: " + iconVal);
-        if (iconVal.empty() || pkg.empty() || pkg.find("unknown.package") == 0 || !fs::exists(fs::path(imgDir) / iconVal)) {
+        if (iconVal.empty() || pkg.empty() || pkg.find("unknown.package") == 0 || !fs::exists(fs::path(GetImgDir()) / iconVal)) {
             std::string apkFile = "";
             if (app.contains("versions") && !app["versions"].empty()) {
                 apkFile = app["versions"][0].value("file", "");
             }
             if (!apkFile.empty()) {
-                std::string fullApkPath = apkDir + "/" + apkFile;
+                std::string fullApkPath = GetApkDir() + "/" + apkFile;
                 LogToFileAndUI("Checking " + fullApkPath); if (fs::exists(fullApkPath)) {
                     ExtractApkMetadataAndIcon(fullApkPath, app);
                     dbUpdated = true;
@@ -852,7 +890,7 @@ void RefreshAppList() {
         std::string apkFile = app.contains("versions") && !app["versions"].empty() ? app["versions"].front().value("file", "") : "";
         std::string sizeStr = "N/A";
         if (!apkFile.empty()) {
-            std::string fullPath = apkDir + "/" + apkFile;
+            std::string fullPath = GetApkDir() + "/" + apkFile;
             if (fs::exists(fullPath)) {
                 try {
                     auto sz = fs::file_size(fullPath);
@@ -866,7 +904,7 @@ void RefreshAppList() {
         std::string iconFile = app.value("icon", "");
         int imgIndex = 0; // Default icon is now always at index 0
         if (!iconFile.empty()) {
-            std::string fullIconPath = imgDir + "/" + iconFile;
+            std::string fullIconPath = GetImgDir() + "/" + iconFile;
             if (fs::exists(fullIconPath)) {
                 std::wstring wpath(fullIconPath.begin(), fullIconPath.end());
                 Bitmap* bmp = Bitmap::FromFile(wpath.c_str());
@@ -931,7 +969,7 @@ void LoadAppIntoForm(int index) {
     screenshots.clear();
     if (app.contains("screenshots")) {
         for (auto& s : app["screenshots"]) {
-            std::string sPath = imgDir + "\\" + s.get<std::string>();
+            std::string sPath = GetImgDir() + "\\" + s.get<std::string>();
             screenshots.push_back(sPath);
             int imgIdx = AddImageToImageList(g_hImgListSS, sPath);
             LVITEMA lvi = {0};
@@ -944,8 +982,8 @@ void LoadAppIntoForm(int index) {
     filePath[0] = '\0';
     SetWindowTextA(hwndApkLabel, "No new APK selected");
     std::string iconP = app.value("icon", "");
-    if (!iconP.empty() && fs::exists(imgDir + "\\" + iconP)) {
-        UpdatePreviewImage(imgDir + "\\" + iconP);
+    if (!iconP.empty() && fs::exists(GetImgDir() + "\\" + iconP)) {
+        UpdatePreviewImage(GetImgDir() + "\\" + iconP);
     } else {
         UpdatePreviewImage("");
     }
@@ -973,20 +1011,20 @@ void DeleteSelectedApp() {
                 for (auto& v : app["versions"]) {
                     std::string apkFile = v.value("file", "");
                     if (!apkFile.empty()) {
-                        std::string fullPath = apkDir + "/" + apkFile;
+                        std::string fullPath = GetApkDir() + "/" + apkFile;
                         try { if (fs::exists(fullPath)) fs::remove(fullPath); } catch(...) {}
                     }
                 }
             }
             std::string iconFile = app.value("icon", "");
             if (!iconFile.empty()) {
-                std::string fullIconPath = imgDir + "/" + iconFile;
+                std::string fullIconPath = GetImgDir() + "/" + iconFile;
                 try { if (fs::exists(fullIconPath)) fs::remove(fullIconPath); } catch(...) {}
             }
             if (app.contains("screenshots")) {
                 for (auto& s : app["screenshots"]) {
                     std::string ssFile = s.get<std::string>();
-                    std::string fullSsPath = imgDir + "/" + ssFile;
+                    std::string fullSsPath = GetImgDir() + "/" + ssFile;
                     try { if (fs::exists(fullSsPath)) fs::remove(fullSsPath); } catch(...) {}
                 }
             }
@@ -1303,8 +1341,8 @@ svrPtr->Post("/api/disconnect", [](const httplib::Request& req, httplib::Respons
             res.set_content("{\"error\":\"invalid json\"}", "application/json");
         }
     });
-    svrPtr->set_mount_point("/apks", apkDir.c_str());
-    svrPtr->set_mount_point("/images", imgDir.c_str());
+    svrPtr->set_mount_point("/apks", GetApkDir().c_str());
+    svrPtr->set_mount_point("/images", GetImgDir().c_str());
 
     svrPtr->Get("/", [](const httplib::Request& req, httplib::Response& res) {
         std::string latestMarketplaceApk = "";
@@ -1465,18 +1503,18 @@ void CopyFileLocal(std::string src, std::string dest) {
 }
 
 void ProcessApp(std::string apk, std::string name, std::string pkg, std::string ver, std::string desc, std::string cat, std::string tagsStr) {
-    fs::create_directory(apkDir); fs::create_directory(imgDir);
+    fs::create_directory(GetApkDir()); fs::create_directory(GetImgDir());
     std::string apkName = "";
     if (!apk.empty()) {
         std::string safeName = name;
         std::replace(safeName.begin(), safeName.end(), ' ', '_');
         apkName = safeName + "-" + ver + ".apk";
-        CopyFileLocal(apk, apkDir + "/" + apkName);
+        CopyFileLocal(apk, GetApkDir() + "/" + apkName);
     }
     std::vector<std::string> copiedScreenshots;
     for (const auto& s : screenshots) {
         std::string sName = fs::path(s).filename().string();
-        if (fs::exists(s) && s.find(imgDir) == std::string::npos) CopyFileLocal(s, imgDir + "/" + sName);
+        if (fs::exists(s) && s.find(GetImgDir()) == std::string::npos) CopyFileLocal(s, GetImgDir() + "/" + sName);
         copiedScreenshots.push_back(sName);
     }
     std::vector<std::string> tags;
@@ -1507,7 +1545,7 @@ void ProcessApp(std::string apk, std::string name, std::string pkg, std::string 
         }
         app["name"] = name; app["description"] = desc; app["category"] = cat;
         app["tags"] = tags; app["screenshots"] = copiedScreenshots;
-        std::string iconP = imgDir + "/" + pkg + "_icon.png";
+        std::string iconP = GetImgDir() + "/" + pkg + "_icon.png";
         if (fs::exists(iconP)) app["icon"] = pkg + "_icon.png";
     } else {
         for (auto& app : db["apps"]) {
@@ -1522,7 +1560,7 @@ void ProcessApp(std::string apk, std::string name, std::string pkg, std::string 
                 }
                 app["name"] = name; app["description"] = desc; app["category"] = cat;
                 app["tags"] = tags; app["screenshots"] = copiedScreenshots;
-                std::string iconP = imgDir + "/" + pkg + "_icon.png";
+                std::string iconP = GetImgDir() + "/" + pkg + "_icon.png";
                 if (fs::exists(iconP)) app["icon"] = pkg + "_icon.png";
                 break;
             }
@@ -1538,7 +1576,7 @@ void ProcessApp(std::string apk, std::string name, std::string pkg, std::string 
         newApp["category"] = cat; newApp["tags"] = tags;
         newApp["versions"] = json::array(); newApp["versions"].push_back({{"version", ver}, {"file", apkName}});
         newApp["screenshots"] = copiedScreenshots; newApp["reviews"] = json::array();
-        std::string iconP = imgDir + "/" + pkg + "_icon.png";
+        std::string iconP = GetImgDir() + "/" + pkg + "_icon.png";
         if (fs::exists(iconP)) newApp["icon"] = pkg + "_icon.png";
         db["apps"].push_back(newApp);
     }
@@ -1595,7 +1633,7 @@ LRESULT CALLBACK AboutDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             "Technical Details:\r\n"
             "- Architecture: Win32 API / C++17 (GDI+, httplib, nlohmann_json)\r\n"
             "- Framework Target: Win32 Native Visual Styles (Legacy Aesthetic)\r\n"
-            "- Default Port: 8552\r\n"
+            "- Default Port: 8553\r\n"
             "- Log Path: %SystemDrive%\\EliteSoftware\\Logs\\LocalAPKStore.log\r\n"
             "- Minimum OS: Windows Vista / 7\r\n"
             "- Authors: Zachary Whiteman, Susan Gemm, TheShadyRainbow4, EliteSoftwareTech Co.",
@@ -1707,7 +1745,7 @@ LRESULT CALLBACK HelpDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             "   - Click 'Apply' to save changes to the local db.json repository.\r\n"
             "   - Click 'Delete Selected' to remove an application entry.\r\n\r\n"
             "2. SERVER MONITOR TAB:\r\n"
-            "   - Embedded HTTP server listens on port 8552 (or custom configured port).\r\n"
+            "   - Embedded HTTP server listens on port 8553 (or custom configured port).\r\n"
             "   - View real-time HTTP API logs and server activity.\r\n"
             "   - Click 'Start Server' / 'Stop Server' to toggle server state.\r\n\r\n"
             "3. LOG FILE INTEGRATION:\r\n"
@@ -1770,8 +1808,7 @@ LRESULT CALLBACK SettingsDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     static HFONT hNormalFont = NULL;
     static HFONT hBoldFont = NULL;
     static HWND hTxtPort = NULL;
-    static HWND hTxtApkDir = NULL;
-    static HWND hTxtImgDir = NULL;
+    static HWND hTxtDataDir = NULL;
 
     switch (uMsg) {
     case WM_PAINT: {
@@ -1807,24 +1844,19 @@ LRESULT CALLBACK SettingsDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         HWND lblPort = CreateWindowA("STATIC", "HTTP Server Port:", WS_CHILD | WS_VISIBLE, 15, 55, 130, 20, hwnd, NULL, NULL, NULL);
         hTxtPort = CreateWindowExA(WS_EX_CLIENTEDGE, "EDIT", std::to_string(serverPort).c_str(), WS_CHILD | WS_VISIBLE | ES_NUMBER, 150, 53, 100, 22, hwnd, NULL, NULL, NULL);
 
-        HWND lblApkDir = CreateWindowA("STATIC", "APK Repository Path:", WS_CHILD | WS_VISIBLE, 15, 90, 130, 20, hwnd, NULL, NULL, NULL);
-        hTxtApkDir = CreateWindowExA(WS_EX_CLIENTEDGE, "EDIT", apkDir.c_str(), WS_CHILD | WS_VISIBLE, 150, 88, 255, 22, hwnd, NULL, NULL, NULL);
+        HWND lblDataDir = CreateWindowA("STATIC", "Data Directory:", WS_CHILD | WS_VISIBLE, 15, 90, 130, 20, hwnd, NULL, NULL, NULL);
+        hTxtDataDir = CreateWindowExA(WS_EX_CLIENTEDGE, "EDIT", dataDir.c_str(), WS_CHILD | WS_VISIBLE, 150, 88, 255, 22, hwnd, NULL, NULL, NULL);
 
-        HWND lblImgDir = CreateWindowA("STATIC", "Image Storage Path:", WS_CHILD | WS_VISIBLE, 15, 125, 130, 20, hwnd, NULL, NULL, NULL);
-        hTxtImgDir = CreateWindowExA(WS_EX_CLIENTEDGE, "EDIT", imgDir.c_str(), WS_CHILD | WS_VISIBLE, 150, 123, 255, 22, hwnd, NULL, NULL, NULL);
+        CreateWindowExA(0, "STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 15, 125, 390, 2, hwnd, NULL, NULL, NULL);
 
-        CreateWindowExA(0, "STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 15, 160, 390, 2, hwnd, NULL, NULL, NULL);
-
-        HWND hBtnWebsite = CreateWindowA("BUTTON", "Open Local Server Website", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 15, 172, 170, 28, hwnd, (HMENU)1003, NULL, NULL);
-        HWND hBtnOkay = CreateWindowA("BUTTON", "Okay", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 195, 172, 100, 28, hwnd, (HMENU)IDOK, NULL, NULL);
-        HWND hBtnCancel = CreateWindowA("BUTTON", "Cancel", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 305, 172, 100, 28, hwnd, (HMENU)IDCANCEL, NULL, NULL);
+        HWND hBtnWebsite = CreateWindowA("BUTTON", "Open Local Server Website", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 15, 137, 170, 28, hwnd, (HMENU)1003, NULL, NULL);
+        HWND hBtnOkay = CreateWindowA("BUTTON", "Okay", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 195, 137, 100, 28, hwnd, (HMENU)IDOK, NULL, NULL);
+        HWND hBtnCancel = CreateWindowA("BUTTON", "Cancel", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 305, 137, 100, 28, hwnd, (HMENU)IDCANCEL, NULL, NULL);
 
         SendMessageA(lblPort, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(hTxtPort, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
-        SendMessageA(lblApkDir, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
-        SendMessageA(hTxtApkDir, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
-        SendMessageA(lblImgDir, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
-        SendMessageA(hTxtImgDir, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
+        SendMessageA(lblDataDir, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
+        SendMessageA(hTxtDataDir, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(hBtnWebsite, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(hBtnOkay, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(hBtnCancel, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
@@ -1841,43 +1873,27 @@ LRESULT CALLBACK SettingsDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     case WM_COMMAND: {
         int id = LOWORD(wParam);
         if (id == IDOK) {
-            char pBuf[32], aBuf[MAX_PATH], iBuf[MAX_PATH];
+            char pBuf[32], dBuf[MAX_PATH];
             GetWindowTextA(hTxtPort, pBuf, 32);
-            GetWindowTextA(hTxtApkDir, aBuf, MAX_PATH);
-            GetWindowTextA(hTxtImgDir, iBuf, MAX_PATH);
+            GetWindowTextA(hTxtDataDir, dBuf, MAX_PATH);
 
             int newPort = atoi(pBuf);
             if (newPort > 0 && newPort < 65535) {
                 serverPort = newPort;
             }
-            if (strlen(aBuf) > 0) {
-                std::string newApkDir = aBuf;
-                if (newApkDir != apkDir) {
-                    if (fs::exists(apkDir)) {
+            if (strlen(dBuf) > 0) {
+                std::string newDataDir = dBuf;
+                if (newDataDir != dataDir) {
+                    if (fs::exists(dataDir)) {
                         try {
-                            fs::create_directories(newApkDir);
-                            for (const auto& entry : fs::directory_iterator(apkDir)) {
-                                fs::copy(entry, fs::path(newApkDir) / entry.path().filename(), fs::copy_options::overwrite_existing);
+                            fs::create_directories(newDataDir);
+                            for (const auto& entry : fs::directory_iterator(dataDir)) {
+                                fs::copy(entry, fs::path(newDataDir) / entry.path().filename(), fs::copy_options::overwrite_existing | fs::copy_options::recursive);
                             }
-                            fs::remove_all(apkDir);
+                            fs::remove_all(dataDir);
                         } catch(...) {}
                     }
-                    apkDir = newApkDir;
-                }
-            }
-            if (strlen(iBuf) > 0) {
-                std::string newImgDir = iBuf;
-                if (newImgDir != imgDir) {
-                    if (fs::exists(imgDir)) {
-                        try {
-                            fs::create_directories(newImgDir);
-                            for (const auto& entry : fs::directory_iterator(imgDir)) {
-                                fs::copy(entry, fs::path(newImgDir) / entry.path().filename(), fs::copy_options::overwrite_existing);
-                            }
-                            fs::remove_all(imgDir);
-                        } catch(...) {}
-                    }
-                    imgDir = newImgDir;
+                    dataDir = newDataDir;
                 }
             }
 
@@ -2130,8 +2146,123 @@ void UpdateTabVisibility() {
     if (btnToggleServer) { ShowWindow(btnToggleServer, showMon); if (showMon == SW_SHOW) BringWindowToTop(btnToggleServer); }
 }
 
+void ProcessIncomingApk(HWND hwnd, const std::string& filepath) {
+    if (!fs::exists(filepath)) return;
+    std::string filename = fs::path(filepath).filename().string();
+    std::string dest = "apks/" + filename;
+    if (fs::absolute(filepath) != fs::absolute(dest)) {
+        fs::copy_file(filepath, dest, fs::copy_options::overwrite_existing);
+    }
+    strcpy(filePath, dest.c_str());
+    SetWindowTextA(hwndApkLabel, dest.c_str());
+    ParseApkMetadata(dest.c_str());
+    SendMessageA(hwnd, WM_COMMAND, MAKEWPARAM(2, 0), (LPARAM)btnApply);
+}
+
+void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, std::string p, std::string d, std::string c, std::string t) {
+    std::thread([=]() {
+        g_pendingProposals.clear();
+        
+        auto askGemini = [](const std::string& name, const std::string& pkg, const std::string& desc, const std::string& cat, const std::string& tags) {
+            std::string prompt = "You are an AI tagging assistant for the Elite App Marketplace. Update the following Android App. "
+                                 "You should be aware of the 'entire suite we have built' - our Elite Software Suite includes the Marketplace App, Server Manager, and local ecosystem. "
+                                 "Generate a detailed 3+ paragraph description (mentioning how it fits in our elite suite if applicable), a concise category, a new optimized Display Name, and a comma-separated list of tags. "
+                                 "Respond ONLY in valid JSON format: {\"name\": \"...\", \"category\": \"...\", \"tags\": \"tag1,tag2\", \"description\": \"...\"}.\n"
+                                 "Current Info:\nName: " + name + "\nPackage: " + pkg + "\nDesc: " + desc + "\nCategory: " + cat + "\nTags: " + tags;
+            std::string raw = GeminiAI::GenerateContent(prompt);
+            
+            // Clean markdown json ticks
+            size_t start = raw.find("{");
+            size_t end = raw.rfind("}");
+            if (start != std::string::npos && end != std::string::npos && end > start) {
+                raw = raw.substr(start, end - start + 1);
+            }
+            return raw;
+        };
+
+        if (!allApps) {
+            if (currentFile.empty()) {
+                MessageBoxA(hwnd, "No app selected to AI Tag.", "Error", MB_OK);
+                return;
+            }
+            std::string res = askGemini(n, p, d, c, t);
+            try {
+                json j = json::parse(res);
+                AIProposal pObj;
+                pObj.appIndex = -1; // -1 means currently selected in form
+                pObj.originalName = n;
+                pObj.newName = j.value("name", n);
+                pObj.originalDesc = d;
+                pObj.newDesc = j.value("description", d);
+                pObj.originalCat = c;
+                pObj.newCat = j.value("category", c);
+                pObj.originalTags = t;
+                pObj.newTags = j.value("tags", t);
+                
+                // Find index in dbCache
+                std::string fname = fs::path(currentFile).filename().string();
+                for (size_t i = 0; i < dbCache["apps"].size(); i++) {
+                    auto& app = dbCache["apps"][i];
+                    if (app.contains("versions") && app["versions"].size() > 0) {
+                        if (app["versions"][0].value("file", "") == fname) {
+                            pObj.appIndex = i;
+                            break;
+                        }
+                    }
+                }
+                
+                g_pendingProposals.push_back(pObj);
+            } catch(...) {
+                MessageBoxA(hwnd, ("AI returned invalid JSON: " + res).c_str(), "Error", MB_OK);
+                return;
+            }
+        } else {
+            for (size_t i = 0; i < dbCache["apps"].size(); i++) {
+                auto& app = dbCache["apps"][i];
+                std::string aname = app.value("name", "");
+                std::string apkg = app.value("package_name", "");
+                std::string adesc = app.value("description", "");
+                std::string acat = app.value("category", "");
+                std::string atags = "";
+                if (app.contains("tags") && app["tags"].is_array()) {
+                    for (auto& tag : app["tags"]) atags += tag.get<std::string>() + ",";
+                }
+                if (!atags.empty()) atags.pop_back();
+
+                std::string res = askGemini(aname, apkg, adesc, acat, atags);
+                try {
+                    json j = json::parse(res);
+                    AIProposal pObj;
+                    pObj.appIndex = i;
+                    pObj.originalName = aname;
+                    pObj.newName = j.value("name", aname);
+                    pObj.originalDesc = adesc;
+                    pObj.newDesc = j.value("description", adesc);
+                    pObj.originalCat = acat;
+                    pObj.newCat = j.value("category", acat);
+                    pObj.originalTags = atags;
+                    pObj.newTags = j.value("tags", atags);
+                    g_pendingProposals.push_back(pObj);
+                } catch(...) {
+                    // Skip failures in batch
+                }
+            }
+        }
+
+        PostMessage(hwnd, WM_AI_DONE, 0, 0);
+    }).detach();
+}
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
+    case WM_COPYDATA: {
+        PCOPYDATASTRUCT pcds = (PCOPYDATASTRUCT)lParam;
+        if (pcds->dwData == 1) {
+            std::string apkPath = (const char*)pcds->lpData;
+            ProcessIncomingApk(hwnd, apkPath);
+        }
+        return 1;
+    }
     case WM_PAINT: {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
@@ -2276,6 +2407,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         }
         if (btnApply && IsWindow(btnApply)) {
             MoveWindow(btnApply, w - 240, chinY + 6, 110, 30, TRUE);
+        }
+        if (btnAITagSelected && IsWindow(btnAITagSelected)) {
+            MoveWindow(btnAITagSelected, w - 480, chinY + 6, 115, 30, TRUE);
+        }
+        if (btnAIAutoTagAll && IsWindow(btnAIAutoTagAll)) {
+            MoveWindow(btnAIAutoTagAll, w - 360, chinY + 6, 115, 30, TRUE);
         }
 
         int tabY = topOffset + 4;
@@ -2486,6 +2623,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         btnBrowse = CreateWindowA("BUTTON", "Browse APK...", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 0, 0, 0, 0, hwndTab, (HMENU)1, hInstance, NULL);
         btnDelete = CreateWindowA("BUTTON", "Delete Selected", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 0, 0, 0, 0, hwndTab, (HMENU)6, hInstance, NULL);
         btnClearForm = CreateWindowA("BUTTON", "New App", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 0, 0, 0, 0, hwndTab, (HMENU)5, hInstance, NULL);
+        btnAITagSelected = CreateWindowA("BUTTON", "AI Tag Selected", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 0, 0, 0, 0, hwnd, (HMENU)20, hInstance, NULL);
+        btnAIAutoTagAll = CreateWindowA("BUTTON", "AI Auto-Tag All", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 0, 0, 0, 0, hwnd, (HMENU)21, hInstance, NULL);
 
         btnApply = CreateWindowA("BUTTON", "Apply", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 0, 0, 0, 0, hwnd, (HMENU)2, hInstance, NULL);
         
@@ -2655,6 +2794,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         else if (wmId == 5) ClearForm();
         else if (wmId == 6) DeleteSelectedApp();
         else if (wmId == 7) ShowWindow(hwnd, SW_HIDE);
+        else if (wmId == 20 || wmId == 21) {
+            if (!getenv("GEMINI_API_KEY")) {
+                MessageBoxA(hwnd, "GEMINI_API_KEY environment variable not set!", "Error", MB_OK | MB_ICONERROR);
+                break;
+            }
+            char n[256] = {0}, p[256] = {0}, v[256] = {0}, d[4096] = {0}, c[256] = {0}, t[512] = {0};
+            if (wmId == 20) {
+                GetWindowTextA(hwndName, n, 256); GetWindowTextA(hwndPackage, p, 256);
+                GetWindowTextA(hwndDesc, d, 4096); GetWindowTextA(hwndCat, c, 256); GetWindowTextA(hwndTags, t, 512);
+            }
+            RunAITask(hwnd, wmId == 21, filePath, n, p, d, c, t);
+        }
         else if (wmId == 2) { // Apply
             char n[256], p[256], v[256], d[4096], c[256], t[512];
             GetWindowTextA(hwndName, n, 256); GetWindowTextA(hwndPackage, p, 256);
@@ -2665,6 +2816,48 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 break;
             }
             ProcessApp(filePath, n, p, v, d, c, t);
+        }
+        break;
+    }
+    case WM_AI_DONE: {
+        if (ShowAIVerifyDialog(hwnd)) {
+            for (auto& prop : g_pendingProposals) {
+                if (prop.selected) {
+                    if (prop.appIndex == -1) {
+                        // Apply to form
+                        SetWindowTextA(hwndName, prop.newName.c_str());
+                        SetWindowTextA(hwndDesc, prop.newDesc.c_str());
+                        SetWindowTextA(hwndCat, prop.newCat.c_str());
+                        SetWindowTextA(hwndTags, prop.newTags.c_str());
+                    } else if (prop.appIndex >= 0 && prop.appIndex < dbCache["apps"].size()) {
+                        auto& app = dbCache["apps"][prop.appIndex];
+                        app["name"] = prop.newName;
+                        app["description"] = prop.newDesc;
+                        app["category"] = prop.newCat;
+                        
+                        std::vector<std::string> tags;
+                        std::string t = prop.newTags;
+                        size_t pos = 0;
+                        while ((pos = t.find(',')) != std::string::npos) {
+                            std::string token = t.substr(0, pos);
+                            token.erase(token.begin(), std::find_if(token.begin(), token.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+                            token.erase(std::find_if(token.rbegin(), token.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), token.end());
+                            if (!token.empty()) tags.push_back(token);
+                            t.erase(0, pos + 1);
+                        }
+                        t.erase(t.begin(), std::find_if(t.begin(), t.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+                        t.erase(std::find_if(t.rbegin(), t.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), t.end());
+                        if (!t.empty()) tags.push_back(t);
+                        
+                        app["tags"] = tags;
+                    }
+                }
+            }
+            if (g_pendingProposals.size() > 0 && g_pendingProposals[0].appIndex >= 0) {
+                saveDb(dbCache);
+                RefreshAppList();
+            }
+            MessageBoxA(hwnd, "AI Tags applied successfully.", "Success", MB_OK);
         }
         break;
     }
@@ -2690,6 +2883,22 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    if (HWND hwndExisting = FindWindowA("EliteAppMarketplaceServer", NULL)) {
+        if (lpCmdLine && strlen(lpCmdLine) > 0) {
+            std::string cmd = lpCmdLine;
+            if (cmd.length() >= 2 && cmd.front() == '"' && cmd.back() == '"') {
+                cmd = cmd.substr(1, cmd.length() - 2);
+            }
+            COPYDATASTRUCT cds;
+            cds.dwData = 1;
+            cds.cbData = cmd.length() + 1;
+            cds.lpData = (PVOID)cmd.c_str();
+            SendMessageA(hwndExisting, WM_COPYDATA, 0, (LPARAM)&cds);
+        }
+        SetForegroundWindow(hwndExisting);
+        return 0;
+    }
+
     char path[MAX_PATH];
     GetModuleFileNameA(NULL, path, MAX_PATH);
     fs::path exeDir = fs::path(path).parent_path();
@@ -2717,6 +2926,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     int showMode = g_windowMaximized ? SW_SHOWMAXIMIZED : nCmdShow;
     ShowWindow(hwnd, showMode);
     UpdateWindow(hwnd);
+
+    if (lpCmdLine && strlen(lpCmdLine) > 0) {
+        std::string cmd = lpCmdLine;
+        if (cmd.length() >= 2 && cmd.front() == '"' && cmd.back() == '"') {
+            cmd = cmd.substr(1, cmd.length() - 2);
+        }
+        COPYDATASTRUCT cds;
+        cds.dwData = 1;
+        cds.cbData = cmd.length() + 1;
+        cds.lpData = (PVOID)cmd.c_str();
+        SendMessageA(hwnd, WM_COPYDATA, 0, (LPARAM)&cds);
+    }
 
     MSG msg;
     while (GetMessageA(&msg, NULL, 0, 0)) {

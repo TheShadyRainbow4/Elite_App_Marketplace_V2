@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.elitesoftware.geminiwidget"
-    android:versionCode="10025"
-    android:versionName="1.0.25" >
+    android:versionCode="10087"
+    android:versionName="1.0.87" >
 
     <uses-sdk
         android:minSdkVersion="24"
@@ -35,6 +35,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true" >
+
+        <!-- Main Component Launcher -->
+        <activity
+            android:name="com.elitesoftware.elitewindowingcomponents.MainActivity"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Elite Windows" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- Custom Frame Builder -->
         <activity
