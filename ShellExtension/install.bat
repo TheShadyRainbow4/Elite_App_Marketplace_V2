@@ -28,3 +28,4 @@ taskkill /f /im explorer.exe
 start explorer.exe
 
 echo Registration complete.
+pause
