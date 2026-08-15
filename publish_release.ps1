@@ -84,7 +84,7 @@ Write-Host "Building Windows Server EXE..."
 cd Manager_App
 Stop-Process -Name "Elite_App_Marketplace-Server.v2" -ErrorAction SilentlyContinue
 Stop-Process -Name "LocalAPKStore" -ErrorAction SilentlyContinue
-cmd /c "windres resource.rc -O coff -o resource.res && gcc -O2 -c miniz.c -o miniz.o && g++ -O2 -mwindows -std=c++17 -o Elite_App_Marketplace-Server.v2.exe main.cpp miniz.o resource.res -lcomctl32 -lws2_32 -lwinhttp -lgdiplus -lole32 -static -static-libgcc -static-libstdc++"
+cmd /c "windres resource.rc -O coff -o resource.res && gcc -O2 -c miniz.c -o miniz.o && g++ -O2 -mwindows -std=c++17 -o Elite_App_Marketplace-Server.v2.exe main.cpp miniz.o resource.res -lcomctl32 -lws2_32 -lwinhttp -lgdiplus -lole32 -luuid -static -static-libgcc -static-libstdc++"
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error: Windows Server EXE Build Failed! Aborting release." -ForegroundColor Red
     exit 1

@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <commctrl.h>
 #include <shellapi.h>
+#include <shobjidl.h>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -1714,13 +1715,26 @@ LRESULT CALLBACK HelpDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         RECT clientRect; GetClientRect(hwnd, &clientRect);
         
         RECT bannerRect = {0, 0, clientRect.right, 42};
-        HBRUSH hbrBanner = CreateSolidBrush(RGB(255, 255, 255));
+        HBRUSH hbrBanner = CreateSolidBrush(RGB(164, 198, 57));
         FillRect(hdc, &bannerRect, hbrBanner);
         DeleteObject(hbrBanner);
         
         HICON hHelpIcon = LoadIconA(GetModuleHandle(NULL), MAKEINTRESOURCE(102));
         if (hHelpIcon) DrawIconEx(hdc, 15, 5, hHelpIcon, 32, 32, 0, NULL, DI_NORMAL | DI_COMPAT);
         
+        SetBkMode(hdc, TRANSPARENT);
+        SelectObject(hdc, hBoldFont);
+        
+        RECT textRect = {60, 0, clientRect.right, 40};
+        const char* titleText = "Local APK Store User Manual & Help Guidance";
+        
+        SetTextColor(hdc, RGB(50, 50, 50));
+        RECT shadowRect = textRect; OffsetRect(&shadowRect, 1, 1);
+        DrawTextA(hdc, titleText, -1, &shadowRect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+        
+        SetTextColor(hdc, RGB(255, 255, 255));
+        DrawTextA(hdc, titleText, -1, &textRect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+
         EndPaint(hwnd, &ps);
         return 0;
     }
@@ -1734,10 +1748,9 @@ LRESULT CALLBACK HelpDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         
         // Icon drawn in WM_PAINT instead for transparency over banner
 
-        HWND hTitle = CreateWindowA("STATIC", "Local APK Store User Manual & Help Guidance", WS_CHILD | WS_VISIBLE, 60, 20, 420, 24, hwnd, NULL, NULL, NULL);
-        SendMessageA(hTitle, WM_SETFONT, (WPARAM)hBoldFont, TRUE);
+        // Title drawn in WM_PAINT instead
 
-        CreateWindowExA(0, "STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 15, 55, 470, 2, hwnd, NULL, NULL, NULL);
+        CreateWindowExA(0, "STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 0, 42, 510, 2, hwnd, NULL, NULL, NULL);
 
         HWND hHelpText = CreateWindowExA(WS_EX_CLIENTEDGE, "EDIT",
             "WELCOME TO LOCAL APK STORE MANAGER\r\n\r\n"
@@ -1804,7 +1817,7 @@ void ShowHelpDialog(HWND hwndParent) {
     }
     EnableWindow(hwndParent, FALSE);
     CreateWindowExA(WS_EX_DLGMODALFRAME, "EliteHelpDialog", "Local APK Store Help & Guidance",
-        WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE,
+        WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_VISIBLE,
         CW_USEDEFAULT, CW_USEDEFAULT, 510, 440, hwndParent, NULL, hInst, NULL);
 }
 
@@ -1821,11 +1834,26 @@ LRESULT CALLBACK SettingsDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         RECT rc;
         GetClientRect(hwnd, &rc);
         
-        RECT bannerRc = { 0, 0, rc.right, 40 };
-        FillRect(hdc, &bannerRc, (HBRUSH)GetStockObject(WHITE_BRUSH));
+        RECT bannerRc = { 0, 0, rc.right, 42 };
+        HBRUSH hbrBanner = CreateSolidBrush(RGB(164, 198, 57));
+        FillRect(hdc, &bannerRc, hbrBanner);
+        DeleteObject(hbrBanner);
 
         HICON hSettingsIcon = LoadIconA(GetModuleHandle(NULL), MAKEINTRESOURCE(103));
-        DrawIconEx(hdc, 15, 4, hSettingsIcon, 32, 32, 0, NULL, DI_NORMAL | DI_COMPAT);
+        if (hSettingsIcon) DrawIconEx(hdc, 15, 4, hSettingsIcon, 32, 32, 0, NULL, DI_NORMAL | DI_COMPAT);
+        
+        SetBkMode(hdc, TRANSPARENT);
+        SelectObject(hdc, hBoldFont);
+
+        RECT textRect = {60, 0, rc.right, 40};
+        const char* titleText = "Application & Server Settings";
+        
+        SetTextColor(hdc, RGB(50, 50, 50));
+        RECT shadowRect = textRect; OffsetRect(&shadowRect, 1, 1);
+        DrawTextA(hdc, titleText, -1, &shadowRect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+        
+        SetTextColor(hdc, RGB(255, 255, 255));
+        DrawTextA(hdc, titleText, -1, &textRect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
         
         EndPaint(hwnd, &ps);
         return 0;
@@ -1839,28 +1867,31 @@ LRESULT CALLBACK SettingsDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         SendMessageA(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hSettingsIcon);
 
         // Icon drawn in WM_PAINT instead for transparency over banner
+        // Title drawn in WM_PAINT instead
 
-        HWND hTitle = CreateWindowA("STATIC", "Application & Server Settings", WS_CHILD | WS_VISIBLE, 60, 12, 300, 24, hwnd, NULL, NULL, NULL);
-        SendMessageA(hTitle, WM_SETFONT, (WPARAM)hBoldFont, TRUE);
-
-        CreateWindowExA(0, "STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 0, 40, 500, 2, hwnd, NULL, NULL, NULL);
+        CreateWindowExA(0, "STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 0, 42, 500, 2, hwnd, NULL, NULL, NULL);
 
         HWND lblPort = CreateWindowA("STATIC", "HTTP Server Port:", WS_CHILD | WS_VISIBLE, 15, 55, 130, 20, hwnd, NULL, NULL, NULL);
         hTxtPort = CreateWindowExA(WS_EX_CLIENTEDGE, "EDIT", std::to_string(serverPort).c_str(), WS_CHILD | WS_VISIBLE | ES_NUMBER, 150, 53, 100, 22, hwnd, NULL, NULL, NULL);
 
         HWND lblDataDir = CreateWindowA("STATIC", "Data Directory:", WS_CHILD | WS_VISIBLE, 15, 90, 130, 20, hwnd, NULL, NULL, NULL);
-        hTxtDataDir = CreateWindowExA(WS_EX_CLIENTEDGE, "EDIT", dataDir.c_str(), WS_CHILD | WS_VISIBLE, 150, 88, 255, 22, hwnd, NULL, NULL, NULL);
+        hTxtDataDir = CreateWindowExA(WS_EX_CLIENTEDGE, "EDIT", dataDir.c_str(), WS_CHILD | WS_VISIBLE, 150, 88, 175, 22, hwnd, NULL, NULL, NULL);
 
-        CreateWindowExA(0, "STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 15, 125, 390, 2, hwnd, NULL, NULL, NULL);
+        HWND hBtnBrowse = CreateWindowA("BUTTON", "Browse...", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 335, 87, 70, 24, hwnd, (HMENU)1004, NULL, NULL);
+        HWND hBtnExplore = CreateWindowA("BUTTON", "Explore", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 335, 115, 70, 24, hwnd, (HMENU)1005, NULL, NULL);
 
-        HWND hBtnWebsite = CreateWindowA("BUTTON", "Open Local Server Website", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 15, 137, 170, 28, hwnd, (HMENU)1003, NULL, NULL);
-        HWND hBtnOkay = CreateWindowA("BUTTON", "Okay", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 195, 137, 100, 28, hwnd, (HMENU)IDOK, NULL, NULL);
-        HWND hBtnCancel = CreateWindowA("BUTTON", "Cancel", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 305, 137, 100, 28, hwnd, (HMENU)IDCANCEL, NULL, NULL);
+        CreateWindowExA(0, "STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 15, 145, 390, 2, hwnd, NULL, NULL, NULL);
+
+        HWND hBtnWebsite = CreateWindowA("BUTTON", "Open Local Server Website", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 15, 157, 170, 28, hwnd, (HMENU)1003, NULL, NULL);
+        HWND hBtnOkay = CreateWindowA("BUTTON", "Okay", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 195, 157, 100, 28, hwnd, (HMENU)IDOK, NULL, NULL);
+        HWND hBtnCancel = CreateWindowA("BUTTON", "Cancel", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 305, 157, 100, 28, hwnd, (HMENU)IDCANCEL, NULL, NULL);
 
         SendMessageA(lblPort, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(hTxtPort, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(lblDataDir, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(hTxtDataDir, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
+        SendMessageA(hBtnBrowse, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
+        SendMessageA(hBtnExplore, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(hBtnWebsite, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(hBtnOkay, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
         SendMessageA(hBtnCancel, WM_SETFONT, (WPARAM)hNormalFont, TRUE);
@@ -1909,6 +1940,34 @@ LRESULT CALLBACK SettingsDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         } else if (id == 1003) {
             std::string url = "http://127.0.0.1:" + std::to_string(serverPort) + "/";
             ShellExecuteA(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
+        } else if (id == 1004) {
+            IFileDialog *pfd;
+            if (SUCCEEDED(CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd)))) {
+                DWORD dwOptions;
+                if (SUCCEEDED(pfd->GetOptions(&dwOptions))) {
+                    pfd->SetOptions(dwOptions | FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM);
+                }
+                if (SUCCEEDED(pfd->Show(hwnd))) {
+                    IShellItem *psi;
+                    if (SUCCEEDED(pfd->GetResult(&psi))) {
+                        PWSTR pszPath;
+                        if (SUCCEEDED(psi->GetDisplayName(SIGDN_FILESYSPATH, &pszPath))) {
+                            int size_needed = WideCharToMultiByte(CP_UTF8, 0, pszPath, -1, NULL, 0, NULL, NULL);
+                            std::string path(size_needed, 0);
+                            WideCharToMultiByte(CP_UTF8, 0, pszPath, -1, &path[0], size_needed, NULL, NULL);
+                            if (!path.empty() && path.back() == '\0') path.pop_back();
+                            SetWindowTextA(hTxtDataDir, path.c_str());
+                            CoTaskMemFree(pszPath);
+                        }
+                        psi->Release();
+                    }
+                }
+                pfd->Release();
+            }
+        } else if (id == 1005) {
+            char dBuf[MAX_PATH];
+            GetWindowTextA(hTxtDataDir, dBuf, MAX_PATH);
+            ShellExecuteA(NULL, "explore", dBuf, NULL, NULL, SW_SHOWNORMAL);
         }
         break;
     }
@@ -1937,7 +1996,7 @@ void ShowSettingsDialog(HWND hwndParent) {
     }
     EnableWindow(hwndParent, FALSE);
     CreateWindowExA(WS_EX_DLGMODALFRAME, "EliteSettingsDialog", "Local APK Store Settings",
-        WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_VISIBLE,
+        WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_VISIBLE,
         CW_USEDEFAULT, CW_USEDEFAULT, 430, 240, hwndParent, NULL, hInst, NULL);
 }
 
@@ -2100,7 +2159,7 @@ void CreateAppToolbar(HWND hwndParent) {
     ZeroMemory(&rbBand, sizeof(rbBand));
     rbBand.cbSize = sizeof(REBARBANDINFOA);
     rbBand.fMask = RBBIM_STYLE | RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_SIZE;
-    rbBand.fStyle = RBBS_CHILDEDGE | RBBS_GRIPPERALWAYS;
+    rbBand.fStyle = RBBS_CHILDEDGE | RBBS_NOGRIPPER;
     rbBand.hwndChild = hwndToolbar;
     
     DWORD dwBtnSize = (DWORD)SendMessageA(hwndToolbar, TB_GETBUTTONSIZE, 0, 0);
@@ -2240,7 +2299,7 @@ void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, 
                 }
                 if (!atags.empty()) atags.pop_back();
 
-                std::string progressTitle = "AI Auto-Tagging " + std::to_string(count+1) + "/10: " + aname;
+                std::string progressTitle = "AI Auto-Tagging " + std::to_string(count+1) + ": " + aname;
                 SetWindowTextA(hwnd, progressTitle.c_str());
 
                 std::string res = askGemini(aname, apkg, adesc, acat, atags);
@@ -2259,7 +2318,7 @@ void RunAITask(HWND hwnd, bool allApps, std::string currentFile, std::string n, 
                     g_pendingProposals.push_back(pObj);
                     
                     count++;
-                    if (count >= 10) break;
+                    Sleep(4000); // Wait 4 seconds to avoid rate limiting
                 } catch(...) {
                     // Skip failures in batch
                 }
